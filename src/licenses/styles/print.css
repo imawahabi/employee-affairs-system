@@ -1,0 +1,85 @@
+@media print {
+  .licenses-print .no-print {
+    display: none !important;
+  }
+
+  .licenses-print .print-only {
+    display: block !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 4cm 1.75cm 0.5cm 1.75cm;
+    orientation: portrait;
+  }
+
+  .licenses-print {
+    font-family: 'Cairo', 'Sultan Normal', 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.4;
+    color: #000;
+    background: white;
+  }
+
+  .licenses-print *,
+  .licenses-print *::before,
+  .licenses-print *::after {
+    box-shadow: none !important;
+    background-image: none !important;
+    color: #000 !important;
+  }
+
+  .licenses-print table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 0 !important;
+    page-break-inside: auto;
+  }
+
+  .licenses-print th,
+  .licenses-print td {
+    border: 1px solid #000 !important;
+    padding: 8px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    font-size: 11pt !important;
+    background: white !important;
+    font-family: 'Sultan Normal', 'Times New Roman', serif !important;
+  }
+
+  .licenses-print th {
+    background: #f0f0f0 !important;
+    font-weight: normal !important;
+    font-size: 12pt !important;
+    font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+  }
+
+  .licenses-print .print-only h1 {
+    font-size: 18pt !important;
+    font-weight: normal !important;
+    font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+    text-align: center !important;
+    margin-bottom: 10pt !important;
+    color: #000 !important;
+  }
+
+  .licenses-print .print-only p {
+    font-size: 12pt !important;
+    font-family: 'Sultan Normal', 'Times New Roman', serif !important;
+    text-align: center !important;
+    margin: 5pt 0 !important;
+    color: #000 !important;
+  }
+
+  .licenses-print * {
+    border-radius: 0 !important;
+  }
+
+  .licenses-print tr {
+    page-break-inside: avoid;
+  }
+
+  .licenses-print tr:hover {
+    background: white !important;
+  }
+}

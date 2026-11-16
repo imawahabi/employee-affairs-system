@@ -1,0 +1,94 @@
+{
+  "name": "gov-hr-suite",
+  "private": true,
+  "author": "Government Entity",
+  "version": "2.0.0",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "homepage": ".",
+  "scripts": {
+    "dev": "vite --port 5180",
+    "build": "tsc && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview --port 5180",
+    "electron": "electron .",
+    "electron:build": "rimraf dist && npm run build && cd backend && npm run build && cd .. && electron-builder",
+    "dev:full": "concurrently \"npm run dev\" \"node scripts/start-backend-dev.cjs\"",
+    "backend": "cd backend && npm start",
+    "frontend": "npm run dev"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.6",
+    "@heroicons/react": "^2.2.0",
+    "@tabler/icons-react": "^3.36.1",
+    "@tanstack/react-virtual": "^3.13.13",
+    "animate-ui": "^0.0.4",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "docx": "^9.5.1",
+    "dotenv": "^17.2.1",
+    "express": "^4.19.2",
+    "file-saver": "^2.0.5",
+    "jspdf": "^4.0.0",
+    "jspdf-autotable": "^5.0.7",
+    "konva": "^10.0.12",
+    "lucide-react": "^0.344.0",
+    "papaparse": "^5.5.3",
+    "react": "^18.3.1",
+    "react-day-picker": "^9.8.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.5.2",
+    "react-konva": "^18.2.14",
+    "react-select": "^5.8.0",
+    "sonner": "^2.0.6",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/papaparse": "^5.3.16",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "concurrently": "^9.2.0",
+    "electron": "^37.2.5",
+    "electron-builder": "^26.0.12",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "rimraf": "^5.0.10",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2"
+  },
+  "build": {
+    "appId": "com.gov-hr-suite.app",
+    "productName": "نظام شؤون الموظفين",
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "backend/**/*",
+      "!backend/node_modules/**",
+      "database.sqlite",
+      "loading.html",
+      "icons/**/*"
+    ],
+    "asarUnpack": [
+      "**/*.node"
+    ],
+    "directories": {
+      "buildResources": "icons"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

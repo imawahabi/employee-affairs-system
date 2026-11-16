@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Cairo', sans-serif;
+}
+
+@keyframes red-soft-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(220, 38, 38, 0.2),
+      0 0 14px rgba(220, 38, 38, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(220, 38, 38, 0.08),
+      0 0 22px rgba(220, 38, 38, 0.25);
+  }
+}
+
+@keyframes red-soft-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(220, 38, 38, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(220, 38, 38, 0.35);
+  }
+}
+
+.alert-pulse {
+  animation: red-soft-pulse 2.8s ease-in-out infinite;
+}
+
+.alert-glow {
+  animation: red-soft-glow 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alert-pulse,
+  .alert-glow {
+    animation: none;
+  }
+}

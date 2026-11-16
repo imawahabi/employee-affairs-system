@@ -1,0 +1,277 @@
+import { Employee } from '../types';
+import { getApiBaseUrl } from '../../api';
+import { getSearchTokens, matchesArabicSearch } from '../../utils/search';
+
+const API_BASE_URL = getApiBaseUrl();
+ 
+// Mock data for development - Real employees from database
+const mockEmployees = [
+  { id: '9', full_name: 'مشاري سامي الوهيب', rank: 'رائد حقوقي', file_number: '612154', category: 'ضابط' as const, created_at: '2025-07-16 06:19:50', updated_at: '2025-07-29 06:44:44' },
+  { id: '10', full_name: 'خالد طارق بن شعبان', rank: 'ملازم أول', file_number: '743542', category: 'ضابط' as const, created_at: '2025-07-16 06:20:18', updated_at: '2025-07-16 06:20:18' },
+  { id: '11', full_name: 'محمد إبراهيم الحميدي', rank: 'ملازم أول حقوقي', file_number: '887981', category: 'ضابط' as const, created_at: '2025-07-16 06:20:32', updated_at: '2025-07-16 06:20:32' },
+  { id: '12', full_name: 'أحمد محمد ملا علي', rank: 'ملازم أول', file_number: '458325', category: 'ضابط' as const, created_at: '2025-07-16 06:20:47', updated_at: '2025-07-16 06:20:47' },
+  { id: '13', full_name: 'عمر صبحي الهندي', rank: 'و.أ.ضابط', file_number: '457515', category: 'ضابط' as const, created_at: '2025-07-16 06:21:00', updated_at: '2025-07-16 06:21:00' },
+  { id: '14', full_name: 'عقاب ميسر العياف', rank: 'و.أ.ضابط', file_number: '744212', category: 'ضابط صف' as const, created_at: '2025-07-16 06:21:11', updated_at: '2025-07-16 06:21:17' },
+  { id: '15', full_name: 'محمد مناحي القحطاني', rank: 'و.أ.ضابط', file_number: '237388', category: 'ضابط صف' as const, created_at: '2025-07-16 06:21:30', updated_at: '2025-07-16 06:21:30' },
+  { id: '16', full_name: 'حمود ناجي الجمعه', rank: 'و.أ.ضابط', file_number: '805521', category: 'ضابط صف' as const, created_at: '2025-07-16 06:21:45', updated_at: '2025-07-16 06:21:45' },
+  { id: '17', full_name: 'مساعد غصاب الفضلي', rank: 'و.أ.ضابط', file_number: '290947', category: 'ضابط صف' as const, created_at: '2025-07-16 06:22:02', updated_at: '2025-07-16 06:22:02' },
+  { id: '18', full_name: 'أنور علي النجار', rank: 'و.أ.ضابط', file_number: '289531', category: 'ضابط صف' as const, created_at: '2025-07-16 06:22:17', updated_at: '2025-07-16 06:22:17' },
+  { id: '34', full_name: 'عبدالمطلب محمد فوزي حجاج', rank: 'باحث قانوني', file_number: '882885', category: 'مهني' as const, created_at: '2025-07-16 06:25:40', updated_at: '2025-07-16 06:26:08' },
+  { id: '35', full_name: 'أحمد يسري ابو العلا', rank: 'طباع', file_number: '637998', category: 'مهني' as const, created_at: '2025-07-16 06:25:51', updated_at: '2025-07-16 06:25:51' },
+  { id: '73', full_name: 'محمد محمد قاسم أحمد', rank: 'رئيس قسم', file_number: '273112300976', category: 'مدني' as const, created_at: '2025-07-24 07:14:30', updated_at: '2025-07-24 07:17:46' },
+  { id: '76', full_name: 'حميده سعيد التحو', rank: 'رئيس قسم', file_number: '283072601334', category: 'مدني' as const, created_at: '2025-07-24 07:18:18', updated_at: '2025-07-24 07:18:18' },
+  { id: '80', full_name: 'عائشة صلاح محمد العميري', rank: 'سكرتيرة', file_number: '298050600105', category: 'مدني' as const, created_at: '2025-07-24 07:19:40', updated_at: '2025-07-24 07:19:40' }
+];
+ 
+
+const mapCategoryFromApi = (value: string): Employee['category'] => {
+  if (value === 'ضباط' || value === 'ضابط') return 'ضابط';
+  if (value === 'ضباط صف' || value === 'ضابط صف') return 'ضابط صف';
+  if (value === 'مهنيين' || value === 'مهني') return 'مهني';
+  if (value === 'مدنيين' || value === 'مدني') return 'مدني';
+  return 'مدني';
+};
+
+const mapCategoryToApi = (value: string) => {
+  if (value === 'ضابط') return 'ضباط';
+  if (value === 'ضابط صف') return 'ضباط صف';
+  if (value === 'مهني') return 'مهنيين';
+  if (value === 'مدني') return 'مدنيين';
+  return value;
+};
+
+const mapEmployeeFromApi = (employee: any): Employee => {
+  if (employee && typeof employee.full_name === 'string') {
+    return {
+      ...employee,
+      status: employee.status === 'inactive' ? 'inactive' : 'active'
+    } as Employee;
+  }
+  const fileNumber = employee?.fileNumber ?? employee?.militaryNumber ?? '';
+  const civilIdValue = employee?.civilId ?? employee?.civil_id ?? '';
+  const fullName = [
+    employee?.firstName,
+    employee?.secondName,
+    employee?.thirdName,
+    employee?.fourthName,
+    employee?.familyName,
+  ].map((part) => String(part || '').trim()).filter(Boolean).join(' ') || employee?.name || '';
+  return {
+    id: employee?.id || '',
+    full_name: fullName,
+    rank: employee?.rank || '',
+    file_number: fileNumber ? String(fileNumber) : '',
+    civil_id: civilIdValue ? String(civilIdValue) : '',
+    department: employee?.department || '',
+    section: employee?.section || '',
+    jobTitle: employee?.jobTitle || '',
+    category: mapCategoryFromApi(employee?.category || ''),
+    status: employee?.status === 'inactive' ? 'inactive' : 'active',
+    created_at: '',
+    updated_at: ''
+  };
+};
+
+const buildEmployeePayload = (employee: Partial<Employee>, includeDefaults = false) => {
+  const payload: Record<string, any> = {};
+  if (employee.full_name !== undefined) payload.name = employee.full_name;
+  if (employee.rank !== undefined) payload.rank = employee.rank;
+  if (employee.file_number !== undefined) payload.fileNumber = employee.file_number || null;
+  if (employee.category !== undefined) payload.category = mapCategoryToApi(employee.category);
+  if (includeDefaults) {
+    if (payload.status === undefined) payload.status = 'active';
+    if (payload.department === undefined) payload.department = '';
+  }
+  return payload;
+};
+ 
+export class EmployeeService {
+  private static async request(endpoint: string, options: RequestInit = {}): Promise<any> {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    };
+
+    try {
+      const response = await fetch(url, config);
+       
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'حدث خطأ في الطلب');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('API Error:', error);
+      // إذا كان خطأ شبكة، استخدم البيانات الوهمية
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        console.warn('Using mock data due to server connection failure');
+        return this.handleMockRequest(endpoint, options);
+      }
+      throw error;
+    }
+  }
+
+  private static handleMockRequest(endpoint: string, options: RequestInit = {}): any {
+    const method = options.method || 'GET';
+
+    if (endpoint === '/employees' && method === 'GET') {
+      return [...mockEmployees];
+    }
+
+    if (endpoint.startsWith('/employees/') && method === 'GET') {
+      const id = endpoint.split('/')[2];
+      return mockEmployees.find(emp => emp.id === id) || null;
+    }
+
+    if (endpoint === '/employees' && method === 'POST') {
+      const data = JSON.parse(options.body as string);
+      const newEmployee = {
+        id: 'emp-' + Date.now(),
+        ...data,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      mockEmployees.push(newEmployee);
+      return newEmployee;
+    }
+
+    if (endpoint === '/employees/bulk' && method === 'POST') {
+      const data = JSON.parse(options.body as string);
+      const { employees } = data;
+
+      const results: { success: any[]; errors: Array<{ employee: any; error: string }> } = {
+        success: [],
+        errors: []
+      };
+
+      for (const empData of employees) {
+        // التحقق من عدم تكرار رقم الملف
+        if (mockEmployees.some(emp => emp.file_number === empData.file_number)) {
+          results.errors.push({
+            employee: empData,
+            error: 'رقم الملف موجود مسبقاً'
+          });
+          continue;
+        }
+
+        const newEmployee = {
+          id: 'emp-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+          ...empData,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+
+        mockEmployees.push(newEmployee);
+        results.success.push(newEmployee);
+      }
+
+      return {
+        message: `تم إضافة ${results.success.length} موظف بنجاح`,
+        success_count: results.success.length,
+        error_count: results.errors.length,
+        results
+      };
+    }
+
+    throw new Error('Mock endpoint not implemented: ' + endpoint);
+  }
+
+  static async getAll(): Promise<Employee[]> {
+    const employees = await this.request('/employees');
+    return Array.isArray(employees) ? employees.map(mapEmployeeFromApi) : [];
+  }
+
+  static async getById(id: string): Promise<Employee | null> {
+    const employees = await this.getAll();
+    return employees.find(emp => emp.id === id) || null;
+  }
+
+  static async create(employee: Omit<Employee, 'id' | 'created_at' | 'updated_at'>): Promise<Employee> {
+    const payload = buildEmployeePayload(employee, true);
+    const response = await this.request('/employees', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+
+    return {
+      id: response?.id || `emp_${Date.now()}`,
+      full_name: employee.full_name,
+      rank: employee.rank,
+      file_number: employee.file_number,
+      category: employee.category,
+      created_at: '',
+      updated_at: ''
+    };
+  }
+
+  static async createBulk(employees: Omit<Employee, 'id' | 'created_at' | 'updated_at'>[]): Promise<any> {
+    const results: { success: Employee[]; errors: Array<{ employee: any; error: string }> } = {
+      success: [],
+      errors: []
+    };
+
+    for (const employee of employees) {
+      try {
+        const created = await this.create(employee);
+        results.success.push(created);
+      } catch (error) {
+        results.errors.push({
+          employee,
+          error: error instanceof Error ? error.message : 'فشل حفظ الموظف'
+        });
+      }
+    }
+
+    return {
+      message: `تم إضافة ${results.success.length} موظف بنجاح`,
+      success_count: results.success.length,
+      error_count: results.errors.length,
+      results
+    };
+  }
+
+  static async update(id: string, employee: Partial<Employee>): Promise<Employee> {
+    const payload = buildEmployeePayload(employee, false);
+    await this.request(`/employees/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+    return {
+      id,
+      full_name: employee.full_name || '',
+      rank: employee.rank || '',
+      file_number: employee.file_number || '',
+      category: employee.category || 'ضابط',
+      created_at: '',
+      updated_at: ''
+    };
+  }
+ 
+  static async delete(id: string): Promise<void> {
+    return this.request(`/employees/${id}`, {
+      method: 'DELETE',
+    });
+  }
+ 
+  static async search(query: string): Promise<Employee[]> {
+    const employees = await this.getAll();
+    const tokens = getSearchTokens(query);
+    return employees.filter(emp => matchesArabicSearch([
+      emp.full_name,
+      emp.rank,
+      emp.file_number,
+      emp.civil_id,
+      emp.category,
+    ], tokens));
+  }
+ 
+  static async getByCategory(category: string): Promise<Employee[]> {
+    const employees = await this.getAll();
+    return employees.filter(emp => emp.category === category);
+  }
+}

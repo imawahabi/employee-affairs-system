@@ -1,0 +1,50 @@
+/* calendar.css */
+:root {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #3b82f6; /* blue-500 */
+  --rdp-background-color: #eff6ff; /* blue-50 */
+  --rdp-accent-color-dark: #2563eb; /* blue-600 */
+  --rdp-background-color-dark: #dbeafe; /* blue-100 */
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  --rdp-outline-selected: 3px solid var(--rdp-accent-color);
+  --rdp-border-radius: 8px;
+}
+
+.rdp {
+  margin: 0;
+  font-family: inherit;
+}
+
+.rdp-caption_label {
+  font-weight: 700;
+  color: #1f2937; /* gray-800 */
+}
+
+.rdp-nav_button {
+  width: var(--rdp-cell-size);
+  height: var(--rdp-cell-size);
+  border-radius: var(--rdp-border-radius);
+}
+
+.rdp-day {
+  border-radius: var(--rdp-border-radius);
+}
+
+.rdp-day_selected, .rdp-day_selected:focus-visible, .rdp-day_selected:hover {
+  background-color: var(--rdp-accent-color);
+  color: white;
+  font-weight: 700;
+}
+
+.rdp-day:hover {
+    background-color: var(--rdp-background-color);
+}
+
+.rdp-day_today {
+    font-weight: bold;
+    color: var(--rdp-accent-color);
+}
+
+.rdp-day_today:not(.rdp-day_selected) {
+    background-color: transparent;
+}
