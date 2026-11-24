@@ -167,7 +167,7 @@ const Alerts: React.FC = () => {
     switch (type) {
       case 'no_upcoming_shift': return 'لا توجد مناوبة قادمة';
       case 'shift_not_received': return 'مناوبة غير مستلمة';
-      case 'professional_extension': return 'تمديد فني';
+      case 'professional_extension': return 'تمديد مهني';
       default: return type;
     }
   };
@@ -404,7 +404,7 @@ const Alerts: React.FC = () => {
                 <option value="all">جميع الأنواع</option>
                 <option value="no_upcoming_shift">لا توجد مناوبة قادمة</option>
                 <option value="shift_not_received">مناوبة غير مستلمة</option>
-                <option value="professional_extension">تمديد فني</option>
+                <option value="professional_extension">تمديد مهني</option>
               </select>
 
               <button

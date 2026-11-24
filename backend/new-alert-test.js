@@ -37,12 +37,12 @@ db.serialize(() => {
         console.log(`🔢 أيام التذكير: ${reminderDays}`);
         console.log(`🔢 أيام التأخير: ${overdueDays}`);
         
-        // المنطق الأول: التحقق من عدم وجود خفارة بعد X يوم من اليوم الحالي
+        // المنطق الأول: التحقق من عدم وجود مناوبة بعد X يوم من اليوم الحالي
         const targetDate = new Date(today);
         targetDate.setDate(targetDate.getDate() + reminderDays);
         const targetDateString = targetDate.toISOString().slice(0, 10);
         
-        console.log(`\n🎯 المنطق الأول: فحص وجود خفارة بعد ${reminderDays} أيام (${targetDateString})`);
+        console.log(`\n🎯 المنطق الأول: فحص وجود مناوبة بعد ${reminderDays} أيام (${targetDateString})`);
         
         db.get(`
             SELECT s.id, s.shiftDate
@@ -52,14 +52,14 @@ db.serialize(() => {
             LIMIT 1
         `, [targetDateString], (err, upcomingShift) => {
             if (err) {
-                console.error('خطأ في فحص الخفارات القادمة:', err);
+                console.error('خطأ في فحص المناوبات القادمة:', err);
                 return;
             }
             
             if (!upcomingShift) {
-                // لا توجد خفارة بعد X يوم من اليوم الحالي
+                // لا توجد مناوبة بعد X يوم من اليوم الحالي
                 const targetDateFormatted = targetDate.toLocaleDateString('ar-US');
-                const message = `لا توجد خفارة مجدولة بعد ${reminderDays} أيام من اليوم (${targetDateFormatted}). يجب إنشاء خفارة جديدة في أقرب وقت.`;
+                const message = `لا توجد مناوبة مجدولة بعد ${reminderDays} أيام من اليوم (${targetDateFormatted}). يجب إنشاء مناوبة جديدة في أقرب وقت.`;
                 
                 const alertId = `alert_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
                 const now = new Date().toISOString();
@@ -77,7 +77,7 @@ db.serialize(() => {
                     'new',
                     message,
                     'high',
-                    'لا توجد خفارة قادمة',
+                    'لا توجد مناوبة قادمة',
                     'shift',
                     '/shift-registration',
                     JSON.stringify({
@@ -91,25 +91,25 @@ db.serialize(() => {
                     now
                 ], function(err) {
                     if (err) {
-                        console.error('خطأ في إنشاء تنبيه عدم وجود خفارة:', err);
+                        console.error('خطأ في إنشاء تنبيه عدم وجود مناوبة:', err);
                     } else {
-                        console.log(`🚨 تم إنشاء تنبيه: لا توجد خفارة بعد ${reminderDays} أيام (${targetDateFormatted})`);
+                        console.log(`🚨 تم إنشاء تنبيه: لا توجد مناوبة بعد ${reminderDays} أيام (${targetDateFormatted})`);
                     }
                     
                     // الانتقال للمنطق الثاني
                     checkOverdueShifts();
                 });
             } else {
-                console.log(`✅ توجد خفارة في ${upcomingShift.shiftDate} - لا حاجة لتنبيه`);
+                console.log(`✅ توجد مناوبة في ${upcomingShift.shiftDate} - لا حاجة لتنبيه`);
                 // الانتقال للمنطق الثاني
                 checkOverdueShifts();
             }
         });
         
         function checkOverdueShifts() {
-            console.log(`\n📋 المنطق الثاني: فحص الخفارات غير المستلمة بعد ${overdueDays} أيام من تاريخ الخفارة`);
+            console.log(`\n📋 المنطق الثاني: فحص المناوبات غير المستلمة بعد ${overdueDays} أيام من تاريخ المناوبة`);
             
-            // البحث عن الخفارات التي:
+            // البحث عن المناوبات التي:
             // 1. تاريخها في المستقبل (أكبر من اليوم الحالي)
             // 2. مر عليها X أيام ولم يتم استلامها
             db.all(`
@@ -120,14 +120,14 @@ db.serialize(() => {
                 AND date('now', 'localtime') >= date(s.shiftDate, '+${overdueDays} days')
             `, [todayString], (err, overdueShifts) => {
                 if (err) {
-                    console.error('خطأ في فحص الخفارات غير المستلمة:', err);
+                    console.error('خطأ في فحص المناوبات غير المستلمة:', err);
                     return;
                 }
                 
-                console.log(`📊 عدد الخفارات غير المستلمة: ${overdueShifts.length}`);
+                console.log(`📊 عدد المناوبات غير المستلمة: ${overdueShifts.length}`);
                 
                 if (overdueShifts.length === 0) {
-                    console.log('✅ لا توجد خفارات غير مستلمة');
+                    console.log('✅ لا توجد مناوبات غير مستلمة');
                     db.close();
                     return;
                 }
@@ -138,7 +138,7 @@ db.serialize(() => {
                     const shiftDateFormatted = new Date(shift.shiftDate).toLocaleDateString('ar-US');
                     const daysPassed = Math.floor((today.getTime() - new Date(shift.shiftDate).getTime()) / (1000 * 60 * 60 * 24));
                     
-                    const message = `خفارة يوم ${shiftDateFormatted} لم يتم استلامها بعد ${daysPassed} يوم من تاريخها.`;
+                    const message = `مناوبة يوم ${shiftDateFormatted} لم يتم استلامها بعد ${daysPassed} يوم من تاريخها.`;
                     
                     const alertId = `alert_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
                     const now = new Date().toISOString();
@@ -156,7 +156,7 @@ db.serialize(() => {
                         'new',
                         message,
                         'medium',
-                        'خفارة غير مستلمة',
+                        'مناوبة غير مستلمة',
                         'shift',
                         '/shifts',
                         JSON.stringify({
@@ -172,9 +172,9 @@ db.serialize(() => {
                         now
                     ], function(err) {
                         if (err) {
-                            console.error('خطأ في إنشاء تنبيه خفارة غير مستلمة:', err);
+                            console.error('خطأ في إنشاء تنبيه مناوبة غير مستلمة:', err);
                         } else {
-                            console.log(`⚠️ تم إنشاء تنبيه: خفارة ${shiftDateFormatted} غير مستلمة بعد ${daysPassed} يوم`);
+                            console.log(`⚠️ تم إنشاء تنبيه: مناوبة ${shiftDateFormatted} غير مستلمة بعد ${daysPassed} يوم`);
                         }
                         
                         processedCount++;

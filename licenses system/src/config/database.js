@@ -6,7 +6,7 @@ const dbConfig = {
   database: 'entity_licenses',
   port: 3306,
   charset: 'utf8mb4',
-  timezone: '+03:00' // توقيت المحلية
+  timezone: '+03:00' // توقيت الكويت
 };
 
 export default dbConfig;

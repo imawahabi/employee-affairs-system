@@ -145,7 +145,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange }) => 
         <footer className="bg-white border-t border-gray-200 px-6 py-4">
           <div className="flex items-center justify-center text-sm text-gray-600">
             <div>
-              <p>جميع الحقوق محفوظة - الجهة الحكومية 2025</p>
+              <p>جميع الحقوق محفوظة - الهيئة العامة للشؤون الإدارية والموارد البشرية - إدارة السجل العام 2025</p>
             </div>
           </div>
         </footer>

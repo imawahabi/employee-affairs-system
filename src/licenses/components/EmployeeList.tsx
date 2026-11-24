@@ -189,8 +189,8 @@ const EmployeeList: React.FC = () => {
                 className="filter-select w-full"
               >
                 <option value="">جميع الفئات</option>
-                <option value="قيادات">قيادات</option>
-                <option value="مشرفون">مشرفون</option>
+                <option value="موظف">قيادات</option>
+                <option value="مشرف">مشرفون</option>
                 <option value="فني">فنيون</option>
                 <option value="إداري">إداريون</option>
               </select>
@@ -219,7 +219,7 @@ const EmployeeList: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-700">
-                    {employee.category === 'قيادات' || employee.category === 'مشرفون'
+                    {employee.category === 'موظف' || employee.category === 'مشرف'
                       ? employee.rank
                       : employee.category}
                   </td>
@@ -227,8 +227,8 @@ const EmployeeList: React.FC = () => {
                   <td className="px-6 py-4 text-sm text-gray-700">{employee.file_number}</td>
                   <td className="px-6 py-4 text-sm">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      employee.category === 'قيادات' ? 'bg-blue-100 text-blue-800' :
-                      employee.category === 'مشرفون' ? 'bg-purple-100 text-purple-800' :
+                      employee.category === 'موظف' ? 'bg-blue-100 text-blue-800' :
+                      employee.category === 'مشرف' ? 'bg-purple-100 text-purple-800' :
                       employee.category === 'فني' ? 'bg-green-100 text-green-800' :
                       'bg-orange-100 text-orange-800'
                     }`}>

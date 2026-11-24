@@ -14,7 +14,7 @@
   }
 
   .licenses-print {
-    font-family: 'Cairo', 'Cairo', sans-serif;
+    font-family: 'Cairo', 'Sultan Normal', 'Times New Roman', serif;
     font-size: 12pt;
     line-height: 1.4;
     color: #000;
@@ -44,20 +44,20 @@
     vertical-align: middle !important;
     font-size: 11pt !important;
     background: white !important;
-    font-family: 'Cairo', sans-serif !important;
+    font-family: 'Sultan Normal', 'Times New Roman', serif !important;
   }
 
   .licenses-print th {
     background: #f0f0f0 !important;
     font-weight: normal !important;
     font-size: 12pt !important;
-    font-family: 'Cairo', sans-serif !important;
+    font-family: 'Sultan Bold', 'Times New Roman', serif !important;
   }
 
   .licenses-print .print-only h1 {
     font-size: 18pt !important;
     font-weight: normal !important;
-    font-family: 'Cairo', sans-serif !important;
+    font-family: 'Sultan Bold', 'Times New Roman', serif !important;
     text-align: center !important;
     margin-bottom: 10pt !important;
     color: #000 !important;
@@ -65,7 +65,7 @@
 
   .licenses-print .print-only p {
     font-size: 12pt !important;
-    font-family: 'Cairo', sans-serif !important;
+    font-family: 'Sultan Normal', 'Times New Roman', serif !important;
     text-align: center !important;
     margin: 5pt 0 !important;
     color: #000 !important;

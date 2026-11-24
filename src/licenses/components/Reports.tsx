@@ -295,13 +295,13 @@ const Reports: React.FC = () => {
       }
 
       // Sort by military rank within each category
-      if (a.employee.category === 'قيادات') {
-        const rankA = OFFICER_RANK_ORDER[a.employee.rank.trim()] || 99;
-        const rankB = OFFICER_RANK_ORDER[b.employee.rank.trim()] || 99;
+      if (a.employee.category === 'موظف') {
+        const rankA = OFFICER_RANK_ORDER[a.employee.rank.replace(' حقوقي', '').trim()] || 99;
+        const rankB = OFFICER_RANK_ORDER[b.employee.rank.replace(' حقوقي', '').trim()] || 99;
         if (rankA !== rankB) return rankA - rankB;
       }
 
-      if (a.employee.category === 'مشرفون') {
+      if (a.employee.category === 'مشرف') {
         const rankA = NCO_RANK_ORDER[a.employee.rank] || 99;
         const rankB = NCO_RANK_ORDER[b.employee.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
@@ -418,13 +418,13 @@ const Reports: React.FC = () => {
       }
 
       // Sort by military rank within each category
-      if (a.employee.category === 'قيادات') {
-        const rankA = OFFICER_RANK_ORDER[a.employee.rank.trim()] || 99;
-        const rankB = OFFICER_RANK_ORDER[b.employee.rank.trim()] || 99;
+      if (a.employee.category === 'موظف') {
+        const rankA = OFFICER_RANK_ORDER[a.employee.rank.replace(' حقوقي', '').trim()] || 99;
+        const rankB = OFFICER_RANK_ORDER[b.employee.rank.replace(' حقوقي', '').trim()] || 99;
         if (rankA !== rankB) return rankA - rankB;
       }
 
-      if (a.employee.category === 'مشرفون') {
+      if (a.employee.category === 'مشرف') {
         const rankA = NCO_RANK_ORDER[a.employee.rank] || 99;
         const rankB = NCO_RANK_ORDER[b.employee.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
@@ -453,13 +453,13 @@ const Reports: React.FC = () => {
       }
 
       // Sort by military rank within each category
-      if (a.category === 'قيادات') {
-        const rankA = OFFICER_RANK_ORDER[a.rank.trim()] || 99;
-        const rankB = OFFICER_RANK_ORDER[b.rank.trim()] || 99;
+      if (a.category === 'موظف') {
+        const rankA = OFFICER_RANK_ORDER[a.rank.replace(' حقوقي', '').trim()] || 99;
+        const rankB = OFFICER_RANK_ORDER[b.rank.replace(' حقوقي', '').trim()] || 99;
         if (rankA !== rankB) return rankA - rankB;
       }
 
-      if (a.category === 'مشرفون') {
+      if (a.category === 'مشرف') {
         const rankA = NCO_RANK_ORDER[a.rank] || 99;
         const rankB = NCO_RANK_ORDER[b.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
@@ -496,7 +496,7 @@ const Reports: React.FC = () => {
 
   // Generate report title and subtitle based on filters
   const generateReportInfo = () => {
-    let title = 'تقرير متابعة موظفي الإدارة العامة';
+    let title = 'تقرير متابعة موظفي الهيئة العامة للشؤون الإدارية والموارد البشرية';
     let subtitle = '';
     let monthsText = '';
     let categoriesText = '';
@@ -525,15 +525,15 @@ const Reports: React.FC = () => {
     if (reportConfig.categories.length > 0) {
       if (reportConfig.categories.length === 1) {
         const category = reportConfig.categories[0];
-        if (category === 'قيادات') categoriesText = '( قيادات )';
-        else if (category === 'مشرفون') categoriesText = '( مشرفون )';
+        if (category === 'موظف') categoriesText = '( قيادات )';
+        else if (category === 'مشرف') categoriesText = '( مشرفون )';
         else if (category === 'فني') categoriesText = '( فنيون )';
         else if (category === 'إداري') categoriesText = '( إداريون )';
         else categoriesText = `( ${category} )`;
       } else {
         const categoryNames = reportConfig.categories.map(cat => {
-          if (cat === 'قيادات') return 'قيادات';
-          if (cat === 'مشرفون') return 'مشرفون';
+          if (cat === 'موظف') return 'قيادات';
+          if (cat === 'مشرف') return 'مشرفون';
           if (cat === 'فني') return 'فنيون';
           if (cat === 'إداري') return 'إداريون';
           return cat;
@@ -558,7 +558,7 @@ const Reports: React.FC = () => {
       'م',
       'المسمى الوظيفي',
       'الاسم',
-      'رقم الملف/الإداري',
+      'رقم الملف/المدني',
       'رخص يوم كامل',
       'استئذان قصير',
       'إستئذان طبي',
@@ -567,7 +567,7 @@ const Reports: React.FC = () => {
     // CSV data rows
     const csvData = reportData.map((item, index) => [
       index + 1,
-      (item.employee.category === 'قيادات' || item.employee.category === 'مشرفون')
+      (item.employee.category === 'موظف' || item.employee.category === 'مشرف')
         ? item.employee.rank
         : item.employee.category,
       item.employee.full_name,
@@ -682,7 +682,7 @@ const Reports: React.FC = () => {
                       }),
                       new TableCell({
                         children: [new Paragraph({
-                          text: (item.employee.category === 'قيادات' || item.employee.category === 'مشرفون')
+                          text: (item.employee.category === 'موظف' || item.employee.category === 'مشرف')
                             ? item.employee.rank
                             : item.employee.category,
                           alignment: AlignmentType.CENTER
@@ -751,7 +751,7 @@ const Reports: React.FC = () => {
           }
 
           body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Sultan Normal', 'Times New Roman', serif;
             font-size: 12pt;
             line-height: 1.4;
             color: #000;
@@ -778,7 +778,7 @@ const Reports: React.FC = () => {
           }
 
           .report-title {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Sultan Bold', 'Times New Roman', serif;
             font-size: 22pt;
             font-weight: normal;
             text-decoration: none;
@@ -788,7 +788,7 @@ const Reports: React.FC = () => {
           }
 
           .report-date {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Sultan Normal', 'Times New Roman', serif;
             font-size: 18pt;
             color: #000;
             text-align: center;
@@ -797,7 +797,7 @@ const Reports: React.FC = () => {
           }
 
           .report-categories {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Sultan Bold', 'Times New Roman', serif;
             font-size: 18pt;
             color: #ff0000;
             margin-bottom: 5px;
@@ -814,13 +814,13 @@ const Reports: React.FC = () => {
             padding: 8px;
             text-align: center;
             vertical-align: top;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Sultan Normal', 'Times New Roman', serif;
             font-size: 17pt;
           }
 
           th {
             background: #e8e8e8;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Sultan Bold', 'Times New Roman', serif;
             font-size: 17pt;
           }
 
@@ -865,7 +865,7 @@ const Reports: React.FC = () => {
               <th>م</th>
               <th>المسمى الوظيفي</th>
               <th>الاسم</th>
-              <th>رقم الملف/الإداري</th>
+              <th>رقم الملف/المدني</th>
               <th>رخصة يوم كامل</th>
               <th>استئذان قصير</th>
               <th>إستئذان طبي</th>
@@ -875,7 +875,7 @@ const Reports: React.FC = () => {
             ${reportData.map((item, index) => `
               <tr>
                 <td>${index + 1}</td>
-                <td>${(item.employee.category === 'قيادات' || item.employee.category === 'مشرفون') ? item.employee.rank : item.employee.category}</td>
+                <td>${(item.employee.category === 'موظف' || item.employee.category === 'مشرف') ? item.employee.rank : item.employee.category}</td>
                 <td class="employee-name">${item.employee.full_name}</td>
                 <td class="number-cell">${item.employee.category === 'إداري' ? (item.employee.civil_id || 'غير مسجل') : (item.employee.file_number || 'غير مسجل')}</td>
                 <td class="number-cell">${item.fullDays}</td>
@@ -1101,7 +1101,7 @@ const Reports: React.FC = () => {
                               </div>                              
                             </td>
                             <td className="py-4 px-3 text-center">
-                                {stat.employee.category === 'قيادات' || stat.employee.category === 'مشرفون'
+                                {stat.employee.category === 'موظف' || stat.employee.category === 'مشرف'
                                   ? stat.employee.rank
                                   : stat.employee.category}
                             </td>
@@ -1344,10 +1344,10 @@ const Reports: React.FC = () => {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
                     >
                       <option value="">جميع الفئات</option>
-                      <option value="قيادات">قيادات</option>
-                      <option value="مشرفون">مشرفون</option>
-                      <option value="فني">فني</option>
-                      <option value="إداري">إداري</option>
+                      <option value="موظف">موظف</option>
+                      <option value="مشرف">مشرف</option>
+                      <option value="فني">مهني</option>
+                      <option value="إداري">مدني</option>
                     </select>
                     </div>
                   </div>
@@ -1404,10 +1404,10 @@ const Reports: React.FC = () => {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
                     >
                       <option value="">جميع الفئات</option>
-                      <option value="قيادات">قيادات</option>
-                      <option value="مشرفون">مشرفون</option>
-                      <option value="فني">فني</option>
-                      <option value="إداري">إداري</option>
+                      <option value="موظف">موظف</option>
+                      <option value="مشرف">مشرف</option>
+                      <option value="فني">مهني</option>
+                      <option value="إداري">مدني</option>
                       </select>
                     </div>
                   </div>
@@ -1552,10 +1552,10 @@ const Reports: React.FC = () => {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
                     >
                       <option value="">جميع الفئات</option>
-                      <option value="قيادات">قيادات</option>
-                      <option value="مشرفون">مشرفون</option>
-                      <option value="فني">فني</option>
-                      <option value="إداري">إداري</option>
+                      <option value="موظف">موظف</option>
+                      <option value="مشرف">مشرف</option>
+                      <option value="فني">مهني</option>
+                      <option value="إداري">مدني</option>
                       </select>
                     </div>
                   </div>
@@ -1740,10 +1740,10 @@ const Reports: React.FC = () => {
                           }}
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white h-32"
                         >
-                          <option value="قيادات">قيادات</option>
-                          <option value="مشرفون">مشرفون</option>
-                          <option value="فني">فني</option>
-                          <option value="إداري">إداري</option>
+                          <option value="موظف">موظف</option>
+                          <option value="مشرف">مشرف</option>
+                          <option value="فني">مهني</option>
+                          <option value="إداري">مدني</option>
                         </select>
                         <p className="text-xs text-gray-500 mt-1">اضغط Ctrl للاختيار المتعدد</p>
                       </div>
@@ -1839,7 +1839,7 @@ const Reports: React.FC = () => {
                           <th className="text-right py-4 px-4 font-bold text-gray-700">م</th>
                           <th className="text-right py-4 px-4 font-bold text-gray-700">المسمى الوظيفي</th>
                           <th className="text-right py-4 px-4 font-bold text-gray-700">الاسم</th>
-                          <th className="text-center py-4 px-4 font-bold text-gray-700">رقم الملف/الإداري</th>
+                          <th className="text-center py-4 px-4 font-bold text-gray-700">رقم الملف/المدني</th>
                           <th className="text-center py-4 px-4 font-bold text-gray-700">رخصة يوم كامل</th>
                           <th className="text-center py-4 px-4 font-bold text-gray-700">استئذانات قصيرة</th>
                           <th className="text-center py-4 px-4 font-bold text-gray-700">إستئذان طبي</th>
@@ -1854,7 +1854,7 @@ const Reports: React.FC = () => {
                               </div>
                             </td>
                             <td className="py-4 px-4 text-gray-700">
-                              {item.employee.category === 'قيادات' || item.employee.category === 'مشرفون'
+                              {item.employee.category === 'موظف' || item.employee.category === 'مشرف'
                                 ? item.employee.rank
                                 : item.employee.category}
                             </td>

@@ -252,10 +252,10 @@ const getFlagImageUrl = (code: string) => {
     : '';
 };
 const nationalityFlagMap: Record<string, string> = {
-  'المحلية': '',
+  'الكويت': '🇰🇼',
   'كويتي': '🇰🇼',
   'كويتية': '🇰🇼',
-  'الدولة': '',
+  'دولة الكويت': '🇰🇼',
   'السعودية': '🇸🇦',
   'سعودي': '🇸🇦',
   'سعودية': '🇸🇦',
@@ -372,7 +372,7 @@ const nationalityFlagMapEnglish: Record<string, string> = {
 const nationalityNameByCode: Record<string, string> = {
   EG: 'مصر',
   SA: 'السعودية',
-  KW: 'المحلية',
+  KW: 'الكويت',
   AE: 'الإمارات',
   QA: 'قطر',
   BH: 'البحرين',
@@ -563,10 +563,10 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
   // Settings state with default values
   const [settings, setSettings] = useState<AppSettings>({
     systemName: 'نظام شؤون الموظفين',
-    departmentName: 'إدارة الشؤون الإدارية',
-    companyName: 'الجهة الحكومية',
-    companyPhone: '+965-90000000',
-    companyEmail: 'info@example.com',
+    departmentName: 'إدارة الخدمات المالية والإدارية والصيانة',
+    companyName: 'الإدارة العامة - مكتب الوكيل',
+    companyPhone: '+965-65500470',
+    companyEmail: 'admin@moi.gov.kw',
     companyAddress: 'المقر الرئيسي',
     alertOverdueDays: 5,
     alertUpcomingDays: 5,
@@ -766,7 +766,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
 
     return {
       id: 'org-root',
-      name: 'المدير العام',
+      name: 'سعادة وكيل الهيئة العامة للشؤون الإدارية والموارد البشرية',
       type: 'root',
       children: rootChildren
     };
@@ -798,10 +798,10 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
       if (settingsData) {
         setSettings({
           systemName: settingsData.system_name?.value || 'نظام شؤون الموظفين',
-          departmentName: settingsData.department_name?.value || 'إدارة الشؤون الإدارية',
-          companyName: settingsData.company_name?.value || 'الجهة الحكومية',
-          companyPhone: settingsData.company_phone?.value || '+965-90000000',
-          companyEmail: settingsData.company_email?.value || 'info@example.com',
+          departmentName: settingsData.department_name?.value || 'إدارة الخدمات المالية والإدارية والصيانة',
+          companyName: settingsData.company_name?.value || 'الإدارة العامة - مكتب الوكيل',
+          companyPhone: settingsData.company_phone?.value || '+965-65500470',
+          companyEmail: settingsData.company_email?.value || 'admin@moi.gov.kw',
           companyAddress: settingsData.company_address?.value || 'المقر الرئيسي',
           alertOverdueDays: parseInt(settingsData.alert_overdue_days?.value || '5'),
           alertUpcomingDays: parseInt(settingsData.alert_upcoming_days?.value || '5'),
@@ -1255,7 +1255,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
       icon: Building
     },
     ranks: {
-      title: 'المسميات الوظيفية',
+      title: 'الرتب',
       description: 'إدارة رتب الفئات المختلفة',
       icon: Award
     },
@@ -1424,8 +1424,8 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                               icon={HardDrive}
                             />
                             <ModuleToggleCard
-                              label="إخفاء تمديدات الفنيين"
-                              description="إخفاء صفحة تمديدات الفنيين من القائمة."
+                              label="إخفاء تمديدات الفنيون"
+                              description="إخفاء صفحة تمديدات الفنيون من القائمة."
                               checked={settings.hideProfessionalExtensions}
                               onChange={(checked) => handleSettingChange('hideProfessionalExtensions', checked)}
                               icon={ClipboardList}
@@ -2069,7 +2069,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                                     {filteredUnassignedEmployees.length > 0 ? (
                                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-72 overflow-auto">
                                         {filteredUnassignedEmployees.map((employee) => {
-                                          const displayName = formatEmployeeDisplayName(employee) || employee.name || '—';
+                                          const displayName = formatEmployeeDisplayName(employee) || employee.name || '-';
                                           const displayLabel = employee.rank ? `${employee.rank} / ${displayName}` : displayName;
                                           const fileLabel = employee.fileNumber || employee.militaryNumber || '';
                                           return (
@@ -2133,7 +2133,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                 {showRanksSection && (
                   <div className="space-y-8">
                     <FormSection
-                      title="إدارة المسميات الوظيفية"
+                      title="إدارة الرتب"
                       icon={Award}
                       badge={`${ranks.length} مسمى وظيفي`}
                       actions={
@@ -2150,10 +2150,10 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                         {ranks.length > 0 ? (
                           <div className="grid gap-6">
                             {[
-                              { label: 'قيادات', color: 'from-blue-500 to-blue-600', text: 'المسميات الوظيفية المعتمدة' },
-                              { label: 'مشرفون', color: 'from-blue-500 to-blue-600', text: 'المسميات الوظيفية المعتمدة' },
-                              { label: 'فنيون', color: 'from-blue-500 to-blue-600', text: 'المسميات الوظيفية المعتمدة' },
-                              { label: 'إداريون', color: 'from-blue-500 to-blue-600', text: 'المسميات الوظيفية المعتمدة' }
+                              { label: 'قيادات', color: 'from-blue-500 to-blue-600', text: 'الرتب المعتمدة' },
+                              { label: 'مشرفون', color: 'from-blue-500 to-blue-600', text: 'الرتب المعتمدة' },
+                              { label: 'فنيون', color: 'from-blue-500 to-blue-600', text: 'الرتب المعتمدة' },
+                              { label: 'إداريون', color: 'from-blue-500 to-blue-600', text: 'الرتب المعتمدة' }
                             ].map((cat) => {
                               const items = ranks
                                 .filter((rank) => rank.category === cat.label)
@@ -2221,7 +2221,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                               <Award className="w-10 h-10 text-gray-400" />
                             </div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">لا توجد رتب</h3>
-                            <p className="text-gray-600 mb-6">ابدأ بإضافة المسميات الوظيفية والمناصب المختلفة</p>
+                            <p className="text-gray-600 mb-6">ابدأ بإضافة الرتب والمناصب المختلفة</p>
                             <button
                               onClick={() => openRankModal()}
                               className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20"
@@ -2354,7 +2354,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                           const descriptionText = cat === 'قيادات'
                             ? 'القيادات - مناصب'
                             : cat === 'مشرفون'
-                              ? 'المشرفون - مسميات وظيفية'
+                              ? 'مشرفون - مسميات وظيفية'
                               : cat === 'فنيون'
                                 ? 'الفنيون - مسميات وظيفية'
                                 : 'الإداريون - مسميات وظيفية ومناصب';

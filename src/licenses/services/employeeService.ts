@@ -6,16 +6,16 @@ const API_BASE_URL = getApiBaseUrl();
  
 // Mock data for development - Real employees from database
 const mockEmployees = [
-  { id: '9', full_name: 'مشاري سامي الوهيب', rank: 'مشرف أول', file_number: '612154', category: 'قيادات' as const, created_at: '2025-07-16 06:19:50', updated_at: '2025-07-29 06:44:44' },
-  { id: '10', full_name: 'خالد طارق بن شعبان', rank: 'موظف أول', file_number: '743542', category: 'قيادات' as const, created_at: '2025-07-16 06:20:18', updated_at: '2025-07-16 06:20:18' },
-  { id: '11', full_name: 'محمد إبراهيم الحميدي', rank: 'موظف أول', file_number: '887981', category: 'قيادات' as const, created_at: '2025-07-16 06:20:32', updated_at: '2025-07-16 06:20:32' },
-  { id: '12', full_name: 'أحمد محمد ملا علي', rank: 'موظف أول', file_number: '458325', category: 'قيادات' as const, created_at: '2025-07-16 06:20:47', updated_at: '2025-07-16 06:20:47' },
-  { id: '13', full_name: 'عمر صبحي الهندي', rank: 'موظف أول', file_number: '457515', category: 'قيادات' as const, created_at: '2025-07-16 06:21:00', updated_at: '2025-07-16 06:21:00' },
-  { id: '14', full_name: 'عقاب ميسر العياف', rank: 'موظف أول', file_number: '744212', category: 'مشرفون' as const, created_at: '2025-07-16 06:21:11', updated_at: '2025-07-16 06:21:17' },
-  { id: '15', full_name: 'محمد مناحي القحطاني', rank: 'موظف أول', file_number: '237388', category: 'مشرفون' as const, created_at: '2025-07-16 06:21:30', updated_at: '2025-07-16 06:21:30' },
-  { id: '16', full_name: 'حمود ناجي الجمعه', rank: 'موظف أول', file_number: '805521', category: 'مشرفون' as const, created_at: '2025-07-16 06:21:45', updated_at: '2025-07-16 06:21:45' },
-  { id: '17', full_name: 'مساعد غصاب الفضلي', rank: 'موظف أول', file_number: '290947', category: 'مشرفون' as const, created_at: '2025-07-16 06:22:02', updated_at: '2025-07-16 06:22:02' },
-  { id: '18', full_name: 'أنور علي النجار', rank: 'موظف أول', file_number: '289531', category: 'مشرفون' as const, created_at: '2025-07-16 06:22:17', updated_at: '2025-07-16 06:22:17' },
+  { id: '9', full_name: 'مشاري سامي الوهيب', rank: 'مشرف أول حقوقي', file_number: '612154', category: 'موظف' as const, created_at: '2025-07-16 06:19:50', updated_at: '2025-07-29 06:44:44' },
+  { id: '10', full_name: 'خالد طارق بن شعبان', rank: 'موظف أول', file_number: '743542', category: 'موظف' as const, created_at: '2025-07-16 06:20:18', updated_at: '2025-07-16 06:20:18' },
+  { id: '11', full_name: 'محمد إبراهيم الحميدي', rank: 'موظف أول حقوقي', file_number: '887981', category: 'موظف' as const, created_at: '2025-07-16 06:20:32', updated_at: '2025-07-16 06:20:32' },
+  { id: '12', full_name: 'أحمد محمد ملا علي', rank: 'موظف أول', file_number: '458325', category: 'موظف' as const, created_at: '2025-07-16 06:20:47', updated_at: '2025-07-16 06:20:47' },
+  { id: '13', full_name: 'عمر صبحي الهندي', rank: 'مشرف', file_number: '457515', category: 'موظف' as const, created_at: '2025-07-16 06:21:00', updated_at: '2025-07-16 06:21:00' },
+  { id: '14', full_name: 'عقاب ميسر العياف', rank: 'مشرف', file_number: '744212', category: 'مشرف' as const, created_at: '2025-07-16 06:21:11', updated_at: '2025-07-16 06:21:17' },
+  { id: '15', full_name: 'محمد مناحي القحطاني', rank: 'مشرف', file_number: '237388', category: 'مشرف' as const, created_at: '2025-07-16 06:21:30', updated_at: '2025-07-16 06:21:30' },
+  { id: '16', full_name: 'حمود ناجي الجمعه', rank: 'مشرف', file_number: '805521', category: 'مشرف' as const, created_at: '2025-07-16 06:21:45', updated_at: '2025-07-16 06:21:45' },
+  { id: '17', full_name: 'مساعد غصاب الفضلي', rank: 'مشرف', file_number: '290947', category: 'مشرف' as const, created_at: '2025-07-16 06:22:02', updated_at: '2025-07-16 06:22:02' },
+  { id: '18', full_name: 'أنور علي النجار', rank: 'مشرف', file_number: '289531', category: 'مشرف' as const, created_at: '2025-07-16 06:22:17', updated_at: '2025-07-16 06:22:17' },
   { id: '34', full_name: 'عبدالمطلب محمد فوزي حجاج', rank: 'باحث قانوني', file_number: '882885', category: 'فني' as const, created_at: '2025-07-16 06:25:40', updated_at: '2025-07-16 06:26:08' },
   { id: '35', full_name: 'أحمد يسري ابو العلا', rank: 'طباع', file_number: '637998', category: 'فني' as const, created_at: '2025-07-16 06:25:51', updated_at: '2025-07-16 06:25:51' },
   { id: '73', full_name: 'محمد محمد قاسم أحمد', rank: 'رئيس قسم', file_number: '273112300976', category: 'إداري' as const, created_at: '2025-07-24 07:14:30', updated_at: '2025-07-24 07:17:46' },
@@ -25,16 +25,16 @@ const mockEmployees = [
  
 
 const mapCategoryFromApi = (value: string): Employee['category'] => {
-  if (value === 'قيادات' || value === 'قيادات') return 'قيادات';
-  if (value === 'مشرفون' || value === 'مشرفون') return 'مشرفون';
+  if (value === 'قيادات' || value === 'موظف') return 'موظف';
+  if (value === 'مشرفون' || value === 'مشرف') return 'مشرف';
   if (value === 'فنيون' || value === 'فني') return 'فني';
   if (value === 'إداريون' || value === 'إداري') return 'إداري';
   return 'إداري';
 };
 
 const mapCategoryToApi = (value: string) => {
-  if (value === 'قيادات') return 'قيادات';
-  if (value === 'مشرفون') return 'مشرفون';
+  if (value === 'موظف') return 'قيادات';
+  if (value === 'مشرف') return 'مشرفون';
   if (value === 'فني') return 'فنيون';
   if (value === 'إداري') return 'إداريون';
   return value;
@@ -246,7 +246,7 @@ export class EmployeeService {
       full_name: employee.full_name || '',
       rank: employee.rank || '',
       file_number: employee.file_number || '',
-      category: employee.category || 'قيادات',
+      category: employee.category || 'موظف',
       created_at: '',
       updated_at: ''
     };

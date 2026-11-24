@@ -329,8 +329,8 @@ const DataImporter: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          employee.category === 'قيادات' ? 'bg-green-100 text-green-800' :
-                          employee.category === 'مشرفون' ? 'bg-blue-100 text-blue-800' :
+                          employee.category === 'موظف' ? 'bg-green-100 text-green-800' :
+                          employee.category === 'مشرف' ? 'bg-blue-100 text-blue-800' :
                           employee.category === 'فني' ? 'bg-purple-100 text-purple-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>

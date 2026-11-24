@@ -14,6 +14,9 @@ import Settings from './components/Settings';
 import NextDutyQueue from './components/NextDutyQueue';
 import ProfessionalExtensions from './components/ProfessionalExtensions';
 import AuditLog from './components/AuditLog';
+import SyncSettings from './components/SyncSettings';
+import TokenGate from './components/TokenGate';
+import MobileApp from './components/MobileApp';
 import ParkingMap from './components/ParkingMap';
 import LicenseAdd from './licenses/components/AddLicense';
 import LicenseList from './licenses/components/LicenseList';
@@ -37,6 +40,7 @@ const PAGE_IDS = new Set([
   'settings-ranks',
   'settings-nationalities',
   'settings-job-titles',
+  'settings-sync',
   'next-queue',
   'audit-log',
   'licenses-add',
@@ -81,9 +85,13 @@ const getPageFromLocation = () => {
   return lastSegment;
 };
 
+const isMobileViewport = () =>
+  typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+
 function AppContent() {
   const { hideShifts, hideLicenses } = useSystem();
   const [currentPage, setCurrentPage] = useState('dashboard');
+  const [isMobile] = useState(isMobileViewport);
 
   useEffect(() => {
     try {
@@ -164,6 +172,8 @@ function AppContent() {
         return <Settings mode="nationalities" />;
       case 'settings-job-titles':
         return <Settings mode="job-titles" />;
+      case 'settings-sync':
+        return <SyncSettings />;
       case 'next-queue':
         return <NextDutyQueue />;
       case 'audit-log':
@@ -181,6 +191,15 @@ function AppContent() {
     }
   };
 
+  if (isMobile) {
+    return (
+      <>
+        <MobileApp />
+        <Toaster />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Layout currentPage={currentPage} onPageChange={handlePageChange}>
@@ -194,7 +213,9 @@ function AppContent() {
 function App() {
   return (
     <SystemProvider>
-      <AppContent />
+      <TokenGate>
+        <AppContent />
+      </TokenGate>
     </SystemProvider>
   );
 }

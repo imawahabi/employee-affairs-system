@@ -32,8 +32,8 @@ interface SystemProviderProps {
 
 export const SystemProvider: React.FC<SystemProviderProps> = ({ children }) => {
   const [systemName, setSystemName] = useState('نظام  شؤون الموظفين');
-  const [departmentName, setDepartmentName] = useState('إدارة الشؤون الإدارية');
-  const [companyName, setCompanyName] = useState('الجهة الحكومية');
+  const [departmentName, setDepartmentName] = useState('إدارة الخدمات المالية والإدارية والصيانة');
+  const [companyName, setCompanyName] = useState('الإدارة العامة - مكتب الوكيل');
   const [hideShifts, setHideShifts] = useState(false);
   const [hideLicenses, setHideLicenses] = useState(false);
   const [hideParking, setHideParking] = useState(false);

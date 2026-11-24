@@ -29,11 +29,6 @@ dist-ssr
 /out/
 *.exe
 *.asar
-# Runtime artifacts (showcase)
-backend/database.lock
-.vercel/
-backend/backups/
-tmp-*.sqlite
-
-# SQLite databases - seeded on first run, not committed
-*.sqlite
+.vercel
+.env*.local
+*.tsbuildinfo

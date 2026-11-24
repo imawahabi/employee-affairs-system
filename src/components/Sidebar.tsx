@@ -27,6 +27,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
+  RefreshCw,
 } from 'lucide-react';
 
 interface NavigationItem {
@@ -51,7 +52,7 @@ const navigation: NavigationItem[] = [
   { id: 'employees', name: 'إدارة الموظفين', icon: UsersRound, category: 'overview' },
   { id: 'employee-reports', name: 'تقارير مخصصة ', icon: FileText, category: 'overview' },
   { id: 'parking-map', name: 'مواقف الموظفين', icon: ParkingCircle, category: 'overview' },
-  { id: 'professional-extensions', name: 'تمديدات الفنيين', icon: CalendarClock, category: 'overview' },
+  { id: 'professional-extensions', name: 'تمديدات الفنيون', icon: CalendarClock, category: 'overview' },
   { id: 'view-shifts', name: 'كشف المناوبات', icon: ListChecks, category: 'shifts' },
   { id: 'shifts', name: 'تسجيل مناوبة جديدة', icon: CalendarPlus, category: 'shifts' },
   { id: 'next-queue', name: 'أولوية المناوبات', icon: ListOrdered, category: 'shifts' },
@@ -63,6 +64,7 @@ const navigation: NavigationItem[] = [
   { id: 'licenses-reports', name: 'التقارير الشاملة', icon: BarChart3, category: 'licenses' },
   { id: 'settings-other', name: 'إدارة البيانات', icon: Database, category: 'system', children: otherSettingsChildren },
   { id: 'settings', name: 'الإعدادات العامة', icon: SlidersHorizontal, category: 'system' },
+  { id: 'settings-sync', name: 'المزامنة السحابية', icon: RefreshCw, category: 'system' },
   { id: 'audit-log', name: 'سجل التغييرات', icon: FileText, category: 'system' },
   { id: 'alerts', name: 'التنبيهات', icon: BellRing, category: 'system' },
 ];
@@ -79,9 +81,14 @@ interface SidebarProps {
   onToggle: () => void;
   currentPage: string;
   onPageChange: (page: string) => void;
+  mobileOpen?: boolean;
 }
 
-export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChange }: SidebarProps) {
+export default function Sidebar({ isCollapsed: collapsedProp, onToggle, currentPage, onPageChange, mobileOpen = false }: SidebarProps) {
+  const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768;
+  // On mobile the sidebar acts as an off-canvas drawer (always expanded when open).
+  const isCollapsed = isMobileView ? false : collapsedProp;
+  const hiddenOnMobile = isMobileView && !mobileOpen;
   const { systemName, departmentName, companyName, hideShifts, hideLicenses, hideParking, hideProfessionalExtensions } = useSystem();
   const [isOtherSettingsOpen, setIsOtherSettingsOpen] = React.useState(settingsOtherChildIds.has(currentPage));
   const [isNavScrolled, setIsNavScrolled] = React.useState(false);
@@ -220,7 +227,7 @@ export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChan
   return (
     <div
       dir="rtl"
-      className={`flex h-screen flex-col bg-gradient-to-b from-white via-white to-slate-50 border-l border-gray-200 shadow-xl transition-all duration-300 fixed right-0 top-0 z-50 ${isCollapsed ? 'w-24' : 'w-64'}`}>
+      className={`flex h-screen flex-col bg-gradient-to-b from-white via-white to-slate-50 border-l border-gray-200 shadow-xl transition-all duration-300 fixed right-0 top-0 z-50 ${isCollapsed ? 'w-24' : 'w-64'} ${hiddenOnMobile ? 'translate-x-full md:translate-x-0' : ''}`}>
       {/* Header Section */}
       <div className={`relative ${isCollapsed ? 'h-20' : 'h-48'} bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 border-b border-blue-800 shadow-xl`}>
         <div className="h-full flex flex-col items-center justify-center p-4">
@@ -233,7 +240,7 @@ export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChan
               >
                 <img
                   src={logo}
-                  alt="Entity Logo"
+                  alt="Ministry Logo"
                   className=" blur-[0px] w-16 h-16 object-contain  blur-[0px]"
                 />
               </div>
@@ -254,7 +261,7 @@ export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChan
             <div className="w-18 h-18 rounded-full px-1 py-1 flex items-center justify-center">
               <img
                 src={logo}
-                alt="Entity Logo"
+                alt="Ministry Logo"
                 className="w-12 h-12 object-contain"
               />
             </div>

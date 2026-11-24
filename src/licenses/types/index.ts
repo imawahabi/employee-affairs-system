@@ -7,7 +7,7 @@ export interface Employee {
   department?: string;
   section?: string;
   jobTitle?: string;
-  category: 'قيادات' | 'مشرفون' | 'فني' | 'إداري';
+  category: 'موظف' | 'مشرف' | 'فني' | 'إداري';
   status?: 'active' | 'inactive';
   created_at: string;
   updated_at: string;

@@ -497,7 +497,7 @@ const ShiftRegistration: React.FC = () => {
     return employees
       .filter(e => selectedEmployees.includes(e.id) && e.status !== 'inactive')
       .sort((a, b) => {
-        // First sort by category: القيادات -> المشرفون -> الفنيون
+        // First sort by category: القيادات -> مشرفون -> الفنيون
         const categoryOrderA = getCategoryOrder(a.category);
         const categoryOrderB = getCategoryOrder(b.category);
         if (categoryOrderA !== categoryOrderB) {
@@ -683,7 +683,7 @@ const ShiftRegistration: React.FC = () => {
       case 'قيادات':
         return 'القيادات';
       case 'مشرفون':
-        return 'المشرفون';
+        return 'مشرفون';
       case 'فنيون':
         return 'الفنيون';
       case 'إداريون':
@@ -1514,7 +1514,7 @@ const ShiftRegistration: React.FC = () => {
                   <div className="text-xs text-slate-500">الحد الأدنى المطلوب</div>
                 </div>
                 <div className={`rounded-xl border p-4 ${ncosReady ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
-                  <div className="text-sm font-semibold text-slate-700">المشرفون</div>
+                  <div className="text-sm font-semibold text-slate-700">مشرفون</div>
                   <div className={`mt-2 text-lg font-bold ${ncosReady ? 'text-emerald-700' : 'text-amber-700'}`}>
                     {validation.stats.ncos.count} / {validation.stats.ncos.required}
                   </div>
@@ -1601,7 +1601,7 @@ const ShiftRegistration: React.FC = () => {
                         <div className={`flex items-center justify-between p-2 rounded text-sm ${
                           ncosReady ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
                         }`}>
-                          <span>المشرفون</span>
+                          <span>مشرفون</span>
                           <span>{validation.stats.ncos.count} / {validation.stats.ncos.required}</span>
                         </div>
                         <div className={`flex items-center justify-between p-2 rounded text-sm ${
@@ -1613,7 +1613,7 @@ const ShiftRegistration: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <h4 className="font-medium text-slate-700 mb-2">الوظائف الفنية</h4>
+                      <h4 className="font-medium text-slate-700 mb-2">الوظائف المهنية</h4>
                       <div className="space-y-1">
                         {validation.stats.professionals.jobGroupsStatus.map(group => (
                           <div key={group.name} className={`flex items-center justify-between p-2 rounded text-sm ${

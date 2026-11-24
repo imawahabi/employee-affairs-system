@@ -165,13 +165,13 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
         return categoryA - categoryB;
       }
 
-      if (employeeA.category === 'قيادات') {
+      if (employeeA.category === 'موظف') {
         const rankA = OFFICER_RANK_ORDER[employeeA.rank.replace(' حقوقي', '').trim()] || 99;
         const rankB = OFFICER_RANK_ORDER[employeeB.rank.replace(' حقوقي', '').trim()] || 99;
         if (rankA !== rankB) return rankA - rankB;
       }
 
-      if (employeeA.category === 'قيادات صف') {
+      if (employeeA.category === 'مشرف') {
         const rankA = NCO_RANK_ORDER[employeeA.rank] || 99;
         const rankB = NCO_RANK_ORDER[employeeB.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
@@ -410,11 +410,11 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
       <body>
         <div class="content-wrapper">
           <div class="report-header">
-            <h1 class="report-title">${reportConfig.title || `تقرير متابعة موظفي الإدارة العامة لسنة <b>${new Date(reportConfig.dateRange.startDate).getFullYear()}`}</b></h1>
+            <h1 class="report-title">${reportConfig.title || `تقرير متابعة موظفي إدارة السجل العام لسنة <b>${new Date(reportConfig.dateRange.startDate).getFullYear()}`}</b></h1>
             <p class="report-date">من <span class="report-date-range">${reportConfig.dateRange.startDate.replace(/-/g, '/')}</span> إلى <span class="report-date-range">${reportConfig.dateRange.endDate.replace(/-/g, '/')}</span></p>
             ${reportConfig.categories.length > 0 ? `<p class="report-categories">( ${reportConfig.categories.map(cat => {
-              if (cat === 'قيادات') return 'قيادات';
-              if (cat === 'قيادات صف') return 'مشرفون';
+              if (cat === 'موظف') return 'قيادات';
+              if (cat === 'مشرف') return 'مشرفون';
               if (cat === 'فني') return 'فنيون';
               if (cat === 'إداري') return 'إداريون';
               return cat;
@@ -437,7 +437,7 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
                 ${reportData.map((item, index) => `
                   <tr>
                     <td class="number-cell">${index + 1}</td>
-                    <td class="rank-cell">${(item.employee.category === 'قيادات' || item.employee.category === 'قيادات صف') ? item.employee.rank : item.employee.category}</td>
+                    <td class="rank-cell">${(item.employee.category === 'موظف' || item.employee.category === 'مشرف') ? item.employee.rank : item.employee.category}</td>
                     <td class="employee-name">${item.employee.full_name}</td>
                     <td class="number-cell">${item.fullDays}</td>
                     <td class="number-cell">${item.halfDays}</td>
@@ -515,7 +515,7 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
         {/* Print Header - Only visible when printing */}
         <div className="print-only text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            {reportConfig.title || `تقرير متابعة موظفي الإدارة العامة لسنة ${new Date(reportConfig.dateRange.startDate).getFullYear()}`}
+            {reportConfig.title || `تقرير متابعة موظفي إدارة السجل العام لسنة ${new Date(reportConfig.dateRange.startDate).getFullYear()}`}
           </h1>
           <p className="text-gray-600 text-lg mb-2">
             من {reportConfig.dateRange.startDate.replace(/-/g, '/')} إلى {reportConfig.dateRange.endDate.replace(/-/g, '/')}
@@ -523,8 +523,8 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
           {reportConfig.categories.length > 0 && (
             <p className="text-blue-600 font-semibold mt-2">
               ( {reportConfig.categories.map(cat => {
-                if (cat === 'قيادات') return 'قيادات';
-                if (cat === 'قيادات صف') return 'مشرفون';
+                if (cat === 'موظف') return 'قيادات';
+                if (cat === 'مشرف') return 'مشرفون';
                 if (cat === 'فني') return 'فنيون';
                 if (cat === 'إداري') return 'إداريون';
                 return cat;
@@ -607,7 +607,7 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
                       </td>
                       <td className="px-6 py-4 text-center text-sm font-medium text-gray-700">
                         <span className="bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold">
-                          {data.employee.category === 'قيادات' || data.employee.category === 'قيادات صف'
+                          {data.employee.category === 'موظف' || data.employee.category === 'مشرف'
                             ? data.employee.rank
                             : data.employee.category}
                         </span>
@@ -731,7 +731,7 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
                     type="text"
                     value={reportConfig.title}
                     onChange={(e) => setReportConfig(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="تقرير متابعة موظفي الإدارة العامة لسنة 2025"
+                    placeholder="تقرير متابعة موظفي إدارة السجل العام لسنة 2025"
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-right"
                   />
                   <p className="text-xs text-gray-500 mt-1">اتركه فارغاً لاستخدام العنوان الافتراضي</p>
@@ -807,7 +807,7 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
                         <FileText className="w-4 h-4 text-blue-500" />
                       </div>
                       <p className="text-blue-900 font-semibold mt-1 text-right">
-                        {reportConfig.title || 'تقرير متابعة موظفي الإدارة العامة'} لسنة {new Date(reportConfig.dateRange.startDate).getFullYear()}
+                        {reportConfig.title || 'تقرير متابعة موظفي إدارة السجل العام'} لسنة {new Date(reportConfig.dateRange.startDate).getFullYear()}
                       </p>
                     </div>
 
@@ -832,8 +832,8 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
                       </div>
                       <p className="text-blue-900 font-semibold mt-1 text-right">
                         {reportConfig.categories.length > 0 ? reportConfig.categories.map(cat => {
-                          if (cat === 'قيادات') return 'قيادات';
-                          if (cat === 'قيادات صف') return 'مشرفون';
+                          if (cat === 'موظف') return 'قيادات';
+                          if (cat === 'مشرف') return 'مشرفون';
                           if (cat === 'فني') return 'فنيون';
                           if (cat === 'إداري') return 'إداريون';
                           return cat;
@@ -982,7 +982,7 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
               {/* Report Header */}
               <div className="text-center mb-8 pb-6 border-b border-gray-200">
                 <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                  {reportConfig.title || 'تقرير متابعة موظفي الإدارة العامة'} لسنة {new Date(reportConfig.dateRange.startDate).getFullYear()}
+                  {reportConfig.title || 'تقرير متابعة موظفي إدارة السجل العام'} لسنة {new Date(reportConfig.dateRange.startDate).getFullYear()}
                 </h1>
                 <p className="text-gray-600">
                   من تاريخ {new Date(reportConfig.dateRange.startDate).toLocaleDateString('ar-US')}
@@ -1014,7 +1014,7 @@ const ModernReports: React.FC<ModernReportsProps> = () => {
                       <tr key={item.employee.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                         <td className="border border-gray-300 px-4 py-3 text-center font-medium">{index + 1}</td>
                         <td className="border border-gray-300 px-4 py-3 text-center">
-                          {item.employee.category === 'قيادات' || item.employee.category === 'قيادات صف'
+                          {item.employee.category === 'موظف' || item.employee.category === 'مشرف'
                             ? item.employee.rank
                             : item.employee.category}
                         </td>

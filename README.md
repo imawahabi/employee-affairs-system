@@ -29,6 +29,7 @@ Employee data in one spreadsheet, duty rosters in another spreadsheet, license t
 - **Audit Log** — every create, update, and approval documented with the user and the time.
 - **Alerts & Notifications** — configurable alerts for expiries, pending approvals, and schedule changes.
 - **Arabic-first Interface** — designed for Arabic from the ground up, with the Cairo font, full RTL direction, and a flat, elegant dashboard design.
+- **Mobile Experience & Sync** — a dedicated phone shell with four tabs and a smart duty calendar, an installable PWA, and a built-in sync layer with conflict handling (see Mobile Experience below).
 
 ## Screenshots from the Real App
 
@@ -51,6 +52,36 @@ Employee data in one spreadsheet, duty rosters in another spreadsheet, license t
 ### Parking Map — interactive zone grid with occupancy and recent allocations
 
 <img src="screenshots/parking-mock-macbook.png" width="860" alt="Parking map">
+
+## Mobile Experience
+
+The same system ships with a dedicated mobile experience: below a tablet breakpoint the interface switches to a purpose-built phone shell — not a squeezed desktop page — so the daily operations are one thumb away.
+
+- **Four bottom tabs** — Home (smart search across name, job title, file number and civil ID, live workforce statistics, and this month's licenses), Employees (searchable directory with per-employee duty history), Shifts, and More.
+- **Shifts, two ways** — a classic list view, or a **smart calendar** that lays the month out with per-day duty badges and attendance totals, with one-tap duty registration.
+- **Everything else, scaled to fit** — the More tab carries a live **sync status card** (device identity, pending changes, conflicts, last sync, and a sync-now action) and opens every remaining desktop section — licenses, alerts, professional extensions, reports, parking, settings — in pages scaled to the phone's width.
+- **Sync built in** — a device-to-cloud sync layer with a header sync badge, conflict resolution, and a PIN gate for the web build, so a phone and a desktop stay on the same data.
+- **Installable PWA** — web app manifest, home-screen icons, and mobile web-app meta tags; install it and it runs full-screen like a native app.
+
+### Home — statistics and smart search
+
+<img src="screenshots-mobile/home-mock-iphone.png" width="300" alt="Mobile home tab">
+
+### Employees — directory with duty history
+
+<img src="screenshots-mobile/employees-mock-iphone.png" width="300" alt="Mobile employees tab">
+
+### Shifts — list view
+
+<img src="screenshots-mobile/shifts-list-mock-iphone.png" width="300" alt="Mobile shifts list">
+
+### Shifts — smart calendar view
+
+<img src="screenshots-mobile/shifts-calendar-mock-iphone.png" width="300" alt="Mobile shifts smart calendar">
+
+### More — sync status and all sections
+
+<img src="screenshots-mobile/more-mock-iphone.png" width="300" alt="Mobile more tab with sync status">
 
 > The screenshots are from the real application while running, seeded with the fictional showcase dataset — every name and record shown is invented.
 

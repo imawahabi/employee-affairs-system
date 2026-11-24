@@ -1170,7 +1170,7 @@ const LicenseList: React.FC = () => {
     const title = new Paragraph({
       alignment: AlignmentType.CENTER,
       children: [new TextRun({
-        text: "نظام الرخص والاستئذانات للإدارة العامة لالمكتب الرئيسي",
+        text: "نظام الرخص والاستئذانات للإدارة العامة لمكتب المدير العام",
         font: "Sultan bold",
         size: 42, // 21pt
         bold: false,
@@ -1202,14 +1202,14 @@ const LicenseList: React.FC = () => {
     });
 
     const tableHeader = new TableRow({
-      children: ['م', 'المسمى الوظيفي', 'اسم الموظف', 'رقم الملف/الإداري', 'الإدارة', 'نوع الرخصة/الاستئذان', 'تاريخ الرخصة/الاستئذان', 'الساعات', 'السنة'].map(text => createCell(text, true)),
+      children: ['م', 'المسمى الوظيفي', 'اسم الموظف', 'رقم الملف/المدني', 'الإدارة', 'نوع الرخصة/الاستئذان', 'تاريخ الرخصة/الاستئذان', 'الساعات', 'السنة'].map(text => createCell(text, true)),
       height: { value: 567, rule: HeightRule.EXACT }, // 1cm
     });
 
     const tableRows = sortedAndFilteredLicenses.map((license, index) => new TableRow({
       children: [
         createCell(String(index + 1), false),
-        createCell(license.employee?.category === 'قيادات' || license.employee?.category === 'مشرفون'
+        createCell(license.employee?.category === 'موظف' || license.employee?.category === 'مشرف'
           ? license.employee?.rank || ''
           : license.employee?.category || '', false),
         createCell(license.employee?.full_name || '', false),
@@ -1253,7 +1253,7 @@ const LicenseList: React.FC = () => {
       "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
     ];
     const currentMonthName = arabicMonths[month];
-    const fileName = `نظام الرخص والاستئذانات للإدارة العامة لالمكتب الرئيسي - ${currentMonthName} - ${year}.docx`;
+    const fileName = `نظام الرخص والاستئذانات للإدارة العامة لمكتب المدير العام - ${currentMonthName} - ${year}.docx`;
     Packer.toBlob(doc).then(blob => {
       saveAs(blob, fileName);
     }).catch(err => {
@@ -1268,7 +1268,7 @@ const LicenseList: React.FC = () => {
       return;
     }
     let csvContent = "\uFEFF"; // BOM for UTF-8
-    csvContent += "م,المسمى الوظيفي,اسم الموظف,رقم الملف/الإداري,الإدارة,نوع الرخصة/الاستئذان,تاريخ الرخصة/الاستئذان,الساعات,الشهر,السنة\r\n";
+    csvContent += "م,المسمى الوظيفي,اسم الموظف,رقم الملف/المدني,الإدارة,نوع الرخصة/الاستئذان,تاريخ الرخصة/الاستئذان,الساعات,الشهر,السنة\r\n";
     sortedAndFilteredLicenses.forEach((license, index) => {
       const row = [
         index + 1,
@@ -1648,7 +1648,7 @@ const LicenseList: React.FC = () => {
                     currentPageLicenses.map((license, index) => {
                       const isHighlighted = String(license.id) === highlightLicenseId;
                       const identifier = getEmployeeIdentifierDetails(license.employee);
-                      const rankLabel = license.employee?.category === 'قيادات' || license.employee?.category === 'مشرفون'
+                      const rankLabel = license.employee?.category === 'موظف' || license.employee?.category === 'مشرف'
                         ? license.employee?.rank
                         : license.employee?.category;
                       return (
@@ -1679,7 +1679,7 @@ const LicenseList: React.FC = () => {
                                   className="cursor-pointer text-right font-bold text-gray-900 hover:text-blue-700 transition-colors"
                                   title="الانتقال إلى إدارة الموظفين"
                                 >
-                                  {license.employee?.full_name || '—'}
+                                  {license.employee?.full_name || '-'}
                                 </button>
                               </div>
                               {identifier.value ? (

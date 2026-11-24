@@ -34,7 +34,7 @@ function getDatabasePath() {
 
   // في التطبيق المُجمع، استخدم مجلد البيانات الخاص بالمستخدم
   console.log('📁 استخدام مجلد البيانات الخاص بالمستخدم (تطبيق مُجمع)');
-  const userDataPath = path.join(os.homedir(), 'AppData', 'Local', 'HrSuite-Licenses');
+  const userDataPath = path.join(os.homedir(), 'AppData', 'Local', 'Moi-Licenses');
   return path.join(userDataPath, 'database.json');
 }
 
@@ -84,27 +84,27 @@ async function readDB() {
         {
           id: 'emp-001',
           full_name: 'أحمد محمد الكندري',
-          rank: 'رائد',
+          rank: 'مشرف أول',
           file_number: '12345',
-          category: 'ضابط',
+          category: 'موظف',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         },
         {
           id: 'emp-002',
           full_name: 'فاطمة علي العتيبي',
-          rank: 'نقيب',
+          rank: 'مشرف',
           file_number: '12346',
-          category: 'ضابط',
+          category: 'موظف',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         },
         {
           id: 'emp-003',
           full_name: 'محمد سالم المطيري',
-          rank: 'رقيب أول',
+          rank: 'موظف أول',
           file_number: '12347',
-          category: 'ضابط صف',
+          category: 'مشرف',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }

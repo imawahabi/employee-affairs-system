@@ -511,8 +511,8 @@ const AddLicense: React.FC<AddLicenseProps> = ({ onNavigate }) => {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, { bg: string; text: string }> = {
-      'قيادات': { bg: 'bg-blue-100', text: 'text-blue-800' },
-      'مشرفون': { bg: 'bg-green-100', text: 'text-green-800' },
+      'موظف': { bg: 'bg-blue-100', text: 'text-blue-800' },
+      'مشرف': { bg: 'bg-green-100', text: 'text-green-800' },
       'فني': { bg: 'bg-yellow-100', text: 'text-yellow-800' },
       'إداري': { bg: 'bg-orange-100', text: 'text-orange-800' },
     };

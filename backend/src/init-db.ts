@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Departments (
     name TEXT NOT NULL UNIQUE
 );
 
--- جدول المسميات الوظيفية (Ranks)
+-- جدول الرتب (Ranks)
 CREATE TABLE IF NOT EXISTS Ranks (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL UNIQUE,
@@ -295,24 +295,24 @@ INSERT OR IGNORE INTO Departments (id, name) VALUES
 ('6', 'م.م.ع. شئون الفنية'),
 ('7', 'م.م.ع. شئون المكتب');
 
--- بيانات المسميات الوظيفية (Ranks)
+-- بيانات الرتب (Ranks)
 INSERT OR IGNORE INTO Ranks (id, name, category, "order") VALUES
 ('1', 'رئيس قسم', 'قيادات', 1),
-('2', 'رئيس قسم', 'قيادات', 2),
+('2', 'مقدم حقوقي', 'قيادات', 2),
 ('3', 'مشرف أول', 'قيادات', 3),
-('4', 'مشرف أول', 'قيادات', 4),
+('4', 'مشرف أول حقوقي', 'قيادات', 4),
 ('5', 'مشرف', 'قيادات', 5),
-('6', 'مشرف', 'قيادات', 6),
+('6', 'مشرف حقوقي', 'قيادات', 6),
 ('7', 'موظف أول', 'قيادات', 7),
-('8', 'موظف أول', 'قيادات', 8),
-('9', 'موظف أول', 'قيادات', 9),
-('10', 'موظف أول', 'قيادات', 10),
-('11', 'موظف أول', 'مشرفون', 1),
-('12', 'موظف', 'مشرفون', 2),
-('13', 'مشرف', 'مشرفون', 3),
-('14', 'مشرف مساعد', 'مشرفون', 4),
-('15', 'موظف أول', 'مشرفون', 5),
-('16', 'موظف', 'مشرفون', 6),
+('8', 'موظف أول حقوقي', 'قيادات', 8),
+('9', 'موظف', 'قيادات', 9),
+('10', 'موظف حقوقي', 'قيادات', 10),
+('11', 'مشرف', 'مشرفون', 1),
+('12', 'مشرف مساعد', 'مشرفون', 2),
+('13', 'موظف أول', 'مشرفون', 3),
+('14', 'موظف', 'مشرفون', 4),
+('15', 'موظف', 'مشرفون', 5),
+('16', 'وكيل موظف', 'مشرفون', 6),
 ('17', 'موظف خدمات', 'مشرفون', 7),
 ('18', 'فني', 'فنيون', 1),
 ('19', 'إداري', 'إداريون', 1);
@@ -320,7 +320,7 @@ INSERT OR IGNORE INTO Ranks (id, name, category, "order") VALUES
 -- بيانات الإعدادات الافتراضية (Settings)
 INSERT OR IGNORE INTO Settings (id, key, value, description) VALUES
 ('setting_system_name', 'system_name', 'نظام إدارة المناوبات', 'اسم النظام'),
-('setting_company_name', 'company_name', 'الجهة الحكومية', 'اسم المؤسسة'),
+('setting_company_name', 'company_name', 'الهيئة العامة للشؤون الإدارية والموارد البشرية', 'اسم المؤسسة'),
 ('setting_company_phone', 'company_phone', '+966-11-1234567', 'هاتف المؤسسة'),
 ('setting_company_email', 'company_email', 'admin@ministry.gov.sa', 'البريد الإلكتروني للمؤسسة'),
 ('setting_company_address', 'company_address', 'الرياض، المملكة العربية السعودية', 'عنوان المؤسسة'),
@@ -353,7 +353,7 @@ INSERT OR IGNORE INTO Nationalities (id, name) VALUES
 INSERT OR IGNORE INTO JobTitles (id, name, category) VALUES
 ('job_officer_cmd', 'قائد وحدة', 'قيادات'),
 ('job_pro_worker', 'عامل', 'فنيون'),
-('job_civil', 'موظف إداري', 'إداريون');
+('job_civil', 'موظف مدني', 'إداريون');
 
 -- بيانات الأقسام الفرعية
 INSERT OR IGNORE INTO Sections (id, name, departmentId) VALUES

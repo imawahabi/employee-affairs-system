@@ -10,6 +10,19 @@ import { initializeDatabase } from './init-db';
 import { startAlertScheduler, checkAndCreateAlerts } from './alert-service';
 import { alertEvents } from './alert-events';
 import { computeExtensionStatusForEmployee, diffInDays, getTodayUtc, parseDateOnly } from './professional-extension-utils';
+import {
+    createSyncRuntime,
+    startSyncWorker,
+    handleGetChanges,
+    handleIncoming,
+    handleAck,
+    handleListConflicts,
+    handleResolveConflict,
+    handleSyncStatus,
+    SyncRuntime,
+    SyncChange,
+} from './sync';
+import { restoreDatabaseFromGitHub, startDatabasePersistence } from './db-persistence';
 
 dotenv.config();
 
@@ -23,6 +36,78 @@ const app = express();
 
 app.use(cors());
 app.use(express.json({ limit: '75mb' }));
+
+// Optional API token auth — required when the backend is exposed beyond localhost
+// (cloud deployment). Set API_TOKEN env var; clients send `x-api-token` header
+// or `?token=` query param (needed for EventSource which cannot set headers).
+const API_TOKEN = process.env.API_TOKEN || '';
+if (API_TOKEN) {
+    app.use('/api', (req, res, next) => {
+        const headerToken = req.headers['x-api-token'];
+        const queryToken = req.query.token;
+        const provided = (typeof headerToken === 'string' ? headerToken : '') || (typeof queryToken === 'string' ? queryToken : '');
+        if (provided === API_TOKEN) return next();
+        res.status(401).json({ error: 'unauthorized' });
+    });
+}
+
+// ---------- Sync endpoints ----------
+let syncRuntime: SyncRuntime | null = null;
+const requireSyncRuntime = (_req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (!syncRuntime) {
+        res.status(503).json({ error: 'sync not initialized' });
+        return;
+    }
+    next();
+};
+
+app.get('/api/sync/status', requireSyncRuntime, async (_req, res) => {
+    try { res.json(await handleSyncStatus(syncRuntime!)); }
+    catch (e: any) { res.status(500).json({ error: e?.message || 'sync status failed' }); }
+});
+
+app.get('/api/sync/changes', requireSyncRuntime, async (req, res) => {
+    try {
+        const device = String(req.query.device || 'unknown');
+        const since = Math.max(0, parseInt(String(req.query.since || '0'), 10) || 0);
+        res.json(await handleGetChanges(syncRuntime!, device, since));
+    } catch (e: any) { res.status(500).json({ error: e?.message || 'sync changes failed' }); }
+});
+
+app.post('/api/sync/incoming', requireSyncRuntime, async (req, res) => {
+    try {
+        const device = String(req.body?.device || 'unknown');
+        const entries = Array.isArray(req.body?.entries) ? (req.body.entries as SyncChange[]) : [];
+        res.json(await handleIncoming(syncRuntime!, device, entries));
+    } catch (e: any) { res.status(500).json({ error: e?.message || 'sync incoming failed' }); }
+});
+
+app.post('/api/sync/ack', requireSyncRuntime, async (req, res) => {
+    try {
+        const device = String(req.body?.device || 'unknown');
+        const seq = Math.max(0, parseInt(String(req.body?.seq || '0'), 10) || 0);
+        res.json(await handleAck(syncRuntime!, device, seq));
+    } catch (e: any) { res.status(500).json({ error: e?.message || 'sync ack failed' }); }
+});
+
+app.post('/api/sync/run', requireSyncRuntime, async (_req, res) => {
+    try {
+        const { runSyncCycle } = await import('./sync');
+        res.json(await runSyncCycle(syncRuntime!));
+    } catch (e: any) { res.status(500).json({ error: e?.message || 'sync run failed' }); }
+});
+
+app.get('/api/sync/conflicts', requireSyncRuntime, async (_req, res) => {
+    try { res.json(await handleListConflicts(syncRuntime!)); }
+    catch (e: any) { res.status(500).json({ error: e?.message || 'sync conflicts failed' }); }
+});
+
+app.post('/api/sync/conflicts/:id/resolve', requireSyncRuntime, async (req, res) => {
+    try {
+        const keep = req.body?.keep === 'remote' ? 'remote' : 'local';
+        res.json(await handleResolveConflict(syncRuntime!, String(req.params.id), keep));
+    } catch (e: any) { res.status(500).json({ error: e?.message || 'sync resolve failed' }); }
+});
 
 const wordUploadRawParser = express.raw({
     type: [
@@ -46,6 +131,10 @@ const licenseImportRawParser = express.raw({
 const DATA_DIR = process.env.DATA_DIR || process.cwd();
 log(`[Server] Using DATA_DIR: ${DATA_DIR}`);
 log(`[Server] Current working directory: ${process.cwd()}`);
+
+// Optional per-install env file next to the database (used for SYNC_PEER_URL etc.)
+// without needing to rebuild or repackage the app.
+dotenv.config({ path: path.join(DATA_DIR, '.env.sync') });
 
 // Ensure DATA_DIR exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -269,6 +358,7 @@ async function getDb() {
             filename: dbPath,
             driver: sqlite3.Database
         });
+        await db.run('PRAGMA busy_timeout = 5000');
         log('[DB] Database connection successful');
         return db;
     } catch (error) {
@@ -295,15 +385,15 @@ const OFFICER_RANKS = [
     'مشرف أول',
     'مشرف',
     'موظف أول',
-    'موظف أول',
+    'موظف',
 ];
 
 const NCO_RANKS = [
-    'موظف أول',
-    'موظف',
     'مشرف',
     'مشرف مساعد',
     'موظف أول',
+    'موظف',
+    'موظف',
     'موظف',
     'موظف خدمات',
 ];
@@ -476,7 +566,7 @@ const inferProfessionalGroupFromJobTitle = (value: any) => {
     return 'أخرى';
 };
 
-const isGovernmentiNationality = (value: any) => {
+const isKuwaitiNationality = (value: any) => {
     const trimmed = normalizeText(value);
     if (!trimmed) return false;
     const normalized = trimmed.replace(/\s+/g, '').toLowerCase();
@@ -540,11 +630,11 @@ const getCategoryOrDefault = (value: any, fallback = DEFAULT_CATEGORY) => {
 };
 
 const getDefaultRankName = (category: string) => {
-    if (category === 'قيادات') return 'موظف أول';
+    if (category === 'قيادات') return 'موظف';
     if (category === 'مشرفون') return 'موظف خدمات';
     if (category === 'إداريون') return 'إداري';
     if (category === 'فنيون') return 'فني';
-    return 'موظف أول';
+    return 'موظف';
 };
 
 const ensureRank = async (db: any, name: string, category: string) => {
@@ -640,8 +730,8 @@ const formatGenderLabel = (value: any) => {
 
 const mapLicenseCategory = (value: any) => {
     const trimmed = normalizeText(value);
-    if (trimmed === 'قيادات') return 'قيادات';
-    if (trimmed === 'مشرفون') return 'مشرفون';
+    if (trimmed === 'قيادات') return 'موظف';
+    if (trimmed === 'مشرفون') return 'مشرف';
     if (trimmed === 'فنيون') return 'فني';
     if (trimmed === 'إداريون') return 'إداري';
     return trimmed;
@@ -649,8 +739,8 @@ const mapLicenseCategory = (value: any) => {
 
 const mapEmployeeCategoryFromLicense = (value: any) => {
     const trimmed = normalizeText(value);
-    if (trimmed === 'قيادات') return 'قيادات';
-    if (trimmed === 'مشرفون') return 'مشرفون';
+    if (trimmed === 'موظف') return 'قيادات';
+    if (trimmed === 'مشرف') return 'مشرفون';
     if (trimmed === 'فني') return 'فنيون';
     if (trimmed === 'إداري') return 'إداريون';
     return trimmed;
@@ -752,7 +842,7 @@ const EMPLOYEE_AUDIT_FIELDS = [
     { key: 'militaryNumber', label: 'الرقم الوظيفي' },
     { key: 'hiringDate', label: 'تاريخ التعيين' },
     { key: 'seniorityNumber', label: 'رقم الأقدمية' },
-    { key: 'hasWeapon', label: 'يحمل جهاز اتصال', formatter: formatYesNo },
+    { key: 'hasWeapon', label: 'لديه جهاز اتصال', formatter: formatYesNo },
     { key: 'weaponAttachments', label: 'ملحقات جهاز الاتصال' },
     { key: 'hasParking', label: 'موقف سيارة', formatter: formatYesNo },
     { key: 'parkingLocation', label: 'موقع الموقف' },
@@ -1085,7 +1175,7 @@ try {
       }
       $joined = ($candidate -join ' ')
       $score = 0
-      foreach ($keyword in @('الاسم','الإسم','الاســــم','المسمى الوظيفي','رقم الملف','الرقم المدني','رقم إداري','الإدارة','الادارة','المسمى','الدرجة','المؤهل','الهاتف')) {
+      foreach ($keyword in @('الاسم','الإسم','الاســــم','المسمى الوظيفي','رقم الملف','الرقم المدني','رقم مدني','الإدارة','الادارة','المسمى','الدرجة','المؤهل','الهاتف')) {
         if ($joined -like "*$keyword*") { $score++ }
       }
       if ($score -gt $bestHeaderScore) {
@@ -1160,7 +1250,7 @@ const FORCE_SOURCE_FIELD_ALIASES: Record<string, string[]> = {
     fileNumber: ['رقم الملف', 'ملف'],
     militaryNumber: ['الرقم الوظيفي', 'رقم وظيفي'],
     referenceNumber: ['رقم المرجع', 'المرجع'],
-    civilId: ['رقم إداري', 'الرقم المدني', 'إداري'],
+    civilId: ['رقم مدني', 'الرقم المدني', 'إداري'],
     birthDate: ['تاريخ الميلاد', 'الميلاد'],
     nationality: ['الجنسية'],
     nationalityArticleNumber: ['رقم مادة الجنسية', 'مادة الجنسية', 'المادة'],
@@ -1177,7 +1267,7 @@ const FORCE_SOURCE_FIELD_ALIASES: Record<string, string[]> = {
     phone_number: ['رقم الهاتف', 'الهاتف', 'النقال', 'الموبايل'],
     hiringDate: ['تاريخ التعيين', 'التعيين'],
     seniorityNumber: ['رقم الأقدمية', 'الاقدمية', 'الأقدمية'],
-    hasWeapon: ['جهاز اتصال', 'يحمل جهاز اتصال'],
+    hasWeapon: ['جهاز اتصال', 'لديه جهاز اتصال'],
     weaponAttachments: ['ملحقات جهاز الاتصال', 'ملحقات جهاز الاتصال'],
     hasParking: ['موقف سيارة', 'لديه موقف', 'الموقف'],
     parkingLocation: ['موقع الموقف', 'مكان الموقف'],
@@ -1220,7 +1310,7 @@ const inferForceCategoryFromRow = (row: ForceWordRow, tableIndex: number) => {
     const rowText = normalizeForceMatchText([...row.headers, ...row.cells].join(' '));
     if (rowText.includes('الإداريون') || rowText.includes('إداريون') || rowText.includes('الدرجه الوظيفيه')) return 'إداريون';
     if (rowText.includes('فني')) return 'فنيون';
-    if (rowText.includes('المشرفون') || rowText.includes('افراد')) return 'مشرفون';
+    if (rowText.includes('مشرفون') || rowText.includes('افراد')) return 'مشرفون';
     if (rowText.includes('قيادات')) return 'قيادات';
     return tableIndex === 1
         ? 'قيادات'
@@ -1296,7 +1386,7 @@ const parsePhoneSourceEmployees = (rows: ForceWordRow[]) => {
         const name = getForceCell(row, ['الاسم', 'الإسم', 'الاســــم']);
         if (!isUsefulForceValue(name)) return;
         const nameKey = normalizeForceMatchText(name);
-        if (nameKey.includes('القيادات') || nameKey.includes('المشرفون') || nameKey.includes('الفنيون')) return;
+        if (nameKey.includes('القيادات') || nameKey.includes('مشرفون') || nameKey.includes('الفنيون')) return;
         parsed.push({
             sourceId: `phone_${row.tableIndex}_${row.rowIndex || index + 2}`,
             tableIndex: Number(row.tableIndex),
@@ -1674,7 +1764,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
                     status: 'active'
                 };
                 const createWarnings = [
-                    isUsefulForceValue(sourceAny.rawRank) && !source.rank ? `المسمى الوظيفي في الكشف (${sourceAny.rawRank}) لا تطابق قائمة المسميات الوظيفية.` : '',
+                    isUsefulForceValue(sourceAny.rawRank) && !source.rank ? `المسمى الوظيفي في الكشف (${sourceAny.rawRank}) لا تطابق قائمة الرتب.` : '',
                     isUsefulForceValue(sourceAny.rawJobTitle) && !source.jobTitle ? `المسمى في الكشف (${sourceAny.rawJobTitle}) لا يطابق قائمة المسميات.` : '',
                     isUsefulForceValue(sourceAny.rawJobGrade) && !source.jobGrade ? `الدرجة في الكشف (${sourceAny.rawJobGrade}) لا تطابق الدرجات الموجودة.` : '',
                     isUsefulForceValue(sourceAny.rawEducationCertificateType) && !source.educationCertificateType ? `المؤهل في الكشف (${sourceAny.rawEducationCertificateType}) لا يطابق قائمة المؤهلات.` : '',
@@ -1799,7 +1889,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
             } else {
                 addMatchedUpdateProposal('rank', source.rank, {
                     options: rankOptions,
-                    warning: isUsefulForceValue(sourceAny.rawRank) && !source.rank ? `المسمى الوظيفي في الكشف (${sourceAny.rawRank}) لا تطابق قائمة المسميات الوظيفية.` : null,
+                    warning: isUsefulForceValue(sourceAny.rawRank) && !source.rank ? `المسمى الوظيفي في الكشف (${sourceAny.rawRank}) لا تطابق قائمة الرتب.` : null,
                     allowEmptySuggestion: isUsefulForceValue(sourceAny.rawRank),
                     sourceRawValue: sourceAny.rawRank
                 });
@@ -7211,7 +7301,7 @@ app.post('/api/backup', async (req, res) => {
 });
 
 const main = async () => {
-    log('🚀 Starting GOV Shifts Server...');
+    log('🚀 Starting MOI Shifts Server...');
     log(`[Main] Environment: ${process.env.NODE_ENV || 'development'}`);
     log(`[Main] Process ID: ${process.pid}`);
     log(`[Main] Node version: ${process.version}`);
@@ -7240,6 +7330,11 @@ const main = async () => {
             process.exit(1);
         }
 
+        // On ephemeral-disk hosts, restore the DB from GitHub backup if missing.
+        if (!fs.existsSync(dbPath) || fs.statSync(dbPath).size === 0) {
+            await restoreDatabaseFromGitHub(dbPath);
+        }
+
         const startupBackup = createDatabaseBackup();
 
         // Initialize database
@@ -7252,13 +7347,20 @@ const main = async () => {
         await migrateDatabase();
         log('[Main] ✅ Database migrations completed');
 
+        // Initialize sync runtime (outbox triggers + worker when SYNC_PEER_URL set)
+        log('[Main] Initializing sync runtime...');
+        syncRuntime = await createSyncRuntime(dbPath);
+        log(`[Main] ✅ Sync runtime ready (device: ${syncRuntime.deviceId}, peer: ${syncRuntime.peerUrl || 'none'})`);
+        startSyncWorker(syncRuntime);
+        startDatabasePersistence(dbPath);
+
         if (startupBackup.status === 'missing') {
             createDatabaseBackup();
         }
 
         // Get port from environment or use dynamic port (0)
         const requestedPort = process.env.PORT ? parseInt(process.env.PORT, 10) : 0;
-        const host = '127.0.0.1';
+        const host = process.env.HOST || '127.0.0.1';
 
         log(`[Main] Starting HTTP server on ${host}:${requestedPort}...`);
         const server = app.listen(requestedPort, host, () => {
@@ -7281,10 +7383,16 @@ const main = async () => {
                     log('[Main] Tables:', tables.map((t: any) => t.name).join(', '));
                 }
 
-                // Start alert scheduler after database is verified
-                log('[Main] Starting alert scheduler...');
-                startAlertScheduler();
-                log('🔔 Alert scheduler started');
+                // Start alert scheduler after database is verified.
+                // Disabled on cloud replica (DISABLE_ALERT_SCHEDULER=1) — the
+                // local desktop is the source of truth for generated alerts.
+                if (process.env.DISABLE_ALERT_SCHEDULER === '1') {
+                    log('[Main] Alert scheduler disabled (cloud replica mode)');
+                } else {
+                    log('[Main] Starting alert scheduler...');
+                    startAlertScheduler();
+                    log('🔔 Alert scheduler started');
+                }
             }).catch(err => {
                 console.error('[Main] ❌ Failed to verify database:', err);
             });

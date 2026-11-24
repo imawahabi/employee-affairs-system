@@ -85,8 +85,8 @@ type BulkEmployeeRow = {
 
 const normalizeBulkCategory = (value: string): Employee['category'] => {
   const trimmed = value.trim();
-  if (trimmed === 'قيادات' || trimmed === 'قيادات') return 'قيادات';
-  if (trimmed === 'مشرفون' || trimmed === 'مشرفون') return 'مشرفون';
+  if (trimmed === 'قيادات' || trimmed === 'موظف') return 'قيادات';
+  if (trimmed === 'مشرفون' || trimmed === 'مشرف') return 'مشرفون';
   if (trimmed === 'فنيون' || trimmed === 'فني') return 'فنيون';
   if (trimmed === 'إداريون' || trimmed === 'إداري') return 'إداريون';
   return 'إداريون';
@@ -930,7 +930,7 @@ const EmployeeManagement: React.FC = () => {
   const nationalityNameByCode: Record<string, string> = {
     EG: 'مصر',
     SA: 'السعودية',
-    KW: 'المحلية',
+    KW: 'الكويت',
     AE: 'الإمارات',
     QA: 'قطر',
     BH: 'البحرين',
@@ -970,10 +970,10 @@ const EmployeeManagement: React.FC = () => {
   };
 
   const nationalityFlagMap: Record<string, string> = {
-    'المحلية': '',
+    'الكويت': '🇰🇼',
     'كويتي': '🇰🇼',
     'كويتية': '🇰🇼',
-    'الدولة': '',
+    'دولة الكويت': '🇰🇼',
     'السعودية': '🇸🇦',
     'سعودي': '🇸🇦',
     'سعودية': '🇸🇦',
@@ -1175,7 +1175,7 @@ const EmployeeManagement: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-5xl font-black mb-1">{activeCounts.officers}</div>
-                  <div className="text-blue-100 text-xs font-medium">قيادات</div>
+                  <div className="text-blue-100 text-xs font-medium">موظف</div>
                 </div>
               </div>
               <div className="border-t border-white border-opacity-20 pt-3">
@@ -1196,11 +1196,11 @@ const EmployeeManagement: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-5xl font-black mb-1">{activeCounts.ncos}</div>
-                  <div className="text-green-100 text-xs font-medium">إشرافي</div>
+                  <div className="text-green-100 text-xs font-medium">مشرفون</div>
                 </div>
               </div>
               <div className="border-t border-white border-opacity-20 pt-3">
-                <h4 className="text-lg font-bold">المشرفون</h4>
+                <h4 className="text-lg font-bold">المشرفون والموظفون</h4>
               </div>
               <div className="absolute top-3 right-3 w-6 h-6 bg-white bg-opacity-10 rounded-full"></div>
               <div className="absolute bottom-3 left-3 w-8 h-8 bg-white bg-opacity-5 rounded-full"></div>
@@ -1260,12 +1260,12 @@ const EmployeeManagement: React.FC = () => {
                 <Users size={22} className="text-blue-600" />
               </div>
               <div className="text-right flex-1">
-                <div className="text-5xl font-black  text-blue-600 mb-1">{activeGeneralTotal + inactiveCount}</div>
+                <div className="text-5xl font-black  text-blue-600 mb-1">{activeGeneralTotal}</div>
                 <div className="text-xs font-bold leading-tight">
-                  إجمالي الموظفين
+                  إجمالي قوة الإدارة العامة
                 </div>
                 <div className="text-xs text-slate-500 mt-0.5">
-                  جميع فئات الموظفين
+                  جميع الفئات
                 </div>
               </div>
             </div>
@@ -1278,12 +1278,12 @@ const EmployeeManagement: React.FC = () => {
                 <Shield size={22} className="text-blue-600" />
               </div>
               <div className="text-right flex-1">
-                <div className="text-5xl font-black text-blue-600  mb-1">{activeGeneralTotal}</div>
+                <div className="text-5xl font-black text-blue-600  mb-1">{activeMilitaryTotal}</div>
                 <div className="text-xs font-bold leading-tight">
-                  الموظفون النشطون
+                  إجمالي الموظفين
                 </div>
                 <div className="text-xs text-slate-500 mt-0.5">
-                  جميع الفئات
+                  فقط
                 </div>
               </div>
             </div>
@@ -1550,7 +1550,7 @@ const EmployeeManagement: React.FC = () => {
                       onChange={(e) => setFilterRank(e.target.value)}
                       className="w-full h-11 px-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white text-sm"
                     >
-                      <option value="all">جميع المسميات الوظيفية</option>
+                      <option value="all">جميع الرتب</option>
                       {quickFilterOptions.ranks.map(rank => (
                         <option key={rank} value={rank}>
                           {rank}
@@ -1776,7 +1776,7 @@ const EmployeeManagement: React.FC = () => {
                               ? flagEmojiToCode(nationalityFlag)
                               : getCountryCode(employee.nationality || '');
                             const nationalityFlagUrl = nationalityCode ? getFlagImageUrl(nationalityCode) : '';
-                            const displayName = formatEmployeeDisplayName(employee) || employee.name || '—';
+                            const displayName = formatEmployeeDisplayName(employee) || employee.name || '-';
                             const secondmentLocation = (employee.secondmentLocation || '').trim();
                             const secondmentText = employee.isSecondedOutsideGeneralAdministration
                               ? `منتدب${secondmentLocation ? ` - ${secondmentLocation}` : ' - جهة الانتداب غير محددة'}`
@@ -2163,7 +2163,7 @@ const EmployeeManagement: React.FC = () => {
                       const jobGradeLabel = employee.category === 'إداريون' ? (employee.jobGrade || '') : '';
                       const isHighlighted = employee.id === highlightEmployeeId;
                       const isFemale = employee.gender === 'أنثى';
-                      const displayName = formatEmployeeDisplayName(employee) || employee.name || '—';
+                      const displayName = formatEmployeeDisplayName(employee) || employee.name || '-';
                       const secondmentLocation = (employee.secondmentLocation || '').trim();
                       const secondmentText = employee.isSecondedOutsideGeneralAdministration
                         ? `منتدب${secondmentLocation ? ` - ${secondmentLocation}` : ' - جهة الانتداب غير محددة'}`
@@ -2664,7 +2664,7 @@ const EmployeeManagement: React.FC = () => {
                       {inactiveEmployees.map((employee, index) => {
                         const departmentName = resolveDepartmentName(employee.department, departmentNameMap);
                         const sectionName = resolveSectionName(employee.department, employee.section, sectionNameMap);
-                        const displayName = formatEmployeeDisplayName(employee) || employee.name || '—';
+                        const displayName = formatEmployeeDisplayName(employee) || employee.name || '-';
                         const fileNumberValue = employee.fileNumber || employee.militaryNumber || '';
 
                         return (

@@ -340,7 +340,7 @@ const EmployeeReportsBuilder: React.FC = () => {
       { key: 'referenceNumber', label: 'رقم المرجع', type: 'text', getValue: (employee) => employee.referenceNumber },
       { key: 'jobTitle', label: 'المسمى الوظيفي', type: 'text', getValue: (employee) => employee.jobTitle },
       { key: 'jobGrade', label: 'الدرجة الوظيفية', type: 'select', getValue: (employee) => employee.jobGrade, options: unique(employees.map((employee) => employee.jobGrade)) },
-      { key: 'professionalGroup', label: 'فئة الفنيين', type: 'select', getValue: (employee) => employee.professionalGroup, options: unique(employees.map((employee) => employee.professionalGroup)) },
+      { key: 'professionalGroup', label: 'فئة الفنيون', type: 'select', getValue: (employee) => employee.professionalGroup, options: unique(employees.map((employee) => employee.professionalGroup)) },
       { key: 'department', label: 'الإدارة', type: 'select', getValue: (employee) => formatDepartmentLabel(employee.department, departmentMap), options: departments.map((department) => department.name) },
       { key: 'section', label: 'القسم', type: 'select', getValue: (employee) => formatSectionLabel(employee.section, sectionMap, employee.department), options: unique(sections.map((section) => section.name)) },
       { key: 'status', label: 'الحالة', type: 'select', getValue: (employee) => employee.status === 'active' ? 'في الخدمة' : 'خارج الخدمة', options: ['في الخدمة', 'خارج الخدمة'] },
@@ -697,7 +697,7 @@ const EmployeeReportsBuilder: React.FC = () => {
       acc[label] = (acc[label] || 0) + 1;
       return acc;
     }, {});
-    const categoryOrder = ['قيادات', 'مشرفون', 'المشرفون', 'فنيون', 'إداريون'];
+    const categoryOrder = ['قيادات', 'مشرفون', 'فنيون', 'إداريون'];
     return Object.entries(counts)
       .map(([label, count]) => ({ label, count }))
       .sort((a, b) => {
@@ -846,18 +846,18 @@ const EmployeeReportsBuilder: React.FC = () => {
         <head>
           <meta charset="utf-8" />
           <style>
-            body { direction: rtl; font-family: 'Cairo', sans-serif; color: #000; }
+            body { direction: rtl; font-family: 'Times New Roman', serif; color: #000; }
             h2, h3, p { text-align: center; margin: 0 0 8px; }
-            h2, h3 { font-family: 'Cairo', sans-serif; font-size: 18px; font-weight: normal; }
-            p { font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: normal; color: #555; }
+            h2, h3 { font-family: 'Times New Roman', serif; font-size: 18px; font-weight: normal; }
+            p { font-family: 'Times New Roman', serif; font-size: 14px; font-weight: normal; color: #555; }
             table { width: 100%; border-collapse: collapse; direction: rtl; table-layout: auto; }
-            th, td { border: 1px solid #000; padding: 8px 4px; text-align: center; vertical-align: middle; font-family: 'Cairo', sans-serif; font-size: 14px; line-height: 1.25; color: #000; font-weight: normal; }
-            th { background: #f3f4f6; font-family: 'Cairo', sans-serif; font-size: 12px; font-weight: normal; }
+            th, td { border: 1px solid #000; padding: 8px 4px; text-align: center; vertical-align: middle; font-family: 'Times New Roman', serif; font-size: 14px; line-height: 1.25; color: #000; font-weight: normal; }
+            th { background: #f3f4f6; font-family: 'Times New Roman', serif; font-size: 12px; font-weight: normal; }
             tr:nth-child(even):not(.category-row):not(.total-row) td { background: #f7f7f7; }
-            .category-row td { background: #efefef; font-family: 'Cairo', sans-serif; font-size: 12px; font-weight: normal; }
-            .total-row td { background: #e6e6e6; font-family: 'Cairo', sans-serif; font-size: 12px; font-weight: normal; }
+            .category-row td { background: #efefef; font-family: 'Times New Roman', serif; font-size: 12px; font-weight: normal; }
+            .total-row td { background: #e6e6e6; font-family: 'Times New Roman', serif; font-size: 12px; font-weight: normal; }
             .text-cell { mso-number-format: "\\@"; }
-            .numeric-cell { font-family: 'Cairo', sans-serif; font-weight: 700; }
+            .numeric-cell { font-family: 'Times New Roman', serif; font-weight: 700; }
             .report-page-break { page-break-before: always; break-before: page; }
           </style>
         </head>
@@ -1204,18 +1204,18 @@ const EmployeeReportsBuilder: React.FC = () => {
           .screen-only { display: none !important; }
           .print-only { display: table-row-group !important; }
           .employee-report-title { padding: 0 0 10px !important; border: 0 !important; background: white !important; }
-          .employee-report-title h2 { font-family: 'Cairo', sans-serif !important; font-size: 21px, !important; font-weight: normal !important; line-height: 1.35 !important; color: #000 !important; }
-          .employee-report-title p { margin-top: 2px !important; font-family: 'Cairo', sans-serif !important; font-size: 14px !important; font-weight: normal !important; color: #555 !important; }
-          .employee-report-print h3 { font-family: 'Cairo', sans-serif !important; font-weight:   !important; }
-          .employee-report-table { width: 100%; border-collapse: collapse; table-layout: auto; font-family: 'Cairo', sans-serif !important; font-size: 14px; line-height: 1.25; }
+          .employee-report-title h2 { font-family: 'Times New Roman', serif !important; font-size: 21px, !important; font-weight: normal !important; line-height: 1.35 !important; color: #000 !important; }
+          .employee-report-title p { margin-top: 2px !important; font-family: 'Times New Roman', serif !important; font-size: 14px !important; font-weight: normal !important; color: #555 !important; }
+          .employee-report-print h3 { font-family: 'Times New Roman', serif !important; font-weight:   !important; }
+          .employee-report-table { width: 100%; border-collapse: collapse; table-layout: auto; font-family: 'Times New Roman', serif !important; font-size: 14px; line-height: 1.25; }
           .employee-report-table th,
           .employee-report-table td { border: 1px solid #000 !important; padding: 8px 4px !important; text-align: center; vertical-align: middle; color: #000 !important; font-weight: normal !important; }
-          .employee-report-table th { border: 1px solid #000 !important; padding: 8px 4px !important; text-align: center; vertical-align: middle; color: #000 !important; background: #f3f4f6 !important; font-family: 'Cairo', sans-serif !important; font-size: 12px !important; font-weight: normal !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .employee-report-table th { border: 1px solid #000 !important; padding: 8px 4px !important; text-align: center; vertical-align: middle; color: #000 !important; background: #f3f4f6 !important; font-family: 'Times New Roman', serif !important; font-size: 12px !important; font-weight: normal !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           .employee-report-table tbody tr:nth-child(even):not(.report-category-row):not(.report-total-row) td { background: #f7f7f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-          .report-category-row td { background: #efefef !important; font-family: 'Cairo', sans-serif !important; font-size: 16px !important; font-weight: normal !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-          .report-total-row td { background: #e6e6e6 !important; font-family: 'Cairo', sans-serif !important; padding: 6px !important; font-size: 14px !important; font-weight: normal !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .report-category-row td { background: #efefef !important; font-family: 'Times New Roman', serif !important; font-size: 16px !important; font-weight: normal !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .report-total-row td { background: #e6e6e6 !important; font-family: 'Times New Roman', serif !important; padding: 6px !important; font-size: 14px !important; font-weight: normal !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           .report-page-break { break-before: page; page-break-before: always; }
-          .report-number-cell { font-family: 'Cairo', sans-serif !important; }
+          .report-number-cell { font-family: 'Times New Roman', serif !important; }
           .report-nowrap { white-space: nowrap; }
         }
         @media screen {
@@ -1376,7 +1376,7 @@ const EmployeeReportsBuilder: React.FC = () => {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
                     <SlidersHorizontal className="h-5 w-5" />
                   </div>
-                  <h2 className="text-base font-black text-slate-950">تموظف أول الكشف</h2>
+                  <h2 className="text-base font-black text-slate-950">تموظف الكشف</h2>
                 </div>
                 <div className="space-y-4">
                   <label className="space-y-2">

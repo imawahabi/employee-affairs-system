@@ -39,7 +39,7 @@ export class SQLImporter {
             full_name: values[1],
             rank: values[2],
             file_number: values[3],
-            category: values[4] as 'قيادات' | 'قيادات صف' | 'فني' | 'إداري',
+            category: values[4] as 'موظف' | 'مشرف' | 'فني' | 'إداري',
             created_at: values[5],
             updated_at: values[6]
           };
@@ -123,8 +123,8 @@ export class SQLImporter {
   static getEmployeeStats(employees: Employee[]) {
     const stats = {
       total: employees.length,
-      officers: employees.filter(emp => emp.category === 'قيادات').length,
-      nonCommissioned: employees.filter(emp => emp.category === 'قيادات صف').length,
+      officers: employees.filter(emp => emp.category === 'موظف').length,
+      nonCommissioned: employees.filter(emp => emp.category === 'مشرف').length,
       professional: employees.filter(emp => emp.category === 'فني').length,
       civilian: employees.filter(emp => emp.category === 'إداري').length
     };

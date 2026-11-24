@@ -88,7 +88,7 @@ const Reports: React.FC = () => {
     style.textContent = `
       .employee-name,
       .employee-rank {
-        font-family: 'Cairo', sans-serif;
+        font-family: 'Sultan Bold', 'Times New Roman', serif;
         font-weight: normal;
       }
 
@@ -138,7 +138,7 @@ const Reports: React.FC = () => {
           color: black !important;
           border-bottom: 2px solid #000 !important;
           padding-bottom: 10px !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
         }
 
         .print-subtitle {
@@ -147,7 +147,7 @@ const Reports: React.FC = () => {
           text-align: center !important;
           margin-bottom: 10px !important;
           color: #dc2626 !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
         }
 
         .print-date-info {
@@ -161,7 +161,7 @@ const Reports: React.FC = () => {
           flex-wrap: wrap !important;
           justify-content: center !important;
           gap: 3px !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
         }
 
         .print-date-item {
@@ -193,7 +193,7 @@ const Reports: React.FC = () => {
           text-align: center !important;
           color: black !important;
           background: white !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Normal', 'Times New Roman', serif !important;
         }
 
         th {
@@ -201,7 +201,7 @@ const Reports: React.FC = () => {
           font-weight: bold !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-size: 17px !important;
         }
 
@@ -223,31 +223,31 @@ const Reports: React.FC = () => {
         }
 
         .employee-name {
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-weight: normal !important;
           font-size: 14px !important;
         }
 
         .employee-rank {
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-weight: normal !important;
           font-size: 13px !important;
         }
 
         .serial-column,
         .total-column {
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Medium', 'Times New Roman', serif !important;
           font-weight: 700 !important;
           font-size: 13px !important;
         }
 
         .shift-date {
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Times New Roman', serif !important;
           font-size: 14px !important;
         }
 
         .shift-note {
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Normal', 'Times New Roman', serif !important;
           font-size: 10px !important;
         }
 
@@ -296,7 +296,7 @@ const Reports: React.FC = () => {
           background: #e0e7ff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-size: 14px !important;
           break-after: avoid;
           page-break-after: avoid;
@@ -306,7 +306,7 @@ const Reports: React.FC = () => {
           background: #e0e7ff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-size: 16px !important;
         }
 
@@ -315,7 +315,7 @@ const Reports: React.FC = () => {
           color: #dc2626 !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-size: 14px !important;
           break-after: avoid;
           page-break-after: avoid;
@@ -326,7 +326,7 @@ const Reports: React.FC = () => {
           color: #dc2626 !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-size: 16px !important;
         }
 
@@ -335,7 +335,7 @@ const Reports: React.FC = () => {
           color: #ffffff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-size: 14px !important;
           break-after: avoid;
           page-break-after: avoid;
@@ -351,7 +351,7 @@ const Reports: React.FC = () => {
           color: #ffffff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
           font-size: 16px !important;
         }
 
@@ -361,7 +361,7 @@ const Reports: React.FC = () => {
         }
 
         .print-date-info strong {
-          font-family: 'Cairo', sans-serif !important;
+          font-family: 'Times New Roman', serif !important;
           font-weight: 700 !important;
         }
 
@@ -459,11 +459,11 @@ const Reports: React.FC = () => {
     () => new Set([
       'مدير عام',
       'مدير إدارة',
-      'مدير إدارة',
+      'مدير إدارة حقوقي',
       'مساعد مدير إدارة',
-      'مساعد مدير إدارة',
-      'فريق',
-      'فريق أول',
+      'مساعد مدير إدارة حقوقي',
+      'مدير عام',
+      'مدير عام',
     ].map(normalizeRankText)),
     []
   );
@@ -499,7 +499,16 @@ const Reports: React.FC = () => {
       .trim();
 
   const formatRankShort = (rawRank: string) => {
-    return (rawRank || '').trim();
+    const normalized = normalizeRankText(rawRank);
+    if (normalized.includes('حقوقي')) {
+      if (normalized.startsWith('مشرف أول')) return 'مشرف أول ح';
+      if (normalized.startsWith('مشرف')) return 'مشرف ح';
+      if (normalized.startsWith('موظف أول')) return 'موظف أ ح';
+      if (normalized.startsWith('موظف')) return 'موظف ح';
+    }
+    if (normalized.startsWith('موظف أول')) return 'موظف أ';
+    if (normalized.startsWith('موظف أول')) return 'موظف أ';
+    return normalized;
   };
 
   const normalizeProfessionalText = (value: string) => {
@@ -1646,7 +1655,7 @@ const Reports: React.FC = () => {
                               })
                               .map(([professionalGroup, groupDepartments], groupIndex) => (
                                 <React.Fragment key={`${category}-${professionalGroup}`}>
-                                  {/* صف فئة الفنيين */}
+                                  {/* صف فئة الفنيون */}
                                   <tr
                                     className={`bg-blue-800 text-white subcategory-row ${
                                       groupIndex > 0 ? 'subcategory-page-break' : ''

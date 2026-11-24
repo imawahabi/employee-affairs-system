@@ -33,7 +33,7 @@ const getPageSubtitle = (activeTab: string): string => {
     'alerts': 'التنبيهات والإشعارات',
     'settings': 'إعدادات النظام'
   };
-  return subtitles[activeTab] || 'نظام إدارة رخص واستئذانات الإدارة العامة';
+  return subtitles[activeTab] || 'نظام إدارة رخص واستئذانات الهيئة العامة للشؤون الإدارية والموارد البشرية';
 };
 
 const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange }) => {
@@ -145,7 +145,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange }) => 
         <footer className="bg-white border-t border-gray-200 px-6 py-4">
           <div className="flex items-center justify-center text-sm text-gray-600">
             <div>
-              <p>جميع الحقوق محفوظة - الإدارة العامة 2025</p>
+              <p>جميع الحقوق محفوظة - الهيئة العامة للشؤون الإدارية والموارد البشرية 2025</p>
             </div>
           </div>
         </footer>

@@ -33,16 +33,16 @@ const dateFormatter = new Intl.DateTimeFormat('ar-US', {
 const numberFormatter = new Intl.NumberFormat('ar-US', { numberingSystem: 'latn' });
 
 const formatDate = (value?: string | null) => {
-  if (!value) return '—';
+  if (!value) return '-';
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
   return dateFormatter.format(date);
 };
 
 const formatYear = (value?: string | null) => {
-  if (!value) return '—';
+  if (!value) return '-';
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '—';
+  if (Number.isNaN(date.getTime())) return '-';
   return String(date.getFullYear());
 };
 
@@ -186,7 +186,7 @@ const ProfessionalExtensions: React.FC = () => {
       const response = await fetchProfessionalExtensionStatus();
       setData(response);
     } catch (err) {
-      setError('تعذر تحميل بيانات تمديدات الفنيين');
+      setError('تعذر تحميل بيانات تمديدات الفنيون');
       console.error(err);
     } finally {
       setLoading(false);
@@ -364,7 +364,7 @@ const ProfessionalExtensions: React.FC = () => {
   };
 
   if (loading) {
-    return <LoadingPage variant="dashboard" title="جاري تحميل تمديدات الفنيين" subtitle="يرجى الانتظار..." />;
+    return <LoadingPage variant="dashboard" title="جاري تحميل تمديدات الفنيون" subtitle="يرجى الانتظار..." />;
   }
 
   if (error) {
@@ -421,8 +421,8 @@ const ProfessionalExtensions: React.FC = () => {
   const archiveCount = data?.archive?.length || 0;
   const hasArchive = archiveCount > 0;
   const selectedDisplayName = selectedItem
-    ? (formatEmployeeDisplayName(selectedItem.employee) || selectedItem.employee.name || '—')
-    : '—';
+    ? (formatEmployeeDisplayName(selectedItem.employee) || selectedItem.employee.name || '-')
+    : '-';
 
   const renderExtensionList = (
     items: ProfessionalExtensionStatusItem[],
@@ -446,7 +446,7 @@ const ProfessionalExtensions: React.FC = () => {
             const extensionLabel = getExtensionLabel(extensionOrder);
             const isLastExtension = extensionOrder === 5;
             const rowKey = item.extension?.id || `${item.employee.id}-${item.periodStart}`;
-            const displayName = formatEmployeeDisplayName(item.employee) || item.employee.name || '—';
+            const displayName = formatEmployeeDisplayName(item.employee) || item.employee.name || '-';
             const departmentLabel = formatDepartmentLabel(item.employee.department) || 'غير مسجل';
             const sectionLabel = item.employee.section ? formatSectionLabel(item.employee.section) : '';
             const ageInfo = getAgeInfo(item.employee.birthDate);
@@ -468,7 +468,7 @@ const ProfessionalExtensions: React.FC = () => {
                     <h3 className="truncate text-base font-black text-slate-950">
                       {item.employee.rank ? `${item.employee.rank} / ` : ''}{displayName}
                     </h3>
-                    <Badge variant="default" size="xs">{item.employee.jobTitle || '—'}</Badge>
+                    <Badge variant="default" size="xs">{item.employee.jobTitle || '-'}</Badge>
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-bold">
                     <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-slate-600">
@@ -478,7 +478,7 @@ const ProfessionalExtensions: React.FC = () => {
                       ميلاد {birthYear}
                     </span>
                     <span className="rounded-lg bg-red-50 px-2.5 py-1 text-red-700">
-                      عمر {ageInfo ? `${numberFormatter.format(ageInfo.years)} سنة` : '—'}
+                      عمر {ageInfo ? `${numberFormatter.format(ageInfo.years)} سنة` : '-'}
                     </span>
                     <span className="rounded-lg bg-green-50 px-2.5 py-1 text-green-700">
                       {item.employee.nationality || "غير محدد الجنسية"}
@@ -558,7 +558,7 @@ const ProfessionalExtensions: React.FC = () => {
                   )}
                   {item.extension && (
                     <div className="max-w-[220px] text-right text-[10px] font-semibold leading-5 text-slate-400">
-                      قرار {item.extension.decisionNumber || '—'} | {item.extension.decisionDate ? formatDate(item.extension.decisionDate) : '—'} | كتاب {item.extension.letterNumber || '—'}
+                      قرار {item.extension.decisionNumber || '-'} | {item.extension.decisionDate ? formatDate(item.extension.decisionDate) : '-'} | كتاب {item.extension.letterNumber || '-'}
                     </div>
                   )}
                 </div>
@@ -575,7 +575,7 @@ const ProfessionalExtensions: React.FC = () => {
       <div className="mx-auto space-y-6">
         <PageHeader
           icon={<Settings size={36} />}
-          title="تمديدات الفنيين"
+          title="تمديدات الفنيون"
           description="متابعة الموظفين الفنيون بين 60 و65 سنة وإدارة قرارات التمديد السنوية"
           actions={(
             <>
@@ -712,7 +712,7 @@ const ProfessionalExtensions: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-900">أرشيف التمديدات</h3>
-                    <p className="text-sm text-gray-600">تمديدات الفنيين خارج الخدمة</p>
+                    <p className="text-sm text-gray-600">تمديدات الفنيون خارج الخدمة</p>
                   </div>
                 </div>
                 <div className="flex-1 max-w-md relative">
@@ -746,7 +746,7 @@ const ProfessionalExtensions: React.FC = () => {
         <Modal
           isOpen={modalOpen}
           onClose={closeModal}
-          title={modalMode === 'create' ? 'إضافة تمديد فني' : 'تعديل تمديد فني'}
+          title={modalMode === 'create' ? 'إضافة تمديد مهني' : 'تعديل تمديد مهني'}
           size="lg"
         >
           <div className="space-y-8">

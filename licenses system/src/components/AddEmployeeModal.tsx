@@ -12,7 +12,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ onAdd, onClose }) =
     full_name: '',
     rank: '',
     file_number: '',
-    category: 'قيادات',
+    category: 'موظف',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -77,10 +77,10 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ onAdd, onClose }) =
               className="input-field"
               required
             >
-              <option value="قيادات">قيادات</option>
-              <option value="قيادات صف">قيادات صف</option>
-              <option value="فني">فني</option>
-              <option value="إداري">إداري</option>
+              <option value="موظف">موظف</option>
+              <option value="مشرف">مشرف</option>
+              <option value="فني">مهني</option>
+              <option value="إداري">مدني</option>
             </select>
           </div>
             <div className="modal-footer">

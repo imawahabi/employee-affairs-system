@@ -356,7 +356,7 @@ const AuditLog: React.FC = () => {
                   {lastUpdated ? lastUpdated.toLocaleTimeString('ar-UK', { 
                     hour: '2-digit', 
                     minute: '2-digit' 
-                  }) : '—'}
+                  }) : '-'}
                 </p>
               </div>
             </div>

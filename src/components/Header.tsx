@@ -20,19 +20,21 @@ import { formatEmployeeDisplayName } from '../utils/employeeDisplay';
 import { formatDepartmentLabel, formatSectionLabel } from '../utils/organization';
 import { useSystem } from '../contexts/SystemContext';
 import NotificationDropdown from './NotificationDropdown';
+import SyncBadge from './SyncBadge';
 import EmployeeModal from './EmployeeModal';
 import { APP_SOFT_REFRESH_EVENT } from '../constants/events';
 
 interface HeaderProps {
   onPageChange: (page: string) => void;
   onToggleSidebar: () => void;
+  onOpenSyncConflicts?: () => void;
 }
 
 const EMPLOYEE_HISTORY_STORAGE_KEY = 'employeeShiftHistoryEmployeeId';
 const AUTO_REFRESH_INTERVAL_MS = 2 * 60 * 1000;
 type HeaderLicenseInfo = { id?: string; type: string; date: string; hours?: number | null; permissionTime?: string | null };
 
-export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
+export default function Header({ onPageChange, onToggleSidebar, onOpenSyncConflicts }: HeaderProps) {
   const { hideShifts, hideLicenses } = useSystem();
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -790,7 +792,7 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                         const departmentLabel = formatDepartmentLabel(employee.department);
                         const sectionLabel = formatSectionLabel(employee.section);
                         const jobTitleLabel = employee.jobTitle || '';
-                        const displayName = formatEmployeeDisplayName(employee) || employee.name || '—';
+                        const displayName = formatEmployeeDisplayName(employee) || employee.name || '-';
                         const displayLabel = employee.rank ? `${employee.rank} / ${displayName}` : displayName;
                         const isExcludedFromShifts = employee.includeInShifts === false;
                         const isCivilian = String(employee.category || '').includes('إداري') || employee.rank === 'إداري';
@@ -951,6 +953,10 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
 
           {/* Right Section */}
           <div className="flex items-center space-x-1 space-x-reverse">
+
+            {onOpenSyncConflicts && (
+              <SyncBadge onOpenConflicts={onOpenSyncConflicts} />
+            )}
 
             <NotificationDropdown
               isOpen={isNotificationOpen}

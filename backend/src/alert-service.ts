@@ -371,8 +371,8 @@ async function checkProfessionalExtensionAlerts(
                 const dueDateObj = parseDateOnly(status.dueDate);
                 const dueDateFormatted = dueDateObj ? dateFormatter.format(dueDateObj) : status.dueDate;
                 const message = overdueDays === 0
-                    ? `ينتهي تمديد فني /  ${employee.name} بتاريخ ${dueDateFormatted}. يلزم إصدار قرار التمديد اليوم.`
-                    : `انتهى تمديد فني /  ${employee.name} بتاريخ ${dueDateFormatted} وتأخر ${overdueDays} يوم عن إصدار قرار التمديد.`;
+                    ? `ينتهي تمديد مهني /  ${employee.name} بتاريخ ${dueDateFormatted}. يلزم إصدار قرار التمديد اليوم.`
+                    : `انتهى تمديد مهني /  ${employee.name} بتاريخ ${dueDateFormatted} وتأخر ${overdueDays} يوم عن إصدار قرار التمديد.`;
 
                 const expiresAt = dueDateObj
                     ? new Date(dueDateObj.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
@@ -385,7 +385,7 @@ async function checkProfessionalExtensionAlerts(
                     status: 'new',
                     message,
                     severity: 'high',
-                    title: 'تأخر تمديد فني',
+                    title: 'تأخر تمديد مهني',
                     category: 'employee',
                     actionUrl: '/professional-extensions',
                     metadata: JSON.stringify({
@@ -422,7 +422,7 @@ async function checkProfessionalExtensionAlerts(
             const dueDateObj = parseDateOnly(status.dueDate);
             const dueDateFormatted = dueDateObj ? dateFormatter.format(dueDateObj) : status.dueDate;
             const severity = status.daysRemaining <= settings.criticalDays ? 'high' : (status.daysRemaining <= 60 ? 'medium' : 'low');
-            const title = status.stage === 'pre_60' ? 'اقتراب سن التقاعد الفني' : 'اقتراب انتهاء تمديد فني';
+            const title = status.stage === 'pre_60' ? 'اقتراب سن التقاعد المهني' : 'اقتراب انتهاء تمديد مهني';
             const message = status.stage === 'pre_60'
                 ? `سيبلغ الموظف ${employee.name} سن 60 بتاريخ ${dueDateFormatted}. تبقى ${status.daysRemaining} يوم لإكمال إجراءات التمديد.`
                 : `ينتهي تمديد الموظف ${employee.name} بتاريخ ${dueDateFormatted}. تبقى ${status.daysRemaining} يوم لإصدار قرار التمديد.`;

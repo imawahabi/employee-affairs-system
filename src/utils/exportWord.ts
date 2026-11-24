@@ -391,7 +391,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: "3- على مشرف المناوبة تدوين أية ملاحظات بدفتر الأحوال.",
+                  text: "3- على موظف المناوبة تدوين أية ملاحظات بدفتر الأحوال.",
                   font: "Sultan Medium",
                   size: 28,
                   color: "0070C0",
@@ -436,7 +436,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             }),
             new Paragraph({
               children: [
-                new TextRun({ text: "6- على مشرف المناوبة أو من ينوب عنه ", font: "Sultan Medium", size: 28, rightToLeft: true }),
+                new TextRun({ text: "6- على موظف المناوبة أو من ينوب عنه ", font: "Sultan Medium", size: 28, rightToLeft: true }),
                 new TextRun({
                   text: "(التأكد)",
                   font: "Sultan Medium",
@@ -445,7 +445,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
                   shading: { type: ShadingType.CLEAR, color: "auto", fill: "FFFF00" },
                 }),
                 new TextRun({
-                  text: " من فاكس الإدارة العامة أثناء المناوبة بمكتب رقم (148) بالدور الأول.",
+                  text: " من فاكس الهيئة العامة للشؤون الإدارية والموارد البشرية أثناء المناوبة بمكتب رقم (148) بالدور الأول.",
                   font: "Sultan Medium",
                   size: 28,
                   color: "FF0000",
@@ -460,7 +460,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: "7- على مشرف المناوبة التأكد من صيانة ونظافة دورية أو سيارة الجهة التابعة لمندوب المناوبة بناء على التعميم الداخلي رقم (2024/2) وتدوين أي ملاحظات في دفتر الأحوال.",
+                  text: "7- على موظف المناوبة التأكد من صيانة ونظافة دورية أو سيارة الجهة التابعة لمندوب المناوبة بناء على التعميم الداخلي رقم (2024/2) وتدوين أي ملاحظات في دفتر الأحوال.",
                   font: "Sultan Medium",
                   size: 28,
                   color: "00B050",

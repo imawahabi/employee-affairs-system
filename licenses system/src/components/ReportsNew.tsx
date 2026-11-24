@@ -399,8 +399,8 @@ const ReportsNew: React.FC = () => {
               <Select
                 isMulti
                 options={[
-                  { value: 'قيادات', label: 'قيادات' },
-                  { value: 'قيادات صف', label: 'قيادات صف' },
+                  { value: 'موظف', label: 'موظف' },
+                  { value: 'مشرف', label: 'مشرف' },
                   { value: 'فني', label: 'فني' }
                 ]}
                 value={filters.categories.map(cat => ({ value: cat, label: cat }))}

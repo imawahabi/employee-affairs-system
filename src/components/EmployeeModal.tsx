@@ -244,7 +244,7 @@ const Icons = {
 
 const digitFormatter = new Intl.NumberFormat('ar-UK', { useGrouping: false });
 const formatDigits = (value: string) => value.replace(/[0-9]/g, (digit) => digitFormatter.format(Number(digit)));
-const isGovernmentiNationality = (value?: string | null) => {
+const isKuwaitiNationality = (value?: string | null) => {
   if (!value) return false;
   const normalized = value.replace(/\s+/g, '').toLowerCase();
   return normalized.includes('كويت') || normalized.includes('kuwait');
@@ -1251,7 +1251,7 @@ const EmployeeModal: React.FC<Props> = ({
       if (name === 'jobTitle' && prev.category === 'فنيون' && !professionalGroupTouched) {
         next.professionalGroup = inferProfessionalGroupFromJobTitle(option?.value || '');
       }
-      if (name === 'nationality' && !isGovernmentiNationality(option?.value || '')) {
+      if (name === 'nationality' && !isKuwaitiNationality(option?.value || '')) {
         next.nationalityArticleNumber = '';
         next.nationalityIssueDate = '';
       }
@@ -1575,7 +1575,7 @@ const EmployeeModal: React.FC<Props> = ({
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>تفاصيل الموظف</title>
           <style>
-            @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+                        @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
             @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
             @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
             @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
@@ -1762,7 +1762,7 @@ const EmployeeModal: React.FC<Props> = ({
 
     const ageDurationLabel = formatDuration(employee?.birthDate);
     const serviceDurationLabel = formatDuration(employee?.hiringDate);
-    const isGovernmenti = isGovernmentiNationality(employee?.nationality || '');
+    const isKuwaiti = isKuwaitiNationality(employee?.nationality || '');
     const isOtherMaritalStatus = employee?.maritalStatus === 'أخرى' || employee?.maritalStatus === 'اخرى';
     const resolvedProfessionalGroup = employee?.category === 'فنيون'
       ? (employee?.professionalGroup || 'أخرى')
@@ -1794,7 +1794,7 @@ const EmployeeModal: React.FC<Props> = ({
           { label: 'المسمى الوظيفي', value: employee?.rank || '-', icon: <Icons.award className="w-4 h-4" /> },
           { label: 'الاسم الكامل', value: displayName || '-', icon: <Icons.user className="w-4 h-4" /> },
           { label: 'المسمى الوظيفي', value: employee?.jobTitle || '-', icon: <Icons.briefcase className="w-4 h-4" /> },
-          { label: 'فئة الفنيين', value: resolvedProfessionalGroup || 'أخرى', hide: employee?.category !== 'فنيون', icon: <Icons.list className="w-4 h-4" /> },
+          { label: 'فئة الفنيون', value: resolvedProfessionalGroup || 'أخرى', hide: employee?.category !== 'فنيون', icon: <Icons.list className="w-4 h-4" /> },
           { label: 'الدرجة الوظيفية', value: employee?.jobGrade || '-', hide: employee?.category !== 'إداريون', icon: <Icons.award className="w-4 h-4" /> },
           {
             label: 'الإدارة',
@@ -1833,8 +1833,8 @@ const EmployeeModal: React.FC<Props> = ({
           { label: 'رقم الأقدمية', value: employee?.seniorityNumber || '-', hide: employee?.category === 'إداريون', icon: <Icons.award className="w-4 h-4" /> },
           { label: 'رقم الهاتف', value: employee?.phone_number || '-', icon: <Icons.phone className="w-4 h-4" /> },
           { label: 'الجنسية', value: employee?.nationality || '-', icon: <Icons.globe className="w-4 h-4" /> },
-          { label: 'رقم مادة الجنسية', value: employee?.nationalityArticleNumber || '-', hide: !isGovernmenti && !employee?.nationalityArticleNumber, icon: <Icons.hash className="w-4 h-4" /> },
-          { label: 'تاريخ إصدار الجنسية', value: employee?.nationalityIssueDate || '', type: 'date' as const, hide: !isGovernmenti && !employee?.nationalityIssueDate, icon: <Icons.calendar className="w-4 h-4" /> },
+          { label: 'رقم مادة الجنسية', value: employee?.nationalityArticleNumber || '-', hide: !isKuwaiti && !employee?.nationalityArticleNumber, icon: <Icons.hash className="w-4 h-4" /> },
+          { label: 'تاريخ إصدار الجنسية', value: employee?.nationalityIssueDate || '', type: 'date' as const, hide: !isKuwaiti && !employee?.nationalityIssueDate, icon: <Icons.calendar className="w-4 h-4" /> },
           { label: 'الحالة الاجتماعية', value: employee?.maritalStatus || '-', icon: <Icons.user className="w-4 h-4" /> },
           { label: 'ملاحظة الحالة الاجتماعية', value: employee?.maritalStatusNote || '-', hide: !isOtherMaritalStatus && !employee?.maritalStatusNote, icon: <Icons.clipboard className="w-4 h-4" /> },
           { label: 'النوع', value: employee?.gender || '-', icon: <Icons.user className="w-4 h-4" /> },
@@ -1859,7 +1859,7 @@ const EmployeeModal: React.FC<Props> = ({
       },
       {
         title: 'المعدات والمرافق',
-        description: 'بيانات جهاز الاتصال والمواقف',
+        description: 'بيانات المعدات والمرافق',
         icon: <Icons.shield className="w-6 h-6" />,
         gradient: 'from-purple-50 to-purple-100',
         fields: [
@@ -1949,7 +1949,7 @@ const EmployeeModal: React.FC<Props> = ({
                         )}
                       </div>
                       <h3 className="text-2xl font-black leading-tight text-slate-950">
-                        {employee?.rank || '—'} / {displayName || '—'}
+                        {employee?.rank || '-'} / {displayName || '-'}
                       </h3>
                       <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold text-slate-600">
                         <span>{formatDepartmentLabel(employee?.department, departmentNameMap) || 'إدارة غير مسجلة'}</span>
@@ -1983,10 +1983,10 @@ const EmployeeModal: React.FC<Props> = ({
                 </div>
                 <div className="grid grid-cols-2 border-t border-slate-100 bg-slate-50/80 md:grid-cols-4">
                   {[
-                    { label: 'رقم الملف', value: employee?.fileNumber || '—' },
-                    { label: 'الرقم المدني', value: employee?.civilId || '—' },
-                    { label: 'الهاتف', value: employee?.phone_number || '—' },
-                    { label: 'مدة الخدمة', value: formatDuration(employee?.hiringDate) || '—' },
+                    { label: 'رقم الملف', value: employee?.fileNumber || '-' },
+                    { label: 'الرقم المدني', value: employee?.civilId || '-' },
+                    { label: 'الهاتف', value: employee?.phone_number || '-' },
+                    { label: 'مدة الخدمة', value: formatDuration(employee?.hiringDate) || '-' },
                   ].map((item) => (
                     <div key={item.label} className="border-l border-slate-100 px-4 py-3 last:border-l-0">
                       <div className="text-xs font-black text-slate-500">{item.label}</div>
@@ -2229,20 +2229,20 @@ const EmployeeModal: React.FC<Props> = ({
 
                   {form.category === 'فنيون' && (
                     <div className="lg:col-span-1">
-                      <FormField label="فئة الفنيين" icon={<Icons.list className="w-4 h-4" />}>
+                      <FormField label="فئة الفنيون" icon={<Icons.list className="w-4 h-4" />}>
                         <Select
                           isDisabled={readOnly}
                           isClearable
                           options={professionalGroupOptions}
                           value={professionalGroupOptions.find((opt) => opt.value === (form.professionalGroup || '')) || null}
                           onChange={(option) => handleSelectChange('professionalGroup', option as { value: string; label: string } | null)}
-                          placeholder="اختر فئة الفنيين"
+                          placeholder="اختر فئة الفنيون"
                           noOptionsMessage={() => 'لا توجد نتائج'}
                           styles={selectStyles}
                           menuPortalTarget={document.body}
                           menuPosition="fixed"
                         />
-                        <p className="text-xs text-gray-500 mt-1">تظهر هذه الفئة في تقارير الفنيين.</p>
+                        <p className="text-xs text-gray-500 mt-1">تظهر هذه الفئة في تقارير الفنيون.</p>
                       </FormField>
                     </div>
                   )}
@@ -2484,7 +2484,7 @@ const EmployeeModal: React.FC<Props> = ({
                     </FormField>
                   </div>
 
-                  {isGovernmentiNationality(form.nationality) && (
+                  {isKuwaitiNationality(form.nationality) && (
                     <>
                       <div>
                         <FormField label="رقم مادة الجنسية" icon={<Icons.hash className="w-4 h-4" />}>
@@ -2697,7 +2697,7 @@ const EmployeeModal: React.FC<Props> = ({
                 {/* Equipment and Facilities Section */}
                 <SectionCard
                   title="المعدات والمرافق"
-                  description="جهاز الاتصال والمواقف"
+                  description="المعدات والمرافق"
                   icon={<Icons.shield className="w-6 h-6" />}
                   gradient="from-purple-50 to-purple-100"
                   isInactive={isInactiveContext}
@@ -2709,7 +2709,7 @@ const EmployeeModal: React.FC<Props> = ({
                         checked={!!form.hasWeapon}
                         onChange={handleCheckboxChange}
                         label="هل لديه جهاز اتصال؟"
-                        description="تفعيل هذا الحقل للموظفين من فئة القيادات والمشرفون"
+                        description="تفعيل هذا الحقل للموظفين من فئة القيادات ومشرفون"
                         disabled={readOnly}
                       />
                     )}
@@ -2719,7 +2719,7 @@ const EmployeeModal: React.FC<Props> = ({
                       checked={!!form.hasParking}
                       onChange={handleCheckboxChange}
                       label="هل لديه موقف سيارات؟"
-                      description="تحديد ما إذا كان للموظف موقف مخصص في الجهة"
+                      description="تحديد ما إذا كان للموظف موقف مخصص في الهيئة"
                       disabled={readOnly}
                     />
 

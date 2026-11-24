@@ -1,20 +1,18 @@
 import { Employee, License } from '../types';
 
 export const CATEGORY_ORDER: { [key: string]: number } = {
-  'قيادات': 1,
-  'مشرفون': 2,
+  'موظف': 1,
+  'مشرف': 2,
   'فني': 3,
   'إداري': 4,
 };
 
 export const OFFICER_RANK_ORDER: { [key: string]: number } = {
-  'مدير عام': 1,
-  'مدير إدارة': 2,
-  'مساعد مدير إدارة': 3,
-  'رئيس قسم': 4,
-  'مشرف أول': 5,
-  'مشرف': 6,
-  'موظف أول': 7,
+  'رئيس قسم': 1,
+  'مشرف أول': 2,
+  'مشرف': 3,
+  'موظف أول': 4,
+  'موظف': 5,
 };
 
 export const NCO_RANK_ORDER: { [key: string]: number } = {
@@ -22,7 +20,9 @@ export const NCO_RANK_ORDER: { [key: string]: number } = {
   'مشرف مساعد': 2,
   'موظف أول': 3,
   'موظف': 4,
-  'موظف خدمات': 5
+  'موظف': 5,
+  'موظف': 6,
+  'موظف خدمات': 7
 };
 
 export const sortEmployees = (employees: Employee[]): Employee[] => {
@@ -34,13 +34,13 @@ export const sortEmployees = (employees: Employee[]): Employee[] => {
       return categoryA - categoryB;
     }
 
-    if (a.category === 'قيادات') {
-      const rankA = OFFICER_RANK_ORDER[a.rank.trim()] || 99;
-      const rankB = OFFICER_RANK_ORDER[b.rank.trim()] || 99;
+    if (a.category === 'موظف') {
+      const rankA = OFFICER_RANK_ORDER[a.rank.replace(' حقوقي', '').trim()] || 99;
+      const rankB = OFFICER_RANK_ORDER[b.rank.replace(' حقوقي', '').trim()] || 99;
       if (rankA !== rankB) return rankA - rankB;
     }
 
-    if (a.category === 'مشرفون') {
+    if (a.category === 'مشرف') {
       const rankA = NCO_RANK_ORDER[a.rank] || 99;
       const rankB = NCO_RANK_ORDER[b.rank] || 99;
       if (rankA !== rankB) return rankA - rankB;

@@ -288,13 +288,13 @@ const Reports: React.FC = () => {
       }
 
       // Sort by military rank within each category
-      if (a.employee.category === 'قيادات') {
+      if (a.employee.category === 'موظف') {
         const rankA = OFFICER_RANK_ORDER[a.employee.rank.replace(' حقوقي', '').trim()] || 99;
         const rankB = OFFICER_RANK_ORDER[b.employee.rank.replace(' حقوقي', '').trim()] || 99;
         if (rankA !== rankB) return rankA - rankB;
       }
 
-      if (a.employee.category === 'قيادات صف') {
+      if (a.employee.category === 'مشرف') {
         const rankA = NCO_RANK_ORDER[a.employee.rank] || 99;
         const rankB = NCO_RANK_ORDER[b.employee.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
@@ -411,13 +411,13 @@ const Reports: React.FC = () => {
       }
 
       // Sort by military rank within each category
-      if (a.employee.category === 'قيادات') {
+      if (a.employee.category === 'موظف') {
         const rankA = OFFICER_RANK_ORDER[a.employee.rank.replace(' حقوقي', '').trim()] || 99;
         const rankB = OFFICER_RANK_ORDER[b.employee.rank.replace(' حقوقي', '').trim()] || 99;
         if (rankA !== rankB) return rankA - rankB;
       }
 
-      if (a.employee.category === 'قيادات صف') {
+      if (a.employee.category === 'مشرف') {
         const rankA = NCO_RANK_ORDER[a.employee.rank] || 99;
         const rankB = NCO_RANK_ORDER[b.employee.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
@@ -446,13 +446,13 @@ const Reports: React.FC = () => {
       }
 
       // Sort by military rank within each category
-      if (a.category === 'قيادات') {
+      if (a.category === 'موظف') {
         const rankA = OFFICER_RANK_ORDER[a.rank.replace(' حقوقي', '').trim()] || 99;
         const rankB = OFFICER_RANK_ORDER[b.rank.replace(' حقوقي', '').trim()] || 99;
         if (rankA !== rankB) return rankA - rankB;
       }
 
-      if (a.category === 'قيادات صف') {
+      if (a.category === 'مشرف') {
         const rankA = NCO_RANK_ORDER[a.rank] || 99;
         const rankB = NCO_RANK_ORDER[b.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
@@ -489,7 +489,7 @@ const Reports: React.FC = () => {
 
   // Generate report title and subtitle based on filters
   const generateReportInfo = () => {
-    let title = 'تقرير متابعة موظفي الإدارة العامة';
+    let title = 'تقرير متابعة موظفي إدارة السجل العام';
     let subtitle = '';
     let monthsText = '';
     let categoriesText = '';
@@ -518,15 +518,15 @@ const Reports: React.FC = () => {
     if (reportConfig.categories.length > 0) {
       if (reportConfig.categories.length === 1) {
         const category = reportConfig.categories[0];
-        if (category === 'قيادات') categoriesText = '( قيادات )';
-        else if (category === 'قيادات صف') categoriesText = '( مشرفون )';
+        if (category === 'موظف') categoriesText = '( قيادات )';
+        else if (category === 'مشرف') categoriesText = '( مشرفون )';
         else if (category === 'فني') categoriesText = '( فنيون )';
         else if (category === 'إداري') categoriesText = '( إداريون )';
         else categoriesText = `( ${category} )`;
       } else {
         const categoryNames = reportConfig.categories.map(cat => {
-          if (cat === 'قيادات') return 'قيادات';
-          if (cat === 'قيادات صف') return 'مشرفون';
+          if (cat === 'موظف') return 'قيادات';
+          if (cat === 'مشرف') return 'مشرفون';
           if (cat === 'فني') return 'فنيون';
           if (cat === 'إداري') return 'إداريون';
           return cat;
@@ -560,7 +560,7 @@ const Reports: React.FC = () => {
     // CSV data rows
     const csvData = reportData.map((item, index) => [
       index + 1,
-      (item.employee.category === 'قيادات' || item.employee.category === 'قيادات صف')
+      (item.employee.category === 'موظف' || item.employee.category === 'مشرف')
         ? item.employee.rank
         : item.employee.category,
       item.employee.full_name,
@@ -675,7 +675,7 @@ const Reports: React.FC = () => {
                       }),
                       new TableCell({
                         children: [new Paragraph({
-                          text: (item.employee.category === 'قيادات' || item.employee.category === 'قيادات صف')
+                          text: (item.employee.category === 'موظف' || item.employee.category === 'مشرف')
                             ? item.employee.rank
                             : item.employee.category,
                           alignment: AlignmentType.CENTER
@@ -867,7 +867,7 @@ const Reports: React.FC = () => {
             ${reportData.map((item, index) => `
               <tr>
                 <td>${index + 1}</td>
-                <td>${(item.employee.category === 'قيادات' || item.employee.category === 'قيادات صف') ? item.employee.rank : item.employee.category}</td>
+                <td>${(item.employee.category === 'موظف' || item.employee.category === 'مشرف') ? item.employee.rank : item.employee.category}</td>
                 <td class="employee-name">${item.employee.full_name}</td>
                 <td class="number-cell">${item.fullDays}</td>
                 <td class="number-cell">${item.halfDays}</td>
@@ -1089,7 +1089,7 @@ const Reports: React.FC = () => {
                               </div>                              
                             </td>
                             <td className="py-4 px-3 text-center">
-                                {stat.employee.category === 'قيادات' || stat.employee.category === 'قيادات صف'
+                                {stat.employee.category === 'موظف' || stat.employee.category === 'مشرف'
                                   ? stat.employee.rank
                                   : stat.employee.category}
                             </td>
@@ -1327,10 +1327,10 @@ const Reports: React.FC = () => {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
                     >
                       <option value="">جميع الفئات</option>
-                      <option value="قيادات">قيادات</option>
-                      <option value="قيادات صف">قيادات صف</option>
-                      <option value="فني">فني</option>
-                      <option value="إداري">إداري</option>
+                      <option value="موظف">موظف</option>
+                      <option value="مشرف">مشرف</option>
+                      <option value="فني">مهني</option>
+                      <option value="إداري">مدني</option>
                     </select>
                     </div>
                   </div>
@@ -1387,10 +1387,10 @@ const Reports: React.FC = () => {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
                     >
                       <option value="">جميع الفئات</option>
-                      <option value="قيادات">قيادات</option>
-                      <option value="قيادات صف">قيادات صف</option>
-                      <option value="فني">فني</option>
-                      <option value="إداري">إداري</option>
+                      <option value="موظف">موظف</option>
+                      <option value="مشرف">مشرف</option>
+                      <option value="فني">مهني</option>
+                      <option value="إداري">مدني</option>
                       </select>
                     </div>
                   </div>
@@ -1535,10 +1535,10 @@ const Reports: React.FC = () => {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
                     >
                       <option value="">جميع الفئات</option>
-                      <option value="قيادات">قيادات</option>
-                      <option value="قيادات صف">قيادات صف</option>
-                      <option value="فني">فني</option>
-                      <option value="إداري">إداري</option>
+                      <option value="موظف">موظف</option>
+                      <option value="مشرف">مشرف</option>
+                      <option value="فني">مهني</option>
+                      <option value="إداري">مدني</option>
                       </select>
                     </div>
                   </div>
@@ -1723,10 +1723,10 @@ const Reports: React.FC = () => {
                           }}
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white h-32"
                         >
-                          <option value="قيادات">قيادات</option>
-                          <option value="قيادات صف">قيادات صف</option>
-                          <option value="فني">فني</option>
-                          <option value="إداري">إداري</option>
+                          <option value="موظف">موظف</option>
+                          <option value="مشرف">مشرف</option>
+                          <option value="فني">مهني</option>
+                          <option value="إداري">مدني</option>
                         </select>
                         <p className="text-xs text-gray-500 mt-1">اضغط Ctrl للاختيار المتعدد</p>
                       </div>
@@ -1837,7 +1837,7 @@ const Reports: React.FC = () => {
                               </div>
                             </td>
                             <td className="py-4 px-4 text-gray-700">
-                              {item.employee.category === 'قيادات' || item.employee.category === 'قيادات صف'
+                              {item.employee.category === 'موظف' || item.employee.category === 'مشرف'
                                 ? item.employee.rank
                                 : item.employee.category}
                             </td>

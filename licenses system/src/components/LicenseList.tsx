@@ -423,7 +423,7 @@ const LicenseList: React.FC = () => {
     const tableRows = sortedAndFilteredLicenses.map((license, index) => new TableRow({
       children: [
         createCell(String(index + 1), false),
-        createCell(license.employee?.category === 'قيادات' || license.employee?.category === 'قيادات صف'
+        createCell(license.employee?.category === 'موظف' || license.employee?.category === 'مشرف'
           ? license.employee?.rank || ''
           : license.employee?.category || '', false),
         createCell(license.employee?.full_name || '', false),
@@ -493,7 +493,7 @@ const LicenseList: React.FC = () => {
         license.license_type,
         license.employee?.file_number || '',
         license.employee?.full_name || '',
-        license.employee?.category === 'قيادات' || license.employee?.category === 'قيادات صف'
+        license.employee?.category === 'موظف' || license.employee?.category === 'مشرف'
           ? license.employee?.rank || ''
           : license.employee?.category || '',
         index + 1
@@ -801,7 +801,7 @@ const LicenseList: React.FC = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-700">
-                          {license.employee?.category === 'قيادات' || license.employee?.category === 'قيادات صف'
+                          {license.employee?.category === 'موظف' || license.employee?.category === 'مشرف'
                             ? license.employee?.rank
                             : license.employee?.category}
                         </td>

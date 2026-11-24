@@ -143,8 +143,8 @@ const ReportsNew: React.FC = () => {
   const progressPercent = ((currentStepIndex + 1) / reportSteps.length) * 100;
   const monthLabel = availableMonths.find(month => month.value === filters.selectedMonth)?.label || 'جميع الشهور';
   const categoryOptions = [
-    { value: 'قيادات', label: 'قيادات' },
-    { value: 'مشرفون', label: 'مشرفون' },
+    { value: 'موظف', label: 'موظف' },
+    { value: 'مشرف', label: 'مشرف' },
     { value: 'موظف خدمات', label: 'موظف خدمات' },
     { value: 'فني', label: 'فني' },
     { value: 'إداري', label: 'إداري' }

@@ -138,6 +138,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
     professionals: activeEmployees.filter(e => e.category === 'فنيون').length,
     civilians: activeEmployees.filter(e => e.category === 'إداريون').length,
   };
+  const activeMilitaryTotal = activeCounts.officers + activeCounts.ncos + activeCounts.professionals;
   const activeGeneralTotal = activeEmployees.length;
   const inactiveCount = inactiveEmployees.length;
 
@@ -227,7 +228,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
   };
 
   const formatLicenseDate = (value?: string) => {
-    if (!value) return '—';
+    if (!value) return '-';
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return value;
     return date.toLocaleDateString('ar-UK', {
@@ -238,9 +239,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
   };
 
   const getTimeSince = (value?: string) => {
-    if (!value) return '—';
+    if (!value) return '-';
     const created = new Date(value);
-    if (Number.isNaN(created.getTime())) return '—';
+    if (Number.isNaN(created.getTime())) return '-';
 
     const diffInMs = Date.now() - created.getTime();
     const minutes = Math.floor(diffInMs / (1000 * 60));
@@ -469,8 +470,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
               <div className="relative z-10">
                 <div className="flex items-start justify-between mb-6">
                   <div className="space-y-1">
-                    <div className="text-blue-200 text-sm font-medium tracking-wide">إجمالي الموظفين</div>
-                    <div className="text-6xl font-black text-white leading-none tracking-tight">{activeGeneralTotal + inactiveCount}</div>
+                    <div className="text-blue-200 text-sm font-medium tracking-wide">إجمالي القوة</div>
+                    <div className="text-6xl font-black text-white leading-none tracking-tight">{activeGeneralTotal}</div>
                   </div>
                   <div className="relative">
                     <div className="w-16 h-16 rounded-2xl bg-white/10 border border-blue-400/50 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">
@@ -483,7 +484,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 </div>
                 <div className="flex items-center gap-2 pt-2">
                   <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                  <span className="text-blue-100 text-sm">جميع فئات الموظفين</span>
+                  <span className="text-blue-100 text-sm">قيادات ● مشرفون ● فنيون ● إداريون</span>
                 </div>
               </div>
             </div>
@@ -498,8 +499,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
               <div className="relative z-10">
                 <div className="flex items-start justify-between mb-6">
                   <div className="space-y-1">
-                    <div className="text-emerald-200 text-sm font-medium tracking-wide">الموظفون النشطون</div>
-                    <div className="text-6xl font-black text-white leading-none tracking-tight">{activeGeneralTotal}</div>
+                    <div className="text-emerald-200 text-sm font-medium tracking-wide">القوة الوظيفية</div>
+                    <div className="text-6xl font-black text-white leading-none tracking-tight">{activeMilitaryTotal}</div>
                   </div>
                   <div className="relative">
                     <div className="w-16 h-16 rounded-2xl border border-green-500/50 bg-white/10 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">
@@ -575,7 +576,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 <div className="text-right flex-1">
                   <div className="text-5xl font-black text-blue-700 mb-1">{activeCounts.ncos}</div>
                   <div className="text-md font-bold leading-tight text-gray-900">
-                    مشرفون
+                    المشرفون
                   </div>
                 </div>
               </div>
@@ -1075,7 +1076,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                     {latestLicenses.map((license) => {
                       const licenseEmployee = license.employee;
                       const fallbackEmployee = employeeById.get(String(license.employee_id));
-                      const rankLabel = licenseEmployee?.rank || fallbackEmployee?.rank || fallbackEmployee?.category || '—';
+                      const rankLabel = licenseEmployee?.rank || fallbackEmployee?.rank || fallbackEmployee?.category || '-';
                       const nameLabel = licenseEmployee?.full_name || fallbackEmployee?.name || 'غير محدد';
                       const displayName = `${rankLabel} / ${nameLabel}`;
                       const typeLabel = formatLicenseTypeLabel(license.license_type);
@@ -1167,7 +1168,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                     <CalendarCheck size={18} className="text-amber-600" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-gray-900">تمديدات الفنيين</h3>
+                    <h3 className="text-base font-bold text-gray-900">تمديدات الفنيون</h3>
                     <p className="text-xs text-gray-600">ملخص حالة التمديدات</p>
                   </div>
                 </div>

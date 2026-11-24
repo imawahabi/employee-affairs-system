@@ -10,12 +10,38 @@ import {
   AuditLogEntry
 } from '../types';
 
-// Backend port configuration (supports Electron dynamic port)
+// Backend base URL configuration.
+// - Web/cloud mode: set VITE_API_URL at build time (e.g. https://api.example.com)
+// - Electron mode: port is discovered dynamically from the main process.
+const ENV_API_URL = (import.meta.env?.VITE_API_URL as string | undefined)?.replace(/\/+$/, '');
 const DEFAULT_BACKEND_PORT = Number(import.meta.env?.VITE_BACKEND_PORT) || 3106;
-const PORT_STORAGE_KEY = 'gov-backend-port';
+const PORT_STORAGE_KEY = 'moi-backend-port';
+const TOKEN_STORAGE_KEY = 'moi-api-token';
 const isElectron = typeof window !== 'undefined' && !!(window as any).electron?.ipcRenderer;
 
-let API_BASE_URL = `http://localhost:${DEFAULT_BACKEND_PORT}/api`;
+export const isWebCloudMode = () => !isElectron && !!ENV_API_URL;
+
+export const getApiToken = (): string => {
+  try {
+    return window.localStorage.getItem(TOKEN_STORAGE_KEY) || (import.meta.env?.VITE_API_TOKEN as string | undefined) || '';
+  } catch {
+    return (import.meta.env?.VITE_API_TOKEN as string | undefined) || '';
+  }
+};
+
+export const setApiToken = (token: string) => {
+  try {
+    if (token) window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
+    else window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+  } catch {}
+};
+
+const authHeaders = (): Record<string, string> => {
+  const token = getApiToken();
+  return token ? { 'x-api-token': token } : {};
+};
+
+let API_BASE_URL = ENV_API_URL ? `${ENV_API_URL}/api` : `http://localhost:${DEFAULT_BACKEND_PORT}/api`;
 let portKnown = false;
 let portReadyPromise: Promise<void> | null = null;
 let resolvePortReady: (() => void) | null = null;
@@ -97,14 +123,18 @@ const ensurePortSet = async (forceRefresh = false): Promise<void> => {
 
 const apiFetch = async (url: string, options: FetchOptions = {}) => {
   await ensurePortSet();
-  return fetch(url, options);
+  const headers = { ...(options.headers || {}), ...authHeaders() };
+  return fetch(url, { ...options, headers });
 };
 
 // Expose API base URL and SSE helper
 export const getApiBaseUrl = () => API_BASE_URL;
 export const openAlertsEventSource = async (): Promise<EventSource> => {
   await ensurePortSet(true);
-  return new EventSource(`${API_BASE_URL}/alerts/stream`);
+  const token = getApiToken();
+  const sep = API_BASE_URL.includes('?') ? '&' : '?';
+  const suffix = token ? `${sep}token=${encodeURIComponent(token)}` : '';
+  return new EventSource(`${API_BASE_URL}/alerts/stream${suffix}`);
 };
 
 // Wrapper for fetch with retry logic
@@ -1136,4 +1166,67 @@ export const updateShiftDetails = async (shiftId: string, title: string, notes: 
   }
 
   return response.json();
+};
+
+// ---------- Sync API ----------
+
+export interface SyncStatus {
+  deviceId: string;
+  peerUrl: string | null;
+  peerName: string;
+  pendingChanges: number;
+  pendingConflicts: number;
+  meta: Record<string, string | null>;
+  cursors: Array<{ peer: string; lastSeq: number }>;
+}
+
+export interface SyncConflict {
+  id: string;
+  tableName: string;
+  rowId: string;
+  localDevice: string | null;
+  remoteDevice: string | null;
+  localData: any;
+  remoteData: any;
+  status: string;
+  createdAt: string;
+  resolvedAt: string | null;
+}
+
+export const fetchSyncStatus = async (): Promise<SyncStatus | null> => {
+  try {
+    const response = await apiFetch(`${API_BASE_URL}/sync/status`);
+    if (!response.ok) return null;
+    return response.json();
+  } catch {
+    return null;
+  }
+};
+
+export const fetchSyncConflicts = async (): Promise<SyncConflict[]> => {
+  const response = await apiFetch(`${API_BASE_URL}/sync/conflicts`);
+  if (!response.ok) return [];
+  return response.json();
+};
+
+export const resolveSyncConflict = async (id: string, keep: 'local' | 'remote'): Promise<void> => {
+  const response = await apiFetch(`${API_BASE_URL}/sync/conflicts/${id}/resolve`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ keep }),
+  });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to resolve conflict');
+  }
+};
+
+export const triggerSyncNow = async (): Promise<{ pushed: number; pulled: number; conflicts: number; error?: string } | null> => {
+  try {
+    const response = await apiFetch(`${API_BASE_URL}/sync/run`, { method: 'POST' });
+    if (!response.ok) return null;
+    return response.json();
+  } catch {
+    return null;
+  }
 };

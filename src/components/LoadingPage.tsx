@@ -52,8 +52,8 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
       case 'ranks':
         return {
           icon: Award,
-          title: title || 'جاري تحميل المسميات الوظيفية',
-          subtitle: subtitle || 'يرجى الانتظار بينما نحضر بيانات المسميات الوظيفية...',
+          title: title || 'جاري تحميل الرتب',
+          subtitle: subtitle || 'يرجى الانتظار بينما نحضر بيانات الرتب...',
           gradient: 'from-blue-500 to-blue-700',
           bgGradient: 'from-blue-50 via-blue-50/30 to-blue-100/50'
         };

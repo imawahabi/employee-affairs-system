@@ -89,7 +89,7 @@ export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChan
                   <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/25 to-transparent"></div>
                   <img
                     src="/icons/logo.png"
-                    alt="Entity Logo"
+                    alt="Ministry Logo"
                     className="relative w-16 h-16 object-contain drop-shadow-2xl"
                     onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                       const target = e.target as HTMLImageElement;
@@ -107,10 +107,10 @@ export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChan
                 </h1>
                 <div className="space-y-1">
                   <p className="text-white/90 text-sm font-semibold drop-shadow-md">
-                    الإدارة العامة
+                    الهيئة العامة للشؤون الإدارية والموارد البشرية
                   </p>
                   <p className="text-white/80 text-xs drop-shadow-sm leading-relaxed px-2">
-                    الجهة الحكومية
+                    الهيئة العامة للشؤون الإدارية والموارد البشرية
                   </p>
                 </div>
               </div>
@@ -124,7 +124,7 @@ export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChan
               <div className="relative p-1.5 rounded-xl bg-gradient-to-br from-white/25 to-white/10 border border-white/30 shadow-2xl backdrop-blur-xl">
                 <img
                   src="/icons/logo.png"
-                  alt="Entity Logo"
+                  alt="Ministry Logo"
                   className="relative w-10 h-10 object-contain drop-shadow-2xl"
                   onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                     const target = e.target as HTMLImageElement;

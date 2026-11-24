@@ -73,9 +73,9 @@ const formatDepartmentOnlyLabel = (department?: string | null) =>
   formatDepartmentLabel(department) || 'غير مسجل';
 
 const formatShortDate = (value?: string | null) => {
-  if (!value) return '—';
+  if (!value) return '-';
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '—';
+  if (Number.isNaN(date.getTime())) return '-';
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -437,7 +437,7 @@ export default function NextDutyQueue() {
                 const previousGroupLabel = previous ? formatDepartmentOnlyLabel(previous.employee.department) : '';
                 const showGroupHeader = key !== 'professionals' && groupLabel !== previousGroupLabel;
                 const lastShiftDate = summary.lastAssignments[0]?.date || null;
-                const displayName = formatEmployeeDisplayName(summary.employee) || summary.employee.name || '—';
+                const displayName = formatEmployeeDisplayName(summary.employee) || summary.employee.name || '-';
 
                 return (
                   <Fragment key={summary.employee.id}>
@@ -450,7 +450,7 @@ export default function NextDutyQueue() {
                     )}
                     <tr className="hover:bg-gray-50">
                       <td className="px-4 py-3 font-semibold text-gray-700">{index + 1}</td>
-                      <td className="px-4 py-3 text-gray-700">{summary.employee.rank || '—'}</td>
+                      <td className="px-4 py-3 text-gray-700">{summary.employee.rank || '-'}</td>
                       <td className="px-4 py-3">
                         <div className="flex flex-col">
                           <button
@@ -603,7 +603,7 @@ export default function NextDutyQueue() {
               </label>
 
               <label className="space-y-2">
-                <span className="block text-xs font-bold text-blue-100">فئة الفنيين</span>
+                <span className="block text-xs font-bold text-blue-100">فئة الفنيون</span>
                 <select
                   value={selectedProfessionalGroup}
                   onChange={(event) => setSelectedProfessionalGroup(event.target.value)}
@@ -648,13 +648,13 @@ export default function NextDutyQueue() {
             <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
               <div className="text-lg font-black text-slate-800">لا توجد نتائج مطابقة</div>
               <div className="mt-2 text-sm font-semibold text-slate-500">
-                غيّر الإدارة أو فئة الفنيين أو ألغِ فلاتر الاستبعاد لعرض الوضع الحالي.
+                غيّر الإدارة أو فئة الفنيون أو ألغِ فلاتر الاستبعاد لعرض الوضع الحالي.
               </div>
             </div>
           )}
           {renderCategoryTable('officers', 'القيادات', 'مرشحون من فئة القيادات حسب الترتيب الوظيفي')}
-          {renderCategoryTable('ncos', 'المشرفون', 'مرشحون من فئة المشرفين حسب الترتيب الوظيفي')}
-          {renderCategoryTable('professionals', 'الفنيون', 'مرشحون من فئة الفنيين حسب الأبعد عن آخر مناوبة')}
+          {renderCategoryTable('ncos', 'مشرفون', 'مرشحون من فئة مشرفون حسب الترتيب الوظيفي')}
+          {renderCategoryTable('professionals', 'الفنيون', 'مرشحون من فئة الفنيون حسب الأبعد عن آخر مناوبة')}
         </div>
       </div>
     </div>

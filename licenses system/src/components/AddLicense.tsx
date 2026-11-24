@@ -629,8 +629,8 @@ const AddLicense: React.FC<AddLicenseProps> = ({ onNavigate }) => {
                               </div>
                               <div className="text-left">
                                 <div className={`text-sm px-2 py-1 rounded-full ${
-                                  employee.category === 'قيادات' ? 'bg-blue-100 text-blue-800' :
-                                  employee.category === 'قيادات صف' ? 'bg-green-100 text-green-800' :
+                                  employee.category === 'موظف' ? 'bg-blue-100 text-blue-800' :
+                                  employee.category === 'مشرف' ? 'bg-green-100 text-green-800' :
                                   employee.category === 'فني' ? 'bg-green-100 text-green-800' :
                                   'bg-gray-100 text-gray-800'
                                 }`}>

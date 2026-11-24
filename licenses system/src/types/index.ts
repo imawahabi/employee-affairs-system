@@ -3,7 +3,7 @@ export interface Employee {
   full_name: string;
   rank: string;
   file_number: string;
-  category: 'قيادات' | 'قيادات صف' | 'فني' | 'إداري';
+  category: 'موظف' | 'مشرف' | 'فني' | 'إداري';
   created_at: string;
   updated_at: string;
 }

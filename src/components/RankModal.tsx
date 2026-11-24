@@ -87,7 +87,7 @@ const RankModal: React.FC<RankModalProps> = ({
           </div>
           <div>
             <h4 className="font-semibold text-blue-900">بيانات المسمى الوظيفي</h4>
-            <p className="text-sm text-blue-700">يتم ترتيب المسميات الوظيفية تلقائياً حسب النظام المعتمد</p>
+            <p className="text-sm text-blue-700">يتم ترتيب الرتب تلقائياً حسب النظام المعتمد</p>
           </div>
         </div>
 

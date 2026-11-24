@@ -23,32 +23,32 @@ ARABIC_DIGITS = {
 }
 
 CATEGORY_MAP = {
-    "ضابط": "ضباط",
-    "ضباط": "ضباط",
-    "ضابطصف": "ضباط صف",
-    "ضباطصف": "ضباط صف",
-    "مهني": "مهنيين",
-    "مهنيين": "مهنيين",
-    "مدني": "مدنيين",
-    "مدنيين": "مدنيين",
+    "موظف": "قيادات",
+    "قيادات": "قيادات",
+    "موظفصف": "مشرفون",
+    "قياداتصف": "مشرفون",
+    "فني": "فنيون",
+    "فنيون": "فنيون",
+    "إداري": "إداريون",
+    "إداريون": "إداريون",
 }
 
 DEFAULT_RANK_BY_CATEGORY = {
-    "ضباط": "ملازم",
-    "ضباط صف": "شرطي",
-    "مهنيين": "مهني",
-    "مدنيين": "مدني",
+    "قيادات": "موظف",
+    "مشرفون": "موظف خدمات",
+    "فنيون": "فني",
+    "إداريون": "إداري",
 }
 
 RANK_ALIAS_MAP = {
-    "و.ض": "و.ضابط",
-    "و.ضابط": "و.ضابط",
-    "وض": "و.ضابط",
-    "وضابط": "و.ضابط",
-    "و.ا.ض": "و.أ.ضابط",
-    "و.ا.ضابط": "و.أ.ضابط",
-    "و.أ.ض": "و.أ.ضابط",
-    "و.أ.ضابط": "و.أ.ضابط",
+    "و.ض": "مشرف مساعد",
+    "مشرف مساعد": "مشرف مساعد",
+    "وض": "مشرف مساعد",
+    "وموظف": "مشرف مساعد",
+    "و.ا.ض": "مشرف",
+    "و.ا.موظف": "مشرف",
+    "و.أ.ض": "مشرف",
+    "مشرف": "مشرف",
 }
 
 PREFERRED_DEPARTMENT = "السجل العام"
@@ -63,7 +63,7 @@ def normalize_file_number(value: str) -> str:
 
 def normalize_category(value: str) -> str:
     cleaned = str(value or "").strip().replace(" ", "")
-    return CATEGORY_MAP.get(cleaned, "ضباط")
+    return CATEGORY_MAP.get(cleaned, "قيادات")
 
 
 def normalize_rank(value: str, category: str) -> str:
@@ -75,7 +75,7 @@ def normalize_rank(value: str, category: str) -> str:
         return alias
     if cleaned:
         return cleaned
-    return DEFAULT_RANK_BY_CATEGORY.get(category, "ملازم")
+    return DEFAULT_RANK_BY_CATEGORY.get(category, "موظف")
 
 
 def normalize_path(value: str) -> str:
@@ -108,14 +108,14 @@ def collect_target_candidates() -> list:
 
     localappdata = os.getenv("LOCALAPPDATA", "").strip()
     if localappdata:
-        add(os.path.join(localappdata, "hr-suite-app", "database.sqlite"))
+        add(os.path.join(localappdata, "gov-hr-suite", "database.sqlite"))
 
     win_user = os.getenv("WSL_WIN_USER", "").strip() or detect_windows_user_from_cwd()
     if win_user:
-        add(f"/mnt/c/Users/{win_user}/AppData/Local/hr-suite-app/database.sqlite")
+        add(f"/mnt/c/Users/{win_user}/AppData/Local/gov-hr-suite/database.sqlite")
 
     # Fallback scan for WSL environments where username is unknown.
-    for path in glob.glob("/mnt/c/Users/*/AppData/Local/hr-suite-app/database.sqlite"):
+    for path in glob.glob("/mnt/c/Users/*/AppData/Local/gov-hr-suite/database.sqlite"):
         add(path)
 
     add(os.path.join("backend", "database.sqlite"))
@@ -134,7 +134,7 @@ def resolve_target_path(target_arg: str):
         return "", candidates
 
     # Prefer an app-data database if present (usually the active runtime DB).
-    appdata_existing = [path for path in existing if "AppData" in path and "hr-suite-app" in path]
+    appdata_existing = [path for path in existing if "AppData" in path and "gov-hr-suite" in path]
     if appdata_existing:
         appdata_existing.sort(key=lambda p: os.path.getmtime(p), reverse=True)
         return appdata_existing[0], candidates
@@ -360,7 +360,7 @@ def create_missing_employees(
             employee_id = f"{employee_id}_{uuid4().hex[:6]}"
 
         name = str(source_employee.get("full_name", "")).strip() or f"Legacy Employee {normalized_identifier}"
-        include_in_shifts = 0 if category == "مدنيين" else 1
+        include_in_shifts = 0 if category == "إداريون" else 1
 
         conn.execute(
             """

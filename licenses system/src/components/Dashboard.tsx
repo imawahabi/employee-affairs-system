@@ -55,8 +55,8 @@ const Dashboard: React.FC = () => {
 
     // Employee categories
     const categories = {
-      officers: employees.filter(e => e.category === 'قيادات').length,
-      ncos: employees.filter(e => e.category === 'قيادات صف').length,
+      officers: employees.filter(e => e.category === 'موظف').length,
+      ncos: employees.filter(e => e.category === 'مشرف').length,
       professionals: employees.filter(e => e.category === 'فني').length,
       civilians: employees.filter(e => e.category === 'إداري').length
     };
@@ -319,7 +319,7 @@ const Dashboard: React.FC = () => {
           <div className="relative p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">قوة الإدارة العامة</p>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">قوة إدارة السجل العام</p>
                 <h3 className="text-sm font-bold text-slate-900">إجمالي الموظفين</h3>
               </div>
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -339,7 +339,7 @@ const Dashboard: React.FC = () => {
                   <div className="text-lg font-bold text-orange-600">{employeeCategories.officers}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xs font-medium text-slate-600 mb-1">قيادات الصف</div>
+                  <div className="text-xs font-medium text-slate-600 mb-1">مشرفون</div>
                   <div className="text-lg font-bold text-orange-600">{employeeCategories.ncos}</div>
                 </div>
                 <div className="text-center">
@@ -401,7 +401,7 @@ const Dashboard: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700">
-                      {license.employee?.category === 'قيادات' || license.employee?.category === 'قيادات صف'
+                      {license.employee?.category === 'موظف' || license.employee?.category === 'مشرف'
                         ? license.employee?.rank
                         : license.employee?.category}
                     </td>
