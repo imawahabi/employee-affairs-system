@@ -20,7 +20,7 @@ Employee data in one spreadsheet, duty rosters in another spreadsheet, license t
 
 ## Features
 
-- **Employee Management** — a complete file for every employee with the master data (departments, ranks, job titles, nationalities, positions, sections), service extensions, and data import.
+- **Employee Management** — a complete file for every employee with the master data (departments, job titles, grades, nationalities, positions, sections), service extensions, and data import.
 - **Duty Shifts & Rotations** — morning, evening, and night duty registration, a weekly view, and a duty history for every employee.
 - **Next Duty Queue** — fair automatic ordering by seniority since the last duty, excluding employees on leave.
 - **Licenses & Leave Permits** — license and permit records with expiry tracking and automatic alerts before renewal dates.
