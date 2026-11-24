@@ -288,24 +288,24 @@ const parseExtensionReminderDays = (rawValue: string | undefined, fallback: numb
 };
 
 const OFFICER_RANKS = [
-    'لواء',
-    'عميد',
-    'عقيد',
-    'مقدم',
-    'رائد',
-    'نقيب',
-    'ملازم أول',
-    'ملازم',
+    'مدير عام',
+    'مدير إدارة',
+    'مساعد مدير إدارة',
+    'رئيس قسم',
+    'مشرف أول',
+    'مشرف',
+    'موظف أول',
+    'موظف أول',
 ];
 
 const NCO_RANKS = [
-    'و.أ.ضابط',
-    'و.ضابط',
-    'رقيب أول',
-    'رقيب',
-    'عريف',
-    'و.عريف',
-    'شرطي',
+    'موظف أول',
+    'موظف',
+    'مشرف',
+    'مشرف مساعد',
+    'موظف أول',
+    'موظف',
+    'موظف خدمات',
 ];
 
 const normalizeRankName = (value: string) => value
@@ -346,17 +346,17 @@ const findRankOrder = (rankName: string, map: { normalized: string; compact: str
 };
 
 const getRankOrder = (rankName: string, category: string) => {
-    if (category === 'ضباط') {
+    if (category === 'قيادات') {
         return findRankOrder(rankName, OFFICER_RANK_MAP);
     }
-    if (category === 'ضباط صف') {
+    if (category === 'مشرفون') {
         return findRankOrder(rankName, NCO_RANK_MAP);
     }
     return Number.MAX_SAFE_INTEGER;
 };
 
-const CATEGORY_OPTIONS = ['ضباط', 'ضباط صف', 'مهنيين', 'مدنيين'];
-const DEFAULT_CATEGORY = 'ضباط';
+const CATEGORY_OPTIONS = ['قيادات', 'مشرفون', 'فنيون', 'إداريون'];
+const DEFAULT_CATEGORY = 'قيادات';
 const PROFESSIONAL_GROUP_OPTIONS = ['طباع', 'سائق', 'فراش', 'أخرى'];
 
 const normalizeText = (value: any) => {
@@ -540,11 +540,11 @@ const getCategoryOrDefault = (value: any, fallback = DEFAULT_CATEGORY) => {
 };
 
 const getDefaultRankName = (category: string) => {
-    if (category === 'ضباط') return 'ملازم';
-    if (category === 'ضباط صف') return 'شرطي';
-    if (category === 'مدنيين') return 'مدني';
-    if (category === 'مهنيين') return 'مهني';
-    return 'ملازم';
+    if (category === 'قيادات') return 'موظف أول';
+    if (category === 'مشرفون') return 'موظف خدمات';
+    if (category === 'إداريون') return 'إداري';
+    if (category === 'فنيون') return 'فني';
+    return 'موظف أول';
 };
 
 const ensureRank = async (db: any, name: string, category: string) => {
@@ -640,19 +640,19 @@ const formatGenderLabel = (value: any) => {
 
 const mapLicenseCategory = (value: any) => {
     const trimmed = normalizeText(value);
-    if (trimmed === 'ضباط') return 'ضابط';
-    if (trimmed === 'ضباط صف') return 'ضابط صف';
-    if (trimmed === 'مهنيين') return 'مهني';
-    if (trimmed === 'مدنيين') return 'مدني';
+    if (trimmed === 'قيادات') return 'قيادات';
+    if (trimmed === 'مشرفون') return 'مشرفون';
+    if (trimmed === 'فنيون') return 'فني';
+    if (trimmed === 'إداريون') return 'إداري';
     return trimmed;
 };
 
 const mapEmployeeCategoryFromLicense = (value: any) => {
     const trimmed = normalizeText(value);
-    if (trimmed === 'ضابط') return 'ضباط';
-    if (trimmed === 'ضابط صف') return 'ضباط صف';
-    if (trimmed === 'مهني') return 'مهنيين';
-    if (trimmed === 'مدني') return 'مدنيين';
+    if (trimmed === 'قيادات') return 'قيادات';
+    if (trimmed === 'مشرفون') return 'مشرفون';
+    if (trimmed === 'فني') return 'فنيون';
+    if (trimmed === 'إداري') return 'إداريون';
     return trimmed;
 };
 
@@ -725,10 +725,10 @@ const EMPLOYEE_AUDIT_FIELDS = [
     { key: 'fileNumber', label: 'رقم الملف' },
     { key: 'name', label: 'الاسم' },
     { key: 'category', label: 'الفئة' },
-    { key: 'rank', label: 'الرتبة' },
+    { key: 'rank', label: 'المسمى الوظيفي' },
     { key: 'jobTitle', label: 'المسمى الوظيفي' },
     { key: 'jobGrade', label: 'الدرجة الوظيفية' },
-    { key: 'professionalGroup', label: 'تصنيف المهنيين' },
+    { key: 'professionalGroup', label: 'تصنيف الفنيون' },
     { key: 'department', label: 'الإدارة' },
     { key: 'section', label: 'القسم' },
     { key: 'status', label: 'الحالة', formatter: formatStatusLabel },
@@ -749,16 +749,16 @@ const EMPLOYEE_AUDIT_FIELDS = [
     { key: 'hasEducationCertificate', label: 'شهادة دراسية', formatter: formatYesNo },
     { key: 'educationCertificateType', label: 'نوع الشهادة' },
     { key: 'educationSpecialization', label: 'تخصص المؤهل الدراسي' },
-    { key: 'militaryNumber', label: 'الرقم العسكري' },
+    { key: 'militaryNumber', label: 'الرقم الوظيفي' },
     { key: 'hiringDate', label: 'تاريخ التعيين' },
     { key: 'seniorityNumber', label: 'رقم الأقدمية' },
-    { key: 'hasWeapon', label: 'يحمل سلاح', formatter: formatYesNo },
-    { key: 'weaponAttachments', label: 'ملحقات السلاح' },
+    { key: 'hasWeapon', label: 'يحمل جهاز اتصال', formatter: formatYesNo },
+    { key: 'weaponAttachments', label: 'ملحقات جهاز الاتصال' },
     { key: 'hasParking', label: 'موقف سيارة', formatter: formatYesNo },
     { key: 'parkingLocation', label: 'موقع الموقف' },
     { key: 'parkingNumber', label: 'رقم الموقف' },
-    { key: 'includeInShifts', label: 'مشارك في الخفارات', formatter: formatYesNo },
-    { key: 'shiftNotes', label: 'ملاحظات الخفارات' },
+    { key: 'includeInShifts', label: 'مشارك في المناوبات', formatter: formatYesNo },
+    { key: 'shiftNotes', label: 'ملاحظات المناوبات' },
     { key: 'excludeFromStatistics', label: 'مستثنى من الإحصائيات', formatter: formatYesNo },
     { key: 'secondmentLocation', label: 'منتدب من خارج الإدارة العامة' }
 ];
@@ -847,9 +847,9 @@ type ForceSyncWarning = {
 const FORCE_FIELD_LABELS: Record<string, string> = {
     name: 'الاسم',
     category: 'الفئة',
-    rank: 'الرتبة',
+    rank: 'المسمى الوظيفي',
     fileNumber: 'رقم الملف',
-    militaryNumber: 'الرقم العسكري',
+    militaryNumber: 'الرقم الوظيفي',
     referenceNumber: 'رقم المرجع',
     civilId: 'الرقم المدني',
     birthDate: 'تاريخ الميلاد',
@@ -871,13 +871,13 @@ const FORCE_FIELD_LABELS: Record<string, string> = {
     department: 'الإدارة',
     section: 'القسم',
     phone_number: 'رقم الهاتف',
-    hasWeapon: 'هل لديه سلاح',
-    weaponAttachments: 'ملحقات السلاح',
+    hasWeapon: 'هل لديه جهاز اتصال',
+    weaponAttachments: 'ملحقات جهاز الاتصال',
     hasParking: 'هل لديه موقف سيارة',
     parkingLocation: 'موقع الموقف',
     parkingNumber: 'رقم الموقف',
-    includeInShifts: 'يدرج في الخفارات',
-    shiftNotes: 'ملاحظات الخفارات',
+    includeInShifts: 'يدرج في المناوبات',
+    shiftNotes: 'ملاحظات المناوبات',
     excludeFromStatistics: 'مستثنى من الإحصائيات',
     isSecondedOutsideGeneralAdministration: 'منتدب من خارج الإدارة العامة',
     secondmentLocation: 'جهة الندب',
@@ -1085,7 +1085,7 @@ try {
       }
       $joined = ($candidate -join ' ')
       $score = 0
-      foreach ($keyword in @('الاسم','الإسم','الاســــم','الرتبة','رقم الملف','الرقم المدني','رقم مدني','الإدارة','الادارة','المسمى','الدرجة','المؤهل','الهاتف')) {
+      foreach ($keyword in @('الاسم','الإسم','الاســــم','المسمى الوظيفي','رقم الملف','الرقم المدني','رقم إداري','الإدارة','الادارة','المسمى','الدرجة','المؤهل','الهاتف')) {
         if ($joined -like "*$keyword*") { $score++ }
       }
       if ($score -gt $bestHeaderScore) {
@@ -1156,11 +1156,11 @@ const getForceCell = (row: ForceWordRow, headerIncludes: string[]) => {
 
 const FORCE_SOURCE_FIELD_ALIASES: Record<string, string[]> = {
     name: ['الاسم', 'الإسم', 'الاســــم', 'اسم الموظف'],
-    rank: ['الرتبة', 'الدرجة العسكرية'],
+    rank: ['المسمى الوظيفي', 'الدرجة الوظيفية'],
     fileNumber: ['رقم الملف', 'ملف'],
-    militaryNumber: ['الرقم العسكري', 'رقم عسكري'],
+    militaryNumber: ['الرقم الوظيفي', 'رقم وظيفي'],
     referenceNumber: ['رقم المرجع', 'المرجع'],
-    civilId: ['رقم مدني', 'الرقم المدني', 'مدني'],
+    civilId: ['رقم إداري', 'الرقم المدني', 'إداري'],
     birthDate: ['تاريخ الميلاد', 'الميلاد'],
     nationality: ['الجنسية'],
     nationalityArticleNumber: ['رقم مادة الجنسية', 'مادة الجنسية', 'المادة'],
@@ -1177,13 +1177,13 @@ const FORCE_SOURCE_FIELD_ALIASES: Record<string, string[]> = {
     phone_number: ['رقم الهاتف', 'الهاتف', 'النقال', 'الموبايل'],
     hiringDate: ['تاريخ التعيين', 'التعيين'],
     seniorityNumber: ['رقم الأقدمية', 'الاقدمية', 'الأقدمية'],
-    hasWeapon: ['سلاح', 'يحمل سلاح'],
-    weaponAttachments: ['ملحقات السلاح', 'مرفقات السلاح'],
+    hasWeapon: ['جهاز اتصال', 'يحمل جهاز اتصال'],
+    weaponAttachments: ['ملحقات جهاز الاتصال', 'ملحقات جهاز الاتصال'],
     hasParking: ['موقف سيارة', 'لديه موقف', 'الموقف'],
     parkingLocation: ['موقع الموقف', 'مكان الموقف'],
     parkingNumber: ['رقم الموقف'],
-    includeInShifts: ['يدرج في الخفارات', 'مشارك في الخفارات', 'الخفارات'],
-    shiftNotes: ['ملاحظات الخفارات'],
+    includeInShifts: ['يدرج في المناوبات', 'مشارك في المناوبات', 'المناوبات'],
+    shiftNotes: ['ملاحظات المناوبات'],
     excludeFromStatistics: ['مستثنى من الإحصائيات', 'استبعاد من الإحصائيات'],
     isSecondedOutsideGeneralAdministration: ['منتدب من خارج الإدارة العامة', 'ندب خارجي'],
     secondmentLocation: ['جهة الندب', 'مكان الندب', 'موقع الندب'],
@@ -1218,18 +1218,18 @@ const normalizeForceMaritalStatus = (value: any) => {
 
 const inferForceCategoryFromRow = (row: ForceWordRow, tableIndex: number) => {
     const rowText = normalizeForceMatchText([...row.headers, ...row.cells].join(' '));
-    if (rowText.includes('المدنيين') || rowText.includes('مدنيين') || rowText.includes('الدرجه الوظيفيه')) return 'مدنيين';
-    if (rowText.includes('مهني')) return 'مهنيين';
-    if (rowText.includes('ضباط الصف') || rowText.includes('افراد')) return 'ضباط صف';
-    if (rowText.includes('ضباط')) return 'ضباط';
+    if (rowText.includes('الإداريون') || rowText.includes('إداريون') || rowText.includes('الدرجه الوظيفيه')) return 'إداريون';
+    if (rowText.includes('فني')) return 'فنيون';
+    if (rowText.includes('المشرفون') || rowText.includes('افراد')) return 'مشرفون';
+    if (rowText.includes('قيادات')) return 'قيادات';
     return tableIndex === 1
-        ? 'ضباط'
+        ? 'قيادات'
         : tableIndex === 2
-            ? 'ضباط صف'
+            ? 'مشرفون'
             : tableIndex === 3
-                ? 'مهنيين'
+                ? 'فنيون'
                 : tableIndex === 4
-                    ? 'مدنيين'
+                    ? 'إداريون'
                     : '';
 };
 
@@ -1251,9 +1251,9 @@ const parseForceSourceEmployees = (rows: ForceWordRow[]) => {
             rowNumber: row.rowIndex || index + 2,
             category,
             name: forceTextValue(name),
-            rank: category === 'مدنيين' ? 'مدني' : getForceSourceCell(row, 'rank'),
-            fileNumber: category === 'مدنيين' ? null : forceDigitsOnly(getForceSourceCell(row, 'fileNumber')),
-            militaryNumber: category === 'ضباط' || category === 'مدنيين'
+            rank: category === 'إداريون' ? 'إداري' : getForceSourceCell(row, 'rank'),
+            fileNumber: category === 'إداريون' ? null : forceDigitsOnly(getForceSourceCell(row, 'fileNumber')),
+            militaryNumber: category === 'قيادات' || category === 'إداريون'
                 ? null
                 : forceDigitsOnly(getForceSourceCell(row, 'militaryNumber')),
             referenceNumber: forceDigitsOnly(getForceSourceCell(row, 'referenceNumber')),
@@ -1268,8 +1268,8 @@ const parseForceSourceEmployees = (rows: ForceWordRow[]) => {
             appointmentDecisionDate: getForceSourceDateCell(row, 'appointmentDecisionDate'),
             gender: normalizeForceGender(getForceSourceCell(row, 'gender')),
             jobTitle: getForceSourceCell(row, 'jobTitle'),
-            jobGrade: category === 'مدنيين' ? getForceSourceCell(row, 'jobGrade') : null,
-            educationCertificateType: category === 'مدنيين' ? educationCertificateType : null,
+            jobGrade: category === 'إداريون' ? getForceSourceCell(row, 'jobGrade') : null,
+            educationCertificateType: category === 'إداريون' ? educationCertificateType : null,
             educationSpecialization: getForceSourceCell(row, 'educationSpecialization'),
             phone_number: forceDigitsOnly(getForceSourceCell(row, 'phone_number')),
             hiringDate: getForceSourceDateCell(row, 'hiringDate'),
@@ -1296,14 +1296,14 @@ const parsePhoneSourceEmployees = (rows: ForceWordRow[]) => {
         const name = getForceCell(row, ['الاسم', 'الإسم', 'الاســــم']);
         if (!isUsefulForceValue(name)) return;
         const nameKey = normalizeForceMatchText(name);
-        if (nameKey.includes('الضباط') || nameKey.includes('ضباط الصف') || nameKey.includes('المهنيين')) return;
+        if (nameKey.includes('القيادات') || nameKey.includes('المشرفون') || nameKey.includes('الفنيون')) return;
         parsed.push({
             sourceId: `phone_${row.tableIndex}_${row.rowIndex || index + 2}`,
             tableIndex: Number(row.tableIndex),
             rowNumber: row.rowIndex || index + 2,
             category: 'غير محدد',
             name: forceTextValue(name),
-            rank: forceTextValue(getForceCell(row, ['الرتبة'])),
+            rank: forceTextValue(getForceCell(row, ['المسمى الوظيفي'])),
             fileNumber: forceTextValue(getForceCell(row, ['رقم الملف'])),
             civilId: null,
             jobTitle: forceTextValue(getForceCell(row, ['المسمى الوظيفي'])),
@@ -1383,14 +1383,14 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
             const organization = resolveForceOrganization(source, departments, sections);
             const scopedRanks = ranks.filter((rank: any) => rank.category === source.category);
             const scopedJobTitles = jobTitles.filter((jobTitle: any) => jobTitle.category === source.category);
-            const rankChoice = source.category === 'مدنيين'
-                ? { value: 'مدني', score: 1 }
+            const rankChoice = source.category === 'إداريون'
+                ? { value: 'إداري', score: 1 }
                 : resolveForceChoice(source.rank, scopedRanks, 0.58);
             const jobTitleChoice = resolveForceChoice(source.jobTitle, scopedJobTitles, 0.5);
-            const jobGradeChoice = source.category === 'مدنيين'
+            const jobGradeChoice = source.category === 'إداريون'
                 ? resolveForceChoice(source.jobGrade, jobGradeRows, 0.5)
                 : { value: null, score: 0 };
-            const educationChoice = source.category === 'مدنيين'
+            const educationChoice = source.category === 'إداريون'
                 ? resolveForceChoice(source.educationCertificateType, educationOptions, 0.5)
                 : { value: null, score: 0 };
             const nationalityChoice = resolveForceChoice(source.nationality, nationalities, 0.58);
@@ -1453,7 +1453,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
             const rankScore = forceSimilarity(source.rank, employee.rank);
             if (rankScore >= 0.82) {
                 score += 0.07;
-                details.push('الرتبة متقاربة');
+                details.push('المسمى الوظيفي متقاربة');
             }
             const departmentScore = forceSimilarity(source.department || source.rawDepartmentText, employee.department);
             if (departmentScore >= 0.7) {
@@ -1481,7 +1481,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
             const exactReference = source.referenceNumber ? byReference.get(forceDigitsOnly(source.referenceNumber) || forceTextValue(source.referenceNumber)) : null;
             if (exactReference) return { employee: exactReference, matchedBy: 'رقم المرجع', confidence: 0.98, details: ['تطابق رقم المرجع'], reviewRequired: false };
             const exactMilitary = source.militaryNumber ? byMilitary.get(forceDigitsOnly(source.militaryNumber) || forceTextValue(source.militaryNumber)) : null;
-            if (exactMilitary) return { employee: exactMilitary, matchedBy: 'الرقم العسكري', confidence: 0.96, details: ['تطابق الرقم العسكري'], reviewRequired: false };
+            if (exactMilitary) return { employee: exactMilitary, matchedBy: 'الرقم الوظيفي', confidence: 0.96, details: ['تطابق الرقم الوظيفي'], reviewRequired: false };
 
             const candidates = employees
                 .map((employee: any) => scoreEmployeeCandidate(source, employee))
@@ -1636,7 +1636,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
                 const createPayload = {
                     name: source.name,
                     category: source.category,
-                    rank: source.rank || (source.category === 'مدنيين' ? 'مدني' : (rankOptions[0]?.value || '')),
+                    rank: source.rank || (source.category === 'إداريون' ? 'إداري' : (rankOptions[0]?.value || '')),
                     fileNumber: source.fileNumber || null,
                     militaryNumber: source.militaryNumber || null,
                     referenceNumber: source.referenceNumber || null,
@@ -1666,7 +1666,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
                     hasParking: source.hasParking ?? false,
                     parkingLocation: source.parkingLocation || null,
                     parkingNumber: source.parkingNumber || null,
-                    includeInShifts: source.category === 'مدنيين' ? false : (source.includeInShifts ?? true),
+                    includeInShifts: source.category === 'إداريون' ? false : (source.includeInShifts ?? true),
                     shiftNotes: source.shiftNotes || null,
                     excludeFromStatistics: source.excludeFromStatistics ?? false,
                     isSecondedOutsideGeneralAdministration: source.isSecondedOutsideGeneralAdministration ?? false,
@@ -1674,7 +1674,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
                     status: 'active'
                 };
                 const createWarnings = [
-                    isUsefulForceValue(sourceAny.rawRank) && !source.rank ? `الرتبة في الكشف (${sourceAny.rawRank}) لا تطابق قائمة الرتب.` : '',
+                    isUsefulForceValue(sourceAny.rawRank) && !source.rank ? `المسمى الوظيفي في الكشف (${sourceAny.rawRank}) لا تطابق قائمة المسميات الوظيفية.` : '',
                     isUsefulForceValue(sourceAny.rawJobTitle) && !source.jobTitle ? `المسمى في الكشف (${sourceAny.rawJobTitle}) لا يطابق قائمة المسميات.` : '',
                     isUsefulForceValue(sourceAny.rawJobGrade) && !source.jobGrade ? `الدرجة في الكشف (${sourceAny.rawJobGrade}) لا تطابق الدرجات الموجودة.` : '',
                     isUsefulForceValue(sourceAny.rawEducationCertificateType) && !source.educationCertificateType ? `المؤهل في الكشف (${sourceAny.rawEducationCertificateType}) لا يطابق قائمة المؤهلات.` : '',
@@ -1751,7 +1751,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
             addMatchedUpdateProposal('excludeFromStatistics', source.excludeFromStatistics);
             addMatchedUpdateProposal('isSecondedOutsideGeneralAdministration', source.isSecondedOutsideGeneralAdministration);
             addMatchedUpdateProposal('secondmentLocation', source.secondmentLocation);
-            if (source.category === 'مدنيين') {
+            if (source.category === 'إداريون') {
                 addMatchedUpdateProposal('jobTitle', source.jobTitle, {
                     options: jobTitleOptions,
                     warning: isUsefulForceValue(sourceAny.rawJobTitle) && !source.jobTitle ? `المسمى في الكشف (${sourceAny.rawJobTitle}) لا يطابق قائمة المسميات.` : null,
@@ -1799,7 +1799,7 @@ const buildForceSyncAnalysis = async (filePath: string, extractedRows?: ForceWor
             } else {
                 addMatchedUpdateProposal('rank', source.rank, {
                     options: rankOptions,
-                    warning: isUsefulForceValue(sourceAny.rawRank) && !source.rank ? `الرتبة في الكشف (${sourceAny.rawRank}) لا تطابق قائمة الرتب.` : null,
+                    warning: isUsefulForceValue(sourceAny.rawRank) && !source.rank ? `المسمى الوظيفي في الكشف (${sourceAny.rawRank}) لا تطابق قائمة المسميات الوظيفية.` : null,
                     allowEmptySuggestion: isUsefulForceValue(sourceAny.rawRank),
                     sourceRawValue: sourceAny.rawRank
                 });
@@ -2053,7 +2053,7 @@ const detectWordAnalyzeKind = (rows: ForceWordRow[], sourceLabel: string): { kin
     const hasPhoneHeader = ['رقم الهاتف', 'الهاتف', 'النقال', 'الموبايل', 'تلفون'].some((keyword) =>
         headerText.includes(normalizeForceMatchText(keyword))
     );
-    const hasForceHeader = ['الرتبة', 'رقم الملف', 'الرقم المدني', 'الدرجة الوظيفية', 'المؤهل العلمي', 'الإدارة'].some((keyword) =>
+    const hasForceHeader = ['المسمى الوظيفي', 'رقم الملف', 'الرقم المدني', 'الدرجة الوظيفية', 'المؤهل العلمي', 'الإدارة'].some((keyword) =>
         headerText.includes(normalizeForceMatchText(keyword))
     );
     const phoneFileHint = ['هاتف', 'هواتف', 'ارقام', 'أرقام', 'تليفون', 'تلفون'].some((keyword) =>
@@ -2538,7 +2538,7 @@ const migrateDatabase = async () => {
         }
         try {
             const professionalRows = await db.all(
-                "SELECT id, jobTitle, professionalGroup FROM Employees WHERE category = 'مهنيين' AND (professionalGroup IS NULL OR professionalGroup = '')"
+                "SELECT id, jobTitle, professionalGroup FROM Employees WHERE category = 'فنيون' AND (professionalGroup IS NULL OR professionalGroup = '')"
             );
             for (const row of professionalRows || []) {
                 const inferred = inferProfessionalGroupFromJobTitle(row.jobTitle) || 'أخرى';
@@ -2661,12 +2661,12 @@ const migrateDatabase = async () => {
             console.warn('[Migration] Unable to normalize Employees.status values:', error);
         }
 
-        const civilianRank = await db.get("SELECT id FROM Ranks WHERE category = 'مدنيين' OR name = 'مدني'");
+        const civilianRank = await db.get("SELECT id FROM Ranks WHERE category = 'إداريون' OR name = 'إداري'");
         if (!civilianRank) {
             log('[Migration] Adding default civilian rank...');
             await db.run(
                 'INSERT INTO Ranks (id, name, category, "order") VALUES (?, ?, ?, ?)',
-                [`rank_civil_${Date.now()}`, 'مدني', 'مدنيين', 1]
+                [`rank_civil_${Date.now()}`, 'إداري', 'إداريون', 1]
             );
         }
 
@@ -2737,7 +2737,7 @@ const migrateDatabase = async () => {
         if (!hideShiftsSetting) {
             await db.run(
                 'INSERT INTO Settings (id, `key`, value, description) VALUES (?, ?, ?, ?)',
-                [`setting_hide_shifts_${Date.now()}`, 'hide_shifts', 'false', 'إخفاء نظام الخفارات في الواجهة']
+                [`setting_hide_shifts_${Date.now()}`, 'hide_shifts', 'false', 'إخفاء نظام المناوبات في الواجهة']
             );
         }
         const hideLicensesSetting = await db.get("SELECT id FROM Settings WHERE `key` = 'hide_licenses'");
@@ -2751,7 +2751,7 @@ const migrateDatabase = async () => {
         if (!excludeWeekendSetting) {
             await db.run(
                 'INSERT INTO Settings (id, `key`, value, description) VALUES (?, ?, ?, ?)',
-                [`setting_exclude_weekend_shifts_${Date.now()}`, 'exclude_weekend_shifts', 'true', 'استثناء الجمعة والسبت من الخفارات']
+                [`setting_exclude_weekend_shifts_${Date.now()}`, 'exclude_weekend_shifts', 'true', 'استثناء الجمعة والسبت من المناوبات']
             );
         }
 
@@ -2887,13 +2887,13 @@ app.get('/api/employees', async (req, res) => {
                 id: 'setting_extension_reminder_days',
                 key: 'extension_reminder_days',
                 value: '30',
-                description: 'أيام التنبيه لتمديد المهنيين قبل الانتهاء (مثال: 90,60,30)'
+                description: 'أيام التنبيه لتمديد الفنيون قبل الانتهاء (مثال: 90,60,30)'
             },
             {
                 id: 'setting_extension_critical_days',
                 key: 'extension_critical_days',
                 value: '30',
-                description: 'عدد الأيام للتنبيه الخطير لتمديد المهنيين'
+                description: 'عدد الأيام للتنبيه الخطير لتمديد الفنيون'
             }
         ];
 
@@ -3070,10 +3070,10 @@ app.post('/api/employees', async (req, res) => {
         const categoryToUse = getCategoryOrDefault(category, DEFAULT_CATEGORY);
         const rankToUse = await resolveRank(db, categoryToUse, rank);
         const departmentToUse = await resolveDepartment(db, department);
-        const professionalGroupToUse = categoryToUse === 'مهنيين'
+        const professionalGroupToUse = categoryToUse === 'فنيون'
             ? (normalizeProfessionalGroup(professionalGroup) || inferProfessionalGroupFromJobTitle(jobTitle) || 'أخرى')
             : null;
-        const includeInShiftsValue = categoryToUse === 'مدنيين' ? 0 : boolToInt(includeInShifts, 1);
+        const includeInShiftsValue = categoryToUse === 'إداريون' ? 0 : boolToInt(includeInShifts, 1);
         const isSecondedOutsideValue = boolToInt(isSecondedOutsideGeneralAdministration, 0);
         const excludeFromStatisticsValue = boolToInt(
             excludeFromStatistics,
@@ -3313,7 +3313,7 @@ app.put('/api/employees/:id', async (req, res) => {
                 ? normalizeOptionalText(educationSpecialization)
                 : normalizeOptionalText(existing.educationSpecialization))
             : null;
-        const includeInShiftsValue = categoryToUse === 'مدنيين'
+        const includeInShiftsValue = categoryToUse === 'إداريون'
             ? 0
             : boolToInt(includeInShifts, existing.includeInShifts ?? 1);
         const wasSecondedOutside = boolToInt(existing.isSecondedOutsideGeneralAdministration, 0);
@@ -3356,7 +3356,7 @@ app.put('/api/employees/:id', async (req, res) => {
         const inferredGroupFromJobTitle = inferProfessionalGroupFromJobTitle(
             jobTitle !== undefined ? jobTitle : existing.jobTitle
         );
-        const professionalGroupToUse = categoryToUse === 'مهنيين'
+        const professionalGroupToUse = categoryToUse === 'فنيون'
             ? (professionalGroupRaw || inferredGroupFromJobTitle || 'أخرى')
             : null;
         const jobGradeToUse = jobGrade !== undefined ? normalizeOptionalText(jobGrade) : normalizeOptionalText(existing.jobGrade);
@@ -3691,7 +3691,7 @@ app.get('/api/professional-extensions/status', async (_req, res) => {
         const restriction = await loadDepartmentRestriction(db);
         const employeesRaw = await db.all(`
             SELECT * FROM Employees
-            WHERE category = 'مهنيين'
+            WHERE category = 'فنيون'
             AND birthDate IS NOT NULL
         `);
         const employees = (employeesRaw || []).filter((emp: any) => isDepartmentAllowed(emp.department, restriction));
@@ -3821,7 +3821,7 @@ app.post('/api/professional-extensions', async (req, res) => {
         if (!employee) {
             return res.status(404).json({ error: 'Employee not found' });
         }
-        if (employee.category !== 'مهنيين') {
+        if (employee.category !== 'فنيون') {
             return res.status(400).json({ error: 'Employee is not in professional category' });
         }
 
@@ -4279,7 +4279,7 @@ app.get('/api/ranks', async (req, res) => {
         const db = await getDb();
         const rows = await db.all('SELECT * FROM Ranks');
         await db.close();
-        const categoryOrder: Record<string, number> = { 'ضباط': 1, 'ضباط صف': 2, 'مهنيين': 3, 'مدنيين': 4 };
+        const categoryOrder: Record<string, number> = { 'قيادات': 1, 'مشرفون': 2, 'فنيون': 3, 'إداريون': 4 };
         const sorted = rows
             .map((row: any) => {
                 const derivedOrder = getRankOrder(row.name, row.category);
@@ -4511,7 +4511,7 @@ app.post('/api/shift-day-exceptions', async (req, res) => {
     try {
         const existingShift = await db.get('SELECT id FROM Shifts WHERE shiftDate = ? LIMIT 1', [normalizedDate]);
         if (existingShift) {
-            return res.status(409).json({ error: 'يوجد خفارة مسجلة في هذا التاريخ. احذف الخفارة أولاً أو اختر تاريخًا آخر.' });
+            return res.status(409).json({ error: 'يوجد مناوبة مسجلة في هذا التاريخ. احذف المناوبة أولاً أو اختر تاريخًا آخر.' });
         }
 
         const existingException = await db.get('SELECT id FROM ShiftDayExceptions WHERE date = ? LIMIT 1', [normalizedDate]);
@@ -4692,7 +4692,7 @@ app.delete('/api/shifts/:id', async (req, res) => {
             entityType: 'shift',
             entityId: id,
             action: 'delete',
-            message: `تم حذف خفارة بتاريخ ${shift.shiftDate}`,
+            message: `تم حذف مناوبة بتاريخ ${shift.shiftDate}`,
             metadata: {
                 shiftDate: shift.shiftDate,
                 createdBy: shift.createdBy,
@@ -4747,8 +4747,8 @@ app.put('/api/shifts/:id/details', async (req, res) => {
             { title: currentShift.title, notes: currentShift.notes },
             { title: updatedShift.title, notes: updatedShift.notes },
             [
-                { key: 'title', label: 'عنوان الخفارة' },
-                { key: 'notes', label: 'ملاحظات الخفارة' }
+                { key: 'title', label: 'عنوان المناوبة' },
+                { key: 'notes', label: 'ملاحظات المناوبة' }
             ]
         );
         if (changeFields.length) {
@@ -4831,7 +4831,7 @@ app.post('/api/shifts', async (req, res) => {
         if (existingExceptionDay) {
             await db.run('ROLLBACK');
             return res.status(409).json({
-                error: 'لا يمكن تسجيل خفارة في يوم استثنائي. يرجى إزالة الاستثناء أو اختيار تاريخ آخر.'
+                error: 'لا يمكن تسجيل مناوبة في يوم استثنائي. يرجى إزالة الاستثناء أو اختيار تاريخ آخر.'
             });
         }
 
@@ -4841,7 +4841,7 @@ app.post('/api/shifts', async (req, res) => {
                 const row = await db.get('SELECT department FROM Employees WHERE id = ? LIMIT 1', [assignment.employeeId]);
                 if (!row || !isDepartmentAllowed(row.department, restriction)) {
                     await db.run('ROLLBACK');
-                    return res.status(403).json({ error: 'غير مسموح بتسجيل خفارة لموظفين خارج الإدارة المحددة' });
+                    return res.status(403).json({ error: 'غير مسموح بتسجيل مناوبة لموظفين خارج الإدارة المحددة' });
                 }
             }
         }
@@ -4875,7 +4875,7 @@ app.post('/api/shifts', async (req, res) => {
             entityType: 'shift',
             entityId: shiftId,
             action: 'create',
-            message: `تم إضافة خفارة بتاريخ ${normalizedShiftDate}`,
+            message: `تم إضافة مناوبة بتاريخ ${normalizedShiftDate}`,
             metadata: {
                 shiftDate: normalizedShiftDate,
                 createdBy,
@@ -4896,7 +4896,7 @@ app.post('/api/shifts', async (req, res) => {
 
         // Check for specific SQLite errors
         if (errorMessage.includes('UNIQUE constraint failed')) {
-            res.status(409).json({ error: 'خفارة موجودة بالفعل في هذا التاريخ. يرجى اختيار تاريخ آخر.' });
+            res.status(409).json({ error: 'مناوبة موجودة بالفعل في هذا التاريخ. يرجى اختيار تاريخ آخر.' });
         } else if (errorMessage.includes('FOREIGN KEY constraint failed')) {
             res.status(400).json({ error: 'موظف أو بيانات غير صحيحة. يرجى التحقق من البيانات المدخلة.' });
         } else {
@@ -4982,7 +4982,7 @@ app.post('/api/shiftassignments', async (req, res) => {
             entityType: 'shift',
             entityId: shiftId,
             action: 'assign',
-            message: `تم إضافة ${employee.rank || ''} / ${employee.name || ''} إلى خفارة بتاريخ ${shift.shiftDate}`.trim(),
+            message: `تم إضافة ${employee.rank || ''} / ${employee.name || ''} إلى مناوبة بتاريخ ${shift.shiftDate}`.trim(),
             metadata: {
                 shiftDate: shift.shiftDate,
                 employeeId,
@@ -5020,7 +5020,7 @@ app.delete('/api/shiftassignments/:id', async (req, res) => {
                 entityType: 'shift',
                 entityId: assignment.shiftId,
                 action: 'unassign',
-                message: `تم إزالة ${assignment.employeeRank || ''} / ${assignment.employeeName || ''} من خفارة بتاريخ ${assignment.shiftDate || ''}`.trim(),
+                message: `تم إزالة ${assignment.employeeRank || ''} / ${assignment.employeeName || ''} من مناوبة بتاريخ ${assignment.shiftDate || ''}`.trim(),
                 metadata: {
                     shiftDate: assignment.shiftDate,
                     employeeId: assignment.employeeId,
@@ -5084,7 +5084,7 @@ app.patch('/api/shiftassignments/:id/employee', async (req, res) => {
             entityType: 'shift',
             entityId: assignment.shiftId,
             action: 'reassign',
-            message: `تم تغيير الموظف من ${assignment.oldEmployeeRank || ''} / ${assignment.oldEmployeeName || ''} إلى ${newEmployee.rank || ''} / ${newEmployee.name || ''} في خفارة بتاريخ ${assignment.shiftDate || ''}`.trim(),
+            message: `تم تغيير الموظف من ${assignment.oldEmployeeRank || ''} / ${assignment.oldEmployeeName || ''} إلى ${newEmployee.rank || ''} / ${newEmployee.name || ''} في مناوبة بتاريخ ${assignment.shiftDate || ''}`.trim(),
             metadata: {
                 shiftDate: assignment.shiftDate,
                 oldEmployeeId: assignment.employeeId,

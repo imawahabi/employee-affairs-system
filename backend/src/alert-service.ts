@@ -286,17 +286,17 @@ export async function checkAndCreateAlerts(): Promise<void> {
         log(`🔢 أيام التذكير المسبق: ${settings.reminderDays}`);
         log(`🔢 أيام التأخير للتنبيه: ${settings.overdueDays}`);
 
-        // المنطق الأول: فجوة في الخفارات (لا توجد خفارات بعد X أيام من اليوم)
+        // المنطق الأول: فجوة في المناوبات (لا توجد مناوبات بعد X أيام من اليوم)
         if (settings.shiftReminders) {
             await checkShiftGap(db, today, todayString, settings.reminderDays);
         }
 
-        // المنطق الثاني: خفارات غير مستلمة (مر عليها X أيام ولم تُستلم)
+        // المنطق الثاني: مناوبات غير مستلمة (مر عليها X أيام ولم تُستلم)
         if (settings.overdueAlerts) {
             await checkUnreceivedShifts(db, today, todayString, settings.overdueDays);
         }
 
-        // المنطق الثالث: تنبيهات تمديد المهنيين
+        // المنطق الثالث: تنبيهات تمديد الفنيون
         if (extensionSettings.enabled && extensionSettings.reminderDays.length > 0) {
             await checkProfessionalExtensionAlerts(db, todayUtc, extensionSettings);
         }
@@ -314,17 +314,17 @@ async function checkProfessionalExtensionAlerts(
     today: Date,
     settings: ExtensionAlertSettings
 ): Promise<void> {
-    log(`\n👥 فحص تنبيهات تمديد المهنيين (${settings.reminderDays.join(', ')})`);
+    log(`\n👥 فحص تنبيهات تمديد الفنيون (${settings.reminderDays.join(', ')})`);
 
     const employees = await db.all(`
         SELECT * FROM Employees
-        WHERE category = 'مهنيين'
+        WHERE category = 'فنيون'
         AND status = 'active'
         AND birthDate IS NOT NULL
     `);
 
     if (!employees.length) {
-        log('ℹ️ لا توجد بيانات لمهنيين بتاريخ ميلاد صالح');
+        log('ℹ️ لا توجد بيانات لفنيون بتاريخ ميلاد صالح');
         return;
     }
 
@@ -371,8 +371,8 @@ async function checkProfessionalExtensionAlerts(
                 const dueDateObj = parseDateOnly(status.dueDate);
                 const dueDateFormatted = dueDateObj ? dateFormatter.format(dueDateObj) : status.dueDate;
                 const message = overdueDays === 0
-                    ? `ينتهي تمديد مهني /  ${employee.name} بتاريخ ${dueDateFormatted}. يلزم إصدار قرار التمديد اليوم.`
-                    : `انتهى تمديد مهني /  ${employee.name} بتاريخ ${dueDateFormatted} وتأخر ${overdueDays} يوم عن إصدار قرار التمديد.`;
+                    ? `ينتهي تمديد فني /  ${employee.name} بتاريخ ${dueDateFormatted}. يلزم إصدار قرار التمديد اليوم.`
+                    : `انتهى تمديد فني /  ${employee.name} بتاريخ ${dueDateFormatted} وتأخر ${overdueDays} يوم عن إصدار قرار التمديد.`;
 
                 const expiresAt = dueDateObj
                     ? new Date(dueDateObj.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
@@ -385,7 +385,7 @@ async function checkProfessionalExtensionAlerts(
                     status: 'new',
                     message,
                     severity: 'high',
-                    title: 'تأخر تمديد مهني',
+                    title: 'تأخر تمديد فني',
                     category: 'employee',
                     actionUrl: '/professional-extensions',
                     metadata: JSON.stringify({
@@ -422,7 +422,7 @@ async function checkProfessionalExtensionAlerts(
             const dueDateObj = parseDateOnly(status.dueDate);
             const dueDateFormatted = dueDateObj ? dateFormatter.format(dueDateObj) : status.dueDate;
             const severity = status.daysRemaining <= settings.criticalDays ? 'high' : (status.daysRemaining <= 60 ? 'medium' : 'low');
-            const title = status.stage === 'pre_60' ? 'اقتراب سن التقاعد المهني' : 'اقتراب انتهاء تمديد مهني';
+            const title = status.stage === 'pre_60' ? 'اقتراب سن التقاعد الفني' : 'اقتراب انتهاء تمديد فني';
             const message = status.stage === 'pre_60'
                 ? `سيبلغ الموظف ${employee.name} سن 60 بتاريخ ${dueDateFormatted}. تبقى ${status.daysRemaining} يوم لإكمال إجراءات التمديد.`
                 : `ينتهي تمديد الموظف ${employee.name} بتاريخ ${dueDateFormatted}. تبقى ${status.daysRemaining} يوم لإصدار قرار التمديد.`;
@@ -455,14 +455,14 @@ async function checkProfessionalExtensionAlerts(
     }
 }
 
-// المنطق الأول: فجوة في الخفارات - التحقق من وجود فجوة أكثر من X أيام بين اليوم وآخر خفارة
+// المنطق الأول: فجوة في المناوبات - التحقق من وجود فجوة أكثر من X أيام بين اليوم وآخر مناوبة
 async function checkShiftGap(
     db: any,
     today: Date,
     todayString: string,
     reminderDays: number
 ): Promise<void> {
-    log(`\n🎯 المنطق الأول: فحص فجوة الخفارات (${reminderDays} أيام)`);
+    log(`\n🎯 المنطق الأول: فحص فجوة المناوبات (${reminderDays} أيام)`);
 
     const dayMs = 24 * 60 * 60 * 1000;
     const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -491,7 +491,7 @@ async function checkShiftGap(
     `);
 
     if (existingAlert) {
-        log('⚠️ تنبيه فجوة الخفارات موجود بالفعل لهذا اليوم');
+        log('⚠️ تنبيه فجوة المناوبات موجود بالفعل لهذا اليوم');
         return;
     }
 
@@ -499,7 +499,7 @@ async function checkShiftGap(
     const duplicateAlert = await db.get(`
         SELECT id FROM Alerts
         WHERE type = 'no_upcoming_shift'
-        AND title = 'لا توجد خفارات مجدولة'
+        AND title = 'لا توجد مناوبات مجدولة'
         AND status IN ('new', 'read')
         AND date(dateTriggered) >= date('now', 'localtime', '-1 day')
     `);
@@ -509,7 +509,7 @@ async function checkShiftGap(
         return;
     }
 
-    // البحث عن أقرب خفارة من اليوم فما بعد
+    // البحث عن أقرب مناوبة من اليوم فما بعد
     const nextShift = await db.get(`
         SELECT s.id, s.shiftDate
         FROM Shifts s
@@ -546,8 +546,8 @@ async function checkShiftGap(
 
     const nextPlanned = resolvePlanned();
     if (!nextPlanned) {
-        // لا توجد خفارات أو أيام استثنائية قادمة - إنشاء تنبيه
-        const message = `لا توجد خفارات أو أيام استثنائية مجدولة خلال ${reminderDays} يوم القادمة.`;
+        // لا توجد مناوبات أو أيام استثنائية قادمة - إنشاء تنبيه
+        const message = `لا توجد مناوبات أو أيام استثنائية مجدولة خلال ${reminderDays} يوم القادمة.`;
 
         await createAlert({
             type: 'no_upcoming_shift',
@@ -555,7 +555,7 @@ async function checkShiftGap(
             status: 'new',
             message,
             severity: 'high',
-            title: 'تأخر في الخفارات',
+            title: 'تأخر في المناوبات',
             category: 'shift',
             actionUrl: '/shift-registration',
             metadata: JSON.stringify({
@@ -570,7 +570,7 @@ async function checkShiftGap(
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
         });
 
-        log(`🚨 تم إنشاء تنبيه: فجوة في الخفارات أكثر من ${reminderDays} أيام`);
+        log(`🚨 تم إنشاء تنبيه: فجوة في المناوبات أكثر من ${reminderDays} أيام`);
         return;
     }
 
@@ -583,8 +583,8 @@ async function checkShiftGap(
     if (gapDays > reminderDays) {
         const nextPlannedFormatted = gapDateFormatter.format(nextPlannedDate);
         const message = nextPlanned.type === 'shift'
-            ? `لا توجد خفارات مجدولة خلال ${reminderDays} يوم القادمة. أقرب خفارة بتاريخ ${nextPlannedFormatted}.`
-            : `لا توجد خفارات مجدولة خلال ${reminderDays} يوم القادمة. أقرب يوم استثنائي بتاريخ ${nextPlannedFormatted}.`;
+            ? `لا توجد مناوبات مجدولة خلال ${reminderDays} يوم القادمة. أقرب مناوبة بتاريخ ${nextPlannedFormatted}.`
+            : `لا توجد مناوبات مجدولة خلال ${reminderDays} يوم القادمة. أقرب يوم استثنائي بتاريخ ${nextPlannedFormatted}.`;
 
         await createAlert({
             type: 'no_upcoming_shift',
@@ -592,7 +592,7 @@ async function checkShiftGap(
             status: 'new',
             message,
             severity: 'high',
-            title: 'تأخر في الخفارات',
+            title: 'تأخر في المناوبات',
             category: 'shift',
             actionUrl: '/shift-registration',
             metadata: JSON.stringify({
@@ -607,33 +607,33 @@ async function checkShiftGap(
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
         });
 
-        log(`🚨 تم إنشاء تنبيه: فجوة في الخفارات أكثر من ${reminderDays} أيام`);
+        log(`🚨 تم إنشاء تنبيه: فجوة في المناوبات أكثر من ${reminderDays} أيام`);
     } else {
         if (nextPlanned.type === 'shift') {
-            log(`✅ توجد خفارة في ${nextPlanned.raw} - لا توجد فجوة`);
+            log(`✅ توجد مناوبة في ${nextPlanned.raw} - لا توجد فجوة`);
         } else {
             log(`✅ يوجد يوم استثنائي في ${nextPlanned.raw} - لا توجد فجوة`);
         }
     }
 }
 
-// المنطق الثاني: خفارات غير مستلمة - التحقق من الخفارات التي مر عليها X أيام ولم تُستلم
+// المنطق الثاني: مناوبات غير مستلمة - التحقق من المناوبات التي مر عليها X أيام ولم تُستلم
 async function checkUnreceivedShifts(
     db: any,
     today: Date,
     todayString: string,
     overdueDays: number
 ): Promise<void> {
-    log(`\n📋 المنطق الثاني: فحص الخفارات غير المستلمة (${overdueDays} أيام)`);
+    log(`\n📋 المنطق الثاني: فحص المناوبات غير المستلمة (${overdueDays} أيام)`);
 
     // حساب تاريخ العتبة: اليوم ناقص عدد أيام التأخير المطلوبة
     const thresholdDate = new Date(today);
     thresholdDate.setDate(thresholdDate.getDate() - overdueDays);
     const thresholdDateString = toLocalDateString(thresholdDate);
     const thresholdDateFormatted = thresholdDate.toLocaleDateString('ar-UK');
-    log(`🔎 سيتم اعتبار الخفارات التي تاريخها في أو قبل: ${thresholdDateString} (${thresholdDateFormatted})`);
+    log(`🔎 سيتم اعتبار المناوبات التي تاريخها في أو قبل: ${thresholdDateString} (${thresholdDateFormatted})`);
 
-    // البحث عن الخفارات التي:
+    // البحث عن المناوبات التي:
     // 1. تاريخها في أو قبل (اليوم - X أيام)
     // 2. لم يتم استلامها (paperCopyReceived = 0)
     // 3. لم يتم إنشاء تنبيه لها من قبل في آخر 24 ساعة
@@ -657,10 +657,10 @@ async function checkUnreceivedShifts(
         ORDER BY s.shiftDate ASC
     `, [thresholdDateString]);
 
-    log(`📊 عدد الخفارات غير المستلمة: ${overdueShifts.length}`);
+    log(`📊 عدد المناوبات غير المستلمة: ${overdueShifts.length}`);
 
     if (overdueShifts.length === 0) {
-        log('✅ لا توجد خفارات غير مستلمة');
+        log('✅ لا توجد مناوبات غير مستلمة');
         return;
     }
 
@@ -678,7 +678,7 @@ async function checkUnreceivedShifts(
         const shiftDateFormatted = dateFormatter.format(shiftDate);
         const daysPassed = Math.floor((today.getTime() - shiftDate.getTime()) / (1000 * 60 * 60 * 24));
 
-        log(`📋 خفارة ${shiftDateFormatted}: مر عليها ${daysPassed} يوم`);
+        log(`📋 مناوبة ${shiftDateFormatted}: مر عليها ${daysPassed} يوم`);
 
         // التحقق مرة أخرى من عدم وجود تنبيه مشابه قبل الإنشاء
         const existingAlert = await db.get(`
@@ -693,11 +693,11 @@ async function checkUnreceivedShifts(
         `, [shift.id, `%${shift.shiftDate}%`]);
 
         if (existingAlert) {
-            log(`⚠️ تنبيه موجود بالفعل للخفارة ${shiftDateFormatted}`);
+            log(`⚠️ تنبيه موجود بالفعل للمناوبة ${shiftDateFormatted}`);
             continue;
         }
 
-        const message = `الخفارة المجدولة في ${shiftDateFormatted} لم يتم استلامها بعد ${daysPassed} يوم من تاريخها .`;
+        const message = `المناوبة المجدولة في ${shiftDateFormatted} لم يتم استلامها بعد ${daysPassed} يوم من تاريخها .`;
 
         await createAlert({
             type: 'shift_not_received',
@@ -705,7 +705,7 @@ async function checkUnreceivedShifts(
             status: 'new',
             message,
             severity: 'medium',
-            title: 'خفارة غير مستلمة',
+            title: 'مناوبة غير مستلمة',
             category: 'shift',
             actionUrl: '/shifts',
             metadata: JSON.stringify({
@@ -719,7 +719,7 @@ async function checkUnreceivedShifts(
             expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString()
         });
 
-        log(`⚠️ تم إنشاء تنبيه: خفارة ${shiftDateFormatted} غير مستلمة بعد ${daysPassed} يوم`);
+        log(`⚠️ تم إنشاء تنبيه: مناوبة ${shiftDateFormatted} غير مستلمة بعد ${daysPassed} يوم`);
     }
 }
 

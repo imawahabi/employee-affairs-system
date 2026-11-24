@@ -964,7 +964,7 @@ const ParkingMap: React.FC = () => {
                     type="text"
                     value={editSearch}
                     onChange={(event) => setEditSearch(event.target.value)}
-                    placeholder="ابحث بالاسم، الرتبة، رقم الملف، أو الإدارة..."
+                    placeholder="ابحث بالاسم، المسمى الوظيفي، رقم الملف، أو الإدارة..."
                     className="w-full h-11 pr-10 pl-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white text-sm text-right"
                   />
                 </div>
@@ -1092,7 +1092,7 @@ const ParkingMap: React.FC = () => {
                     type="text"
                     value={createSearch}
                     onChange={(event) => setCreateSearch(event.target.value)}
-                    placeholder="ابحث بالاسم، الرتبة، رقم الملف، أو الإدارة..."
+                    placeholder="ابحث بالاسم، المسمى الوظيفي، رقم الملف، أو الإدارة..."
                     className="w-full h-11 pr-10 pl-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white text-sm text-right"
                   />
                 </div>

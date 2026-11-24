@@ -144,7 +144,7 @@ const EditLicenseModal: React.FC<EditLicenseModalProps> = ({ license, employees,
                 <Search className="absolute left-3 top-3 w-4 h-4 text-secondary-400" />
                 <input
                   type="text"
-                  placeholder="ابحث بالاسم، الرتبة، أو رقم الملف..."
+                  placeholder="ابحث بالاسم، المسمى الوظيفي، أو رقم الملف..."
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
@@ -416,14 +416,14 @@ const LicenseList: React.FC = () => {
     });
 
     const tableHeader = new TableRow({
-      children: ['م', 'الرتبة', 'اسم الموظف', 'رقم الملف', 'نوع الاستئذان', 'تاريخ الاستئذان', 'السنة'].map(text => createCell(text, true)),
+      children: ['م', 'المسمى الوظيفي', 'اسم الموظف', 'رقم الملف', 'نوع الاستئذان', 'تاريخ الاستئذان', 'السنة'].map(text => createCell(text, true)),
       height: { value: 567, rule: HeightRule.EXACT }, // 1cm
     });
 
     const tableRows = sortedAndFilteredLicenses.map((license, index) => new TableRow({
       children: [
         createCell(String(index + 1), false),
-        createCell(license.employee?.category === 'ضابط' || license.employee?.category === 'ضابط صف'
+        createCell(license.employee?.category === 'قيادات' || license.employee?.category === 'قيادات صف'
           ? license.employee?.rank || ''
           : license.employee?.category || '', false),
         createCell(license.employee?.full_name || '', false),
@@ -487,13 +487,13 @@ const LicenseList: React.FC = () => {
       doc.setFont('Sultan-bold');
       doc.setR2L(true);
 
-      const head = [['التاريخ', 'نوع الاستئذان', 'رقم الملف', 'الاسم', 'الرتبة', 'م']];
+      const head = [['التاريخ', 'نوع الاستئذان', 'رقم الملف', 'الاسم', 'المسمى الوظيفي', 'م']];
       const body = sortedAndFilteredLicenses.map((license, index) => [
         formatDate(license.license_date),
         license.license_type,
         license.employee?.file_number || '',
         license.employee?.full_name || '',
-        license.employee?.category === 'ضابط' || license.employee?.category === 'ضابط صف'
+        license.employee?.category === 'قيادات' || license.employee?.category === 'قيادات صف'
           ? license.employee?.rank || ''
           : license.employee?.category || '',
         index + 1
@@ -532,7 +532,7 @@ const LicenseList: React.FC = () => {
       return;
     }
     let csvContent = "\uFEFF"; // BOM for UTF-8
-    csvContent += "م,الرتبة,اسم الموظف,رقم الملف,نوع الاستئذان,تاريخ الاستئذان,الساعات,الشهر,السنة\r\n";
+    csvContent += "م,المسمى الوظيفي,اسم الموظف,رقم الملف,نوع الاستئذان,تاريخ الاستئذان,الساعات,الشهر,السنة\r\n";
     sortedAndFilteredLicenses.forEach((license, index) => {
       const row = [
         index + 1,
@@ -591,7 +591,7 @@ const LicenseList: React.FC = () => {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="ابحث بالاسم أو الرتبة أو رقم الملف..."
+                      placeholder="ابحث بالاسم أو المسمى الوظيفي أو رقم الملف..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full pr-12 pl-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-right"
@@ -780,7 +780,7 @@ const LicenseList: React.FC = () => {
                 <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
                   <tr>
                     <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">م</th>
-                    <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">الرتبة</th>
+                    <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">المسمى الوظيفي</th>
                     <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">اسم الموظف</th>
                     <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">رقم الملف</th>
                     <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">نوع الاستئذان</th>
@@ -801,7 +801,7 @@ const LicenseList: React.FC = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-700">
-                          {license.employee?.category === 'ضابط' || license.employee?.category === 'ضابط صف'
+                          {license.employee?.category === 'قيادات' || license.employee?.category === 'قيادات صف'
                             ? license.employee?.rank
                             : license.employee?.category}
                         </td>

@@ -210,8 +210,8 @@ const NotificationSettingsComponent: React.FC = () => {
               <div className="flex items-center gap-3">
                 <ClockIcon className="h-5 w-5 text-orange-500" />
                 <div>
-                  <h3 className="font-medium text-gray-900">تذكير الخفارات</h3>
-                  <p className="text-sm text-gray-600">تذكير بالخفارات القادمة</p>
+                  <h3 className="font-medium text-gray-900">تذكير المناوبات</h3>
+                  <p className="text-sm text-gray-600">تذكير بالمناوبات القادمة</p>
                 </div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -231,7 +231,7 @@ const NotificationSettingsComponent: React.FC = () => {
                 <ExclamationTriangleIcon className="h-5 w-5 text-red-500" />
                 <div>
                   <h3 className="font-medium text-gray-900">تنبيهات التأخير</h3>
-                  <p className="text-sm text-gray-600">تنبيه عند تأخر الخفارات</p>
+                  <p className="text-sm text-gray-600">تنبيه عند تأخر المناوبات</p>
                 </div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -289,7 +289,7 @@ const NotificationSettingsComponent: React.FC = () => {
                   onChange={(e) => updateSetting('reminderDays', parseInt(e.target.value))}
                   className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                <span className="text-sm text-gray-600">يوم قبل الخفارة</span>
+                <span className="text-sm text-gray-600">يوم قبل المناوبة</span>
               </div>
             </div>
 
@@ -307,7 +307,7 @@ const NotificationSettingsComponent: React.FC = () => {
                   onChange={(e) => updateSetting('overdueDays', parseInt(e.target.value))}
                   className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                <span className="text-sm text-gray-600">يوم بعد انتهاء الخفارة</span>
+                <span className="text-sm text-gray-600">يوم بعد انتهاء المناوبة</span>
               </div>
             </div>
           </div>

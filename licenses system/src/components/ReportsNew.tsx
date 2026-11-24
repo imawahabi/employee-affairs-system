@@ -226,7 +226,7 @@ const ReportsNew: React.FC = () => {
       return true;
     });
     
-    // استخدام وظيفة sortEmployees من ملف sorting.ts لترتيب الإحصائيات حسب الفئة والرتبة
+    // استخدام وظيفة sortEmployees من ملف sorting.ts لترتيب الإحصائيات حسب الفئة والمسمى الوظيفي
     return filteredStats.sort((a, b) => {
       // استخدام نفس منطق الترتيب الموجود في وظيفة sortEmployees
       const employeeA = a.employee;
@@ -339,7 +339,7 @@ const ReportsNew: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">البحث</label>
               <input
                 type="text"
-                placeholder="ابحث بالاسم أو الرتبة..."
+                placeholder="ابحث بالاسم أو المسمى الوظيفي..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm"
@@ -399,9 +399,9 @@ const ReportsNew: React.FC = () => {
               <Select
                 isMulti
                 options={[
-                  { value: 'ضابط', label: 'ضابط' },
-                  { value: 'ضابط صف', label: 'ضابط صف' },
-                  { value: 'مهني', label: 'مهني' }
+                  { value: 'قيادات', label: 'قيادات' },
+                  { value: 'قيادات صف', label: 'قيادات صف' },
+                  { value: 'فني', label: 'فني' }
                 ]}
                 value={filters.categories.map(cat => ({ value: cat, label: cat }))}
                 onChange={(newValue) => setFilters(prev => ({

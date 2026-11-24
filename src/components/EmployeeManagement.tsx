@@ -85,11 +85,11 @@ type BulkEmployeeRow = {
 
 const normalizeBulkCategory = (value: string): Employee['category'] => {
   const trimmed = value.trim();
-  if (trimmed === 'ضباط' || trimmed === 'ضابط') return 'ضباط';
-  if (trimmed === 'ضباط صف' || trimmed === 'ضابط صف') return 'ضباط صف';
-  if (trimmed === 'مهنيين' || trimmed === 'مهني') return 'مهنيين';
-  if (trimmed === 'مدنيين' || trimmed === 'مدني') return 'مدنيين';
-  return 'مدنيين';
+  if (trimmed === 'قيادات' || trimmed === 'قيادات') return 'قيادات';
+  if (trimmed === 'مشرفون' || trimmed === 'مشرفون') return 'مشرفون';
+  if (trimmed === 'فنيون' || trimmed === 'فني') return 'فنيون';
+  if (trimmed === 'إداريون' || trimmed === 'إداري') return 'إداريون';
+  return 'إداريون';
 };
 
 const EmployeeManagement: React.FC = () => {
@@ -125,7 +125,7 @@ const EmployeeManagement: React.FC = () => {
           fileNumber: row.fileNumber || row['رقم الملف'] || '',
           name: row.name || row['الاسم'] || '',
           category: row.category || row['الفئة'] || '',
-          rank: row.rank || row['الرتبة'] || '',
+          rank: row.rank || row['المسمى الوظيفي'] || '',
           jobTitle: row.jobTitle || row['المسمى الوظيفي'] || '',
           department: row.department || row['القسم'] || '',
           status: (() => {
@@ -471,7 +471,7 @@ const EmployeeManagement: React.FC = () => {
       const matchesShifts = filterShifts === 'all' || (filterShifts === 'yes' ? employee.includeInShifts !== false : employee.includeInShifts === false);
       const matchesSecondment = filterSecondment === 'all' || (filterSecondment === 'yes' ? employee.isSecondedOutsideGeneralAdministration === true : employee.isSecondedOutsideGeneralAdministration !== true);
       const matchesStatsExclusion = filterStatsExclusion === 'all' || (filterStatsExclusion === 'yes' ? employee.excludeFromStatistics === true : employee.excludeFromStatistics !== true);
-      const matchesCivilians = showCivilians || employee.category !== 'مدنيين';
+      const matchesCivilians = showCivilians || employee.category !== 'إداريون';
       return matchesSearch && matchesDepartment && matchesCategory && matchesStatus && matchesSection && matchesRank && matchesJobTitle && matchesNationality && matchesWeapon && matchesParking && matchesShifts && matchesSecondment && matchesStatsExclusion && matchesCivilians;
     });
   }, [
@@ -556,10 +556,10 @@ const EmployeeManagement: React.FC = () => {
   const activeCounts = useMemo(() => {
     return activeEmployees.reduce(
       (acc, employee) => {
-        if (employee.category === 'ضباط') acc.officers += 1;
-        if (employee.category === 'ضباط صف') acc.ncos += 1;
-        if (employee.category === 'مهنيين') acc.professionals += 1;
-        if (employee.category === 'مدنيين') acc.civilians += 1;
+        if (employee.category === 'قيادات') acc.officers += 1;
+        if (employee.category === 'مشرفون') acc.ncos += 1;
+        if (employee.category === 'فنيون') acc.professionals += 1;
+        if (employee.category === 'إداريون') acc.civilians += 1;
         return acc;
       },
       { officers: 0, ncos: 0, professionals: 0, civilians: 0 }
@@ -594,7 +594,7 @@ const EmployeeManagement: React.FC = () => {
       const categoryDiff = getCategoryOrder(a.category) - getCategoryOrder(b.category);
       if (categoryDiff !== 0) return categoryDiff;
 
-      const isOfficerCategory = a.category === 'ضباط' || a.category === 'ضباط صف';
+      const isOfficerCategory = a.category === 'قيادات' || a.category === 'مشرفون';
       if (isOfficerCategory) {
         // Then sort by base rank order within officers/NCOs
         const rankDiff = getRankOrder(a.rank, a.category) - getRankOrder(b.rank, b.category);
@@ -671,7 +671,7 @@ const EmployeeManagement: React.FC = () => {
     if (!canReorderTogether(draggedEmployee, targetEmployee)) {
       setDraggedEmployeeId(null);
       setDragOverEmployeeId(null);
-      toast.error('الترتيب اليدوي مسموح داخل نفس الرتبة فقط');
+      toast.error('الترتيب اليدوي مسموح داخل نفس المسمى الوظيفي فقط');
       return;
     }
     const ids = sortedEmployees.map((employee) => employee.id);
@@ -1158,7 +1158,7 @@ const EmployeeManagement: React.FC = () => {
         >
           {manualOrderMode && (
             <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800">
-              اسحب صف الموظف داخل نفس الرتبة فقط. لا يمكن نقل رتبة أعلى أسفل رتبة أدنى، ويتم حفظ الترتيب داخل نطاق الرتبة في قاعدة البيانات.
+              اسحب صف الموظف داخل نفس المسمى الوظيفي فقط. لا يمكن نقل مسمى وظيفي أعلى أسفل مسمى وظيفي أدنى، ويتم حفظ الترتيب داخل نطاق المسمى الوظيفي في قاعدة البيانات.
             </div>
           )}
         </PageHeader>
@@ -1175,11 +1175,11 @@ const EmployeeManagement: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-5xl font-black mb-1">{activeCounts.officers}</div>
-                  <div className="text-blue-100 text-xs font-medium">ضابط</div>
+                  <div className="text-blue-100 text-xs font-medium">قيادات</div>
                 </div>
               </div>
               <div className="border-t border-white border-opacity-20 pt-3">
-                <h4 className="text-lg font-bold">الضباط</h4>
+                <h4 className="text-lg font-bold">القيادات</h4>
               </div>
               <div className="absolute top-3 right-3 w-6 h-6 bg-white bg-opacity-10 rounded-full"></div>
               <div className="absolute bottom-3 left-3 w-8 h-8 bg-white bg-opacity-5 rounded-full"></div>
@@ -1196,11 +1196,11 @@ const EmployeeManagement: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-5xl font-black mb-1">{activeCounts.ncos}</div>
-                  <div className="text-green-100 text-xs font-medium">عسكري</div>
+                  <div className="text-green-100 text-xs font-medium">إشرافي</div>
                 </div>
               </div>
               <div className="border-t border-white border-opacity-20 pt-3">
-                <h4 className="text-lg font-bold">ضباط الصف والأفراد</h4>
+                <h4 className="text-lg font-bold">المشرفون</h4>
               </div>
               <div className="absolute top-3 right-3 w-6 h-6 bg-white bg-opacity-10 rounded-full"></div>
               <div className="absolute bottom-3 left-3 w-8 h-8 bg-white bg-opacity-5 rounded-full"></div>
@@ -1217,11 +1217,11 @@ const EmployeeManagement: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-5xl font-black mb-1">{activeCounts.professionals}</div>
-                  <div className="text-yellow-100 text-xs font-medium">مهني</div>
+                  <div className="text-yellow-100 text-xs font-medium">فني</div>
                 </div>
               </div>
               <div className="border-t border-white border-opacity-20 pt-3">
-                <h4 className="text-lg font-bold">المهنيين</h4>
+                <h4 className="text-lg font-bold">الفنيون</h4>
               </div>
               <div className="absolute top-3 right-3 w-6 h-6 bg-white bg-opacity-10 rounded-full"></div>
               <div className="absolute bottom-3 left-3 w-8 h-8 bg-white bg-opacity-5 rounded-full"></div>
@@ -1238,11 +1238,11 @@ const EmployeeManagement: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-5xl font-black mb-1 text-white">{activeCounts.civilians}</div>
-                  <div className="text-white text-xs font-medium">مدني</div>
+                  <div className="text-white text-xs font-medium">إداري</div>
                 </div>
               </div>
               <div className="border-t border-slate-200 border-opacity-20 pt-3">
-                <h4 className="text-lg font-bold text-white">المدنيين</h4>
+                <h4 className="text-lg font-bold text-white">الإداريون</h4>
               </div>
               <div className="absolute top-3 right-3 w-6 h-6 bg-white/10 rounded-full"></div>
               <div className="absolute bottom-3 left-3 w-8 h-8 bg-white/10 rounded-full"></div>
@@ -1260,12 +1260,12 @@ const EmployeeManagement: React.FC = () => {
                 <Users size={22} className="text-blue-600" />
               </div>
               <div className="text-right flex-1">
-                <div className="text-5xl font-black  text-blue-600 mb-1">{activeGeneralTotal}</div>
+                <div className="text-5xl font-black  text-blue-600 mb-1">{activeGeneralTotal + inactiveCount}</div>
                 <div className="text-xs font-bold leading-tight">
-                  إجمالي قوة الإدارة العامة
+                  إجمالي الموظفين
                 </div>
                 <div className="text-xs text-slate-500 mt-0.5">
-                  عسكريين ومدنيين
+                  جميع فئات الموظفين
                 </div>
               </div>
             </div>
@@ -1278,12 +1278,12 @@ const EmployeeManagement: React.FC = () => {
                 <Shield size={22} className="text-blue-600" />
               </div>
               <div className="text-right flex-1">
-                <div className="text-5xl font-black text-blue-600  mb-1">{activeMilitaryTotal}</div>
+                <div className="text-5xl font-black text-blue-600  mb-1">{activeGeneralTotal}</div>
                 <div className="text-xs font-bold leading-tight">
-                  إجمالي قوة العسكريين
+                  الموظفون النشطون
                 </div>
                 <div className="text-xs text-slate-500 mt-0.5">
-                  فقط
+                  جميع الفئات
                 </div>
               </div>
             </div>
@@ -1331,7 +1331,7 @@ const EmployeeManagement: React.FC = () => {
                   <table className="min-w-full border-collapse text-right text-xs text-slate-700">
                     <thead>
                       <tr className="border-b border-amber-100 bg-amber-50/70 text-amber-900">
-                        <th className="px-2 py-2 font-bold">الرتبة</th>
+                        <th className="px-2 py-2 font-bold">المسمى الوظيفي</th>
                         <th className="px-2 py-2 font-bold">الاسم</th>
                         <th className="px-2 py-2 font-bold">سبب الاستبعاد</th>
                       </tr>
@@ -1346,7 +1346,7 @@ const EmployeeManagement: React.FC = () => {
                         return (
                           <tr key={employee.id} className="border-b border-amber-100 last:border-b-0">
                             <td className="px-2 py-2 font-semibold text-slate-700">
-                              {employee.category === 'مهنيين' ? (employee.jobTitle || employee.rank || '-') : (employee.rank || '-')}
+                              {employee.category === 'فنيون' ? (employee.jobTitle || employee.rank || '-') : (employee.rank || '-')}
                             </td>
                             <td className="px-2 py-2 font-semibold text-slate-900">
                               {formatEmployeeDisplayName(employee) || employee.name}
@@ -1374,7 +1374,7 @@ const EmployeeManagement: React.FC = () => {
                   البحث السريع والتصفية
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  بحث شامل بالاسم والرتبة والمسمى والأرقام والإدارة
+                  بحث شامل بالاسم والمسمى الوظيفي والمسمى والأرقام والإدارة
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -1435,7 +1435,7 @@ const EmployeeManagement: React.FC = () => {
                 </div>
                 <input
                   type="text"
-                  placeholder="ابحث بالاسم، الرتبة، المسمى، الإدارة، أو الأرقام..."
+                  placeholder="ابحث بالاسم، المسمى الوظيفي، المسمى، الإدارة، أو الأرقام..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pr-16 pl-24 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 bg-white transition-all duration-200 text-md placeholder-gray-400"
@@ -1491,10 +1491,10 @@ const EmployeeManagement: React.FC = () => {
                       className="w-full h-11 px-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white text-sm"
                     >
                       <option value="all">جميع الفئات</option>
-                      <option value="ضباط">ضباط</option>
-                      <option value="ضباط صف">ضباط صف</option>
-                      <option value="مهنيين">مهنيين</option>
-                      <option value="مدنيين">مدنيين</option>
+                      <option value="قيادات">قيادات</option>
+                      <option value="مشرفون">مشرفون</option>
+                      <option value="فنيون">فنيون</option>
+                      <option value="إداريون">إداريون</option>
                     </select>
                   </div>
 
@@ -1544,13 +1544,13 @@ const EmployeeManagement: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-xs font-semibold text-gray-600">الرتبة</label>
+                    <label className="block text-xs font-semibold text-gray-600">المسمى الوظيفي</label>
                     <select
                       value={filterRank}
                       onChange={(e) => setFilterRank(e.target.value)}
                       className="w-full h-11 px-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white text-sm"
                     >
-                      <option value="all">جميع الرتب</option>
+                      <option value="all">جميع المسميات الوظيفية</option>
                       {quickFilterOptions.ranks.map(rank => (
                         <option key={rank} value={rank}>
                           {rank}
@@ -1592,15 +1592,15 @@ const EmployeeManagement: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-xs font-semibold text-gray-600">السلاح</label>
+                    <label className="block text-xs font-semibold text-gray-600">جهاز الاتصال</label>
                     <select
                       value={filterWeapon}
                       onChange={(e) => setFilterWeapon(e.target.value)}
                       className="w-full h-11 px-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white text-sm"
                     >
                       <option value="all">الكل</option>
-                      <option value="yes">لديه سلاح</option>
-                      <option value="no">بدون سلاح</option>
+                      <option value="yes">لديه جهاز اتصال</option>
+                      <option value="no">بدون جهاز اتصال</option>
                     </select>
                   </div>
 
@@ -1618,15 +1618,15 @@ const EmployeeManagement: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-xs font-semibold text-gray-600">الخفارات</label>
+                    <label className="block text-xs font-semibold text-gray-600">المناوبات</label>
                     <select
                       value={filterShifts}
                       onChange={(e) => setFilterShifts(e.target.value)}
                       className="w-full h-11 px-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white text-sm"
                     >
                       <option value="all">الكل</option>
-                      <option value="yes">مدرج في الخفارات</option>
-                      <option value="no">غير مدرج في الخفارات</option>
+                      <option value="yes">مدرج في المناوبات</option>
+                      <option value="no">غير مدرج في المناوبات</option>
                     </select>
                   </div>
 
@@ -1699,9 +1699,9 @@ const EmployeeManagement: React.FC = () => {
                             <th className="px-4 py-3 text-right align-middle font-bold">
                               <div className="flex items-center justify-start gap-1">
                                 <span>
-                                  {category === 'ضباط'
+                                  {category === 'قيادات'
                                     ? 'المنصــب'
-                                    : category === 'مدنيين'
+                                    : category === 'إداريون'
                                       ? 'المسمى/المنصب'
                                       : 'المسمى الوظيفي'}
                                 </span>
@@ -1733,7 +1733,7 @@ const EmployeeManagement: React.FC = () => {
                             </th>
                             <th className="px-4 py-3 text-right align-middle font-bold">
                               <div className="flex items-center justify-start gap-1">
-                                <span>{hideShifts ? 'التجهيزات والمرافق' : 'التجهيزات / الخفارات'}</span>
+                                <span>{hideShifts ? 'التجهيزات والمرافق' : 'التجهيزات / المناوبات'}</span>
                               </div>
                             </th>
                             <th className="px-4 py-3 text-right align-middle font-bold">
@@ -1751,11 +1751,11 @@ const EmployeeManagement: React.FC = () => {
                             const isHighlighted = employee.id === highlightEmployeeId;
                             const categoryIndex = employeeCategoryIndexMap.get(employee.id) ?? index + 1;
                             const serviceInfo = isInactive ? null : getServiceInfo(employee.hiringDate);
-                            const showWeaponIcon = employee.category === 'ضباط' || employee.category === 'ضباط صف';
-                            const showShiftIcon = !hideShifts && employee.category !== 'مدنيين';
+                            const showWeaponIcon = employee.category === 'قيادات' || employee.category === 'مشرفون';
+                            const showShiftIcon = !hideShifts && employee.category !== 'إداريون';
                             const weaponTooltip = employee.hasWeapon
-                              ? (employee.weaponAttachments ? `المرفقات: ${employee.weaponAttachments}` : 'سلاح بدون ملاحظات')
-                              : 'لا يوجد سلاح';
+                              ? (employee.weaponAttachments ? `المرفقات: ${employee.weaponAttachments}` : 'جهاز اتصال بدون ملاحظات')
+                              : 'لا يوجد جهاز اتصال';
                             const parkingTooltip = employee.hasParking
                               ? (() => {
                                 const parts = [];
@@ -1766,8 +1766,8 @@ const EmployeeManagement: React.FC = () => {
                               : 'لا يوجد موقف';
                             const shiftTooltip = showShiftIcon
                               ? (employee.includeInShifts === false
-                                ? (employee.shiftNotes ? `ملاحظات : ${employee.shiftNotes}` : 'غير مدرج في الخفارات')
-                                : 'مدرج في الخفارات')
+                                ? (employee.shiftNotes ? `ملاحظات : ${employee.shiftNotes}` : 'غير مدرج في المناوبات')
+                                : 'مدرج في المناوبات')
                               : '';
                             const ageInfo = getAgeInfo(employee.birthDate);
                             const nationalityFlag = getNationalityFlag(employee.nationality);
@@ -1788,7 +1788,7 @@ const EmployeeManagement: React.FC = () => {
                               : 'غير مسجل';
                             const departmentDisplay = departmentName ? wrapLabel(departmentName, 25) : '';
                             const sectionDisplay = sectionName ? wrapLabel(sectionName, 25) : '';
-                            const jobGradeLabel = employee.category === 'مدنيين' ? (employee.jobGrade || '') : '';
+                            const jobGradeLabel = employee.category === 'إداريون' ? (employee.jobGrade || '') : '';
                             const isManualDropTarget = manualOrderMode && dragOverEmployeeId === employee.id && draggedEmployeeId !== employee.id;
 
                             return (
@@ -1876,7 +1876,7 @@ const EmployeeManagement: React.FC = () => {
                                   ) : (
                                     <div className="text-gray-300">لا يوجد</div>
                                   )}
-                                  {employee.category === 'مدنيين' && (
+                                  {employee.category === 'إداريون' && (
                                     <div className={`text-xs mt-1 ${jobGradeLabel ? 'text-gray-500' : 'text-gray-300'}`}>
                                       {jobGradeLabel || 'لا يوجد'}
                                     </div>
@@ -1911,7 +1911,7 @@ const EmployeeManagement: React.FC = () => {
                                           type="button"
                                           onClick={() => handleCopyValue(
                                             employee.fileNumber || employee.militaryNumber || '',
-                                            employee.fileNumber ? 'رقم الملف' : 'الرقم العسكري'
+                                            employee.fileNumber ? 'رقم الملف' : 'الرقم الوظيفي'
                                           )}
                                           className="inline-flex items-center text-[13px] font-bold text-blue-700 hover:text-blue-900 transition cursor-pointer"
                                           title="اضغط للنسخ"
@@ -2045,7 +2045,7 @@ const EmployeeManagement: React.FC = () => {
                                         <div className="flex items-center justify-between gap-2">
                                           <div className="flex items-center gap-2">
                                             <Shield className={`w-4 h-4 ${employee.hasWeapon ? 'text-blue-600' : 'text-gray-400'}`} />
-                                            <span className={`${employee.hasWeapon ? 'text-blue-600 font-bold' : 'text-gray-600'}`}>سلاح</span>
+                                            <span className={`${employee.hasWeapon ? 'text-blue-600 font-bold' : 'text-gray-600'}`}>جهاز اتصال</span>
                                           </div>
                                           <div className="flex items-center gap-2">
                                             <span className={`${employee.hasWeapon ? 'text-blue-600 font-bold' : 'text-red-600'}`}>
@@ -2079,7 +2079,7 @@ const EmployeeManagement: React.FC = () => {
                                         <div className="flex items-center justify-between gap-2">
                                           <div className="flex items-center gap-2">
                                             <ClipboardList className={`w-4 h-4 ${employee.includeInShifts === false ? 'text-gray-400' : 'text-emerald-600'}`} />
-                                            <span className={`${employee.includeInShifts ? 'text-emerald-600 font-bold' : 'text-gray-300'}`}>الخفارات</span>
+                                            <span className={`${employee.includeInShifts ? 'text-emerald-600 font-bold' : 'text-gray-300'}`}>المناوبات</span>
                                           </div>
                                           <div className="flex items-center gap-2">
                                             <span className={`${employee.includeInShifts === false ? 'text-red-600' : 'text-emerald-600'}`}>
@@ -2160,7 +2160,7 @@ const EmployeeManagement: React.FC = () => {
                       const hiringYear = employee.hiringDate ? formatYear(employee.hiringDate) : '';
                       const birthYear = employee.birthDate ? formatYear(employee.birthDate) : '';
                       const jobTitleLabel = employee.jobTitle || 'لا يوجد';
-                      const jobGradeLabel = employee.category === 'مدنيين' ? (employee.jobGrade || '') : '';
+                      const jobGradeLabel = employee.category === 'إداريون' ? (employee.jobGrade || '') : '';
                       const isHighlighted = employee.id === highlightEmployeeId;
                       const isFemale = employee.gender === 'أنثى';
                       const displayName = formatEmployeeDisplayName(employee) || employee.name || '—';
@@ -2225,7 +2225,7 @@ const EmployeeManagement: React.FC = () => {
                               >
                                 {jobTitleLabel}
                               </div>
-                              {employee.category === 'مدنيين' && (
+                              {employee.category === 'إداريون' && (
                                 <div className={`mt-1 text-[11px] ${jobGradeLabel ? 'text-gray-500' : 'text-gray-300'}`}>
                                   {jobGradeLabel || 'لا يوجد'}
                                 </div>
@@ -2356,7 +2356,7 @@ const EmployeeManagement: React.FC = () => {
                     <th className="px-2 py-1">رقم الملف</th>
                     <th className="px-2 py-1">الاسم</th>
                     <th className="px-2 py-1">الفئة</th>
-                    <th className="px-2 py-1">الرتبة</th>
+                    <th className="px-2 py-1">المسمى الوظيفي</th>
                     <th className="px-2 py-1">المسمى الوظيفي</th>
                     <th className="px-2 py-1">القسم</th>
                     <th className="px-2 py-1">الحالة</th>

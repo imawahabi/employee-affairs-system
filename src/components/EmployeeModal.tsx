@@ -108,7 +108,7 @@ const getValidationWarnings = (form: Partial<Employee>): string[] => {
   const warnings: string[] = [];
   if (!form.firstName?.trim() && !form.name?.trim()) warnings.push('لم يتم إدخال الاسم الأول');
   if (!form.category) warnings.push('لم يتم اختيار الفئة');
-  if (form.category !== 'مدنيين' && !form.rank?.trim()) warnings.push('لم يتم اختيار الرتبة');
+  if (form.category !== 'إداريون' && !form.rank?.trim()) warnings.push('لم يتم اختيار المسمى الوظيفي');
   if (!form.department) warnings.push('لم يتم اختيار الإدارة');
   if (!form.civilId?.trim()) warnings.push('لم يتم إدخال الرقم المدني');
   if (form.civilId?.trim() && !/^\d{12}$/.test(form.civilId.trim())) {
@@ -906,20 +906,20 @@ const EmployeeModal: React.FC<Props> = ({
   const readOnly = localMode === 'view';
   const isEdit = localMode === 'edit';
   const isCreate = localMode === 'create';
-  const isCreateCivilian = isCreate && form.category === 'مدنيين';
+  const isCreateCivilian = isCreate && form.category === 'إداريون';
   const isInactiveView = localMode === 'view' && employee?.status === 'inactive';
   const isInactiveContext = localMode !== 'create' && (form.status === 'inactive' || employee?.status === 'inactive');
-  const canHaveWeapon = form.category === 'ضباط' || form.category === 'ضباط صف';
-  const showFileNumberField = form.category !== 'مدنيين';
-  const showMilitaryNumberField = form.category === 'ضباط صف' || form.category === 'مهنيين';
-  const includeInShiftsActive = form.category === 'مدنيين' ? false : form.includeInShifts !== false;
+  const canHaveWeapon = form.category === 'قيادات' || form.category === 'مشرفون';
+  const showFileNumberField = form.category !== 'إداريون';
+  const showMilitaryNumberField = form.category === 'مشرفون' || form.category === 'فنيون';
+  const includeInShiftsActive = form.category === 'إداريون' ? false : form.includeInShifts !== false;
   const isSecondedOutside = form.isSecondedOutsideGeneralAdministration === true;
   const displayName = employee
     ? (formatEmployeeDisplayName(employee) || employee.name || 'الموظف')
     : 'الموظف';
   const jobTitleLabel = React.useMemo(() => {
-    if (form.category === 'ضباط') return 'المنصب';
-    if (form.category === 'مدنيين') return 'المسمى الوظيفي / المنصب';
+    if (form.category === 'قيادات') return 'المنصب';
+    if (form.category === 'إداريون') return 'المسمى الوظيفي / المنصب';
     return 'المسمى الوظيفي';
   }, [form.category]);
   const normalizeProfessionalText = (value: string) => {
@@ -970,10 +970,10 @@ const EmployeeModal: React.FC<Props> = ({
   );
   const categoryOptions = React.useMemo(
     () => [
-      { value: 'ضباط', label: 'ضباط' },
-      { value: 'ضباط صف', label: 'ضباط صف' },
-      { value: 'مهنيين', label: 'مهنيين' },
-      { value: 'مدنيين', label: 'مدنيين' }
+      { value: 'قيادات', label: 'قيادات' },
+      { value: 'مشرفون', label: 'مشرفون' },
+      { value: 'فنيون', label: 'فنيون' },
+      { value: 'إداريون', label: 'إداريون' }
     ],
     []
   );
@@ -1110,7 +1110,7 @@ const EmployeeModal: React.FC<Props> = ({
       const educationCertificateType = employee.educationCertificateType
         || (hasEducationCertificate ? '' : 'بدون شهادة');
       const educationSpecialization = employee.educationSpecialization || '';
-      const inferredGroup = employee.category === 'مهنيين'
+      const inferredGroup = employee.category === 'فنيون'
         ? (employee.professionalGroup || inferProfessionalGroupFromJobTitle(employee.jobTitle || ''))
         : '';
       const hasStructuredName = Boolean(
@@ -1137,7 +1137,7 @@ const EmployeeModal: React.FC<Props> = ({
         hasEducationCertificate,
         educationCertificateType,
         educationSpecialization,
-        includeInShifts: employee.category === 'مدنيين' ? false : employee.includeInShifts,
+        includeInShifts: employee.category === 'إداريون' ? false : employee.includeInShifts,
         hasWeapon: employee.hasWeapon || false,
         hasParking: employee.hasParking || false,
         jobGrade: employee.jobGrade || '',
@@ -1201,18 +1201,18 @@ const EmployeeModal: React.FC<Props> = ({
         next.name = buildFullNameFromParts(next);
       }
       if (name === 'category') {
-        next.rank = value === 'مدنيين' && !isEdit ? 'مدني' : '';
+        next.rank = value === 'إداريون' && !isEdit ? 'إداري' : '';
         next.jobTitle = '';
-        next.jobGrade = value === 'مدنيين' ? prev.jobGrade : '';
-        next.fileNumber = value === 'مدنيين' ? '' : prev.fileNumber;
-        next.militaryNumber = value === 'ضباط صف' || value === 'مهنيين' ? prev.militaryNumber : '';
-        next.includeInShifts = value === 'مدنيين' ? false : (prev.includeInShifts ?? true);
-        next.shiftNotes = value === 'مدنيين' ? '' : prev.shiftNotes;
-        next.professionalGroup = value === 'مهنيين'
+        next.jobGrade = value === 'إداريون' ? prev.jobGrade : '';
+        next.fileNumber = value === 'إداريون' ? '' : prev.fileNumber;
+        next.militaryNumber = value === 'مشرفون' || value === 'فنيون' ? prev.militaryNumber : '';
+        next.includeInShifts = value === 'إداريون' ? false : (prev.includeInShifts ?? true);
+        next.shiftNotes = value === 'إداريون' ? '' : prev.shiftNotes;
+        next.professionalGroup = value === 'فنيون'
           ? inferProfessionalGroupFromJobTitle(next.jobTitle || '')
           : '';
         setProfessionalGroupTouched(false);
-        if (value !== 'ضباط' && value !== 'ضباط صف') {
+        if (value !== 'قيادات' && value !== 'مشرفون') {
           next.hasWeapon = false;
           next.weaponAttachments = '';
         }
@@ -1245,10 +1245,10 @@ const EmployeeModal: React.FC<Props> = ({
     }
     setForm(prev => {
       const next: any = { ...prev, [name]: option?.value || '' };
-      if (name === 'professionalGroup' && !option?.value && prev.category === 'مهنيين') {
+      if (name === 'professionalGroup' && !option?.value && prev.category === 'فنيون') {
         next.professionalGroup = inferProfessionalGroupFromJobTitle(prev.jobTitle || '');
       }
-      if (name === 'jobTitle' && prev.category === 'مهنيين' && !professionalGroupTouched) {
+      if (name === 'jobTitle' && prev.category === 'فنيون' && !professionalGroupTouched) {
         next.professionalGroup = inferProfessionalGroupFromJobTitle(option?.value || '');
       }
       if (name === 'nationality' && !isGovernmentiNationality(option?.value || '')) {
@@ -1265,18 +1265,18 @@ const EmployeeModal: React.FC<Props> = ({
     if (warnings.length) setWarnings([]);
     setForm(prev => {
       const next: any = { ...prev, category: value };
-      next.rank = value === 'مدنيين' && !isEdit ? 'مدني' : '';
+      next.rank = value === 'إداريون' && !isEdit ? 'إداري' : '';
       next.jobTitle = '';
-      next.jobGrade = value === 'مدنيين' ? prev.jobGrade : '';
-      next.fileNumber = value === 'مدنيين' ? '' : prev.fileNumber;
-      next.militaryNumber = value === 'ضباط صف' || value === 'مهنيين' ? prev.militaryNumber : '';
-      next.includeInShifts = value === 'مدنيين' ? false : (prev.includeInShifts ?? true);
-      next.shiftNotes = value === 'مدنيين' ? '' : prev.shiftNotes;
-      next.professionalGroup = value === 'مهنيين'
+      next.jobGrade = value === 'إداريون' ? prev.jobGrade : '';
+      next.fileNumber = value === 'إداريون' ? '' : prev.fileNumber;
+      next.militaryNumber = value === 'مشرفون' || value === 'فنيون' ? prev.militaryNumber : '';
+      next.includeInShifts = value === 'إداريون' ? false : (prev.includeInShifts ?? true);
+      next.shiftNotes = value === 'إداريون' ? '' : prev.shiftNotes;
+      next.professionalGroup = value === 'فنيون'
         ? inferProfessionalGroupFromJobTitle(next.jobTitle || '')
         : '';
       setProfessionalGroupTouched(false);
-      if (value !== 'ضباط' && value !== 'ضباط صف') {
+      if (value !== 'قيادات' && value !== 'مشرفون') {
         next.hasWeapon = false;
         next.weaponAttachments = '';
       }
@@ -1296,7 +1296,7 @@ const EmployeeModal: React.FC<Props> = ({
     if (confirmSubmit) setConfirmSubmit(false);
     if (warnings.length) setWarnings([]);
     setForm(prev => {
-      if (name === 'includeInShifts' && (prev.category === 'مدنيين')) {
+      if (name === 'includeInShifts' && (prev.category === 'إداريون')) {
         return { ...prev, includeInShifts: false, shiftNotes: '' };
       }
       const next: any = { ...prev, [name]: checked };
@@ -1370,8 +1370,8 @@ const EmployeeModal: React.FC<Props> = ({
         : (form.hasParking ? 'المواقف الداخلية' : '');
 
       const normalizedCategory = (form.category as Employee['category']) || '';
-      const normalizedRank = normalizedCategory === 'مدنيين' ? 'مدني' : (form.rank || '');
-      const includeInShiftsValue = normalizedCategory === 'مدنيين' ? false : form.includeInShifts !== false;
+      const normalizedRank = normalizedCategory === 'إداريون' ? 'إداري' : (form.rank || '');
+      const includeInShiftsValue = normalizedCategory === 'إداريون' ? false : form.includeInShifts !== false;
       const educationCertificateType = form.hasEducationCertificate
         ? (form.educationCertificateType || '')
         : 'بدون شهادة';
@@ -1382,8 +1382,8 @@ const EmployeeModal: React.FC<Props> = ({
       const maritalStatusNoteValue = (form.maritalStatus === 'أخرى' || form.maritalStatus === 'اخرى')
         ? (form.maritalStatusNote || '')
         : '';
-      const fileNumberValue = normalizedCategory === 'مدنيين' ? null : (form.fileNumber?.trim() || null);
-      const militaryNumberValue = normalizedCategory === 'ضباط صف' || normalizedCategory === 'مهنيين'
+      const fileNumberValue = normalizedCategory === 'إداريون' ? null : (form.fileNumber?.trim() || null);
+      const militaryNumberValue = normalizedCategory === 'مشرفون' || normalizedCategory === 'فنيون'
         ? (form.militaryNumber || '')
         : '';
       const normalizedDepartment = selectedDepartmentOption?.value || form.department || '';
@@ -1407,8 +1407,8 @@ const EmployeeModal: React.FC<Props> = ({
         category: normalizedCategory,
         rank: normalizedRank,
         jobTitle: form.jobTitle || null,
-        jobGrade: normalizedCategory === 'مدنيين' ? (form.jobGrade || '') : '',
-        professionalGroup: normalizedCategory === 'مهنيين'
+        jobGrade: normalizedCategory === 'إداريون' ? (form.jobGrade || '') : '',
+        professionalGroup: normalizedCategory === 'فنيون'
           ? (form.professionalGroup || inferProfessionalGroupFromJobTitle(form.jobTitle || ''))
           : null,
         department: normalizedDepartment,
@@ -1471,7 +1471,7 @@ const EmployeeModal: React.FC<Props> = ({
     const shouldHideShiftsInPrint = hideShifts || printHideShifts;
     const shouldHideLicensesInPrint = hideLicenses || printHideLicenses;
     const printableSections = viewSections.filter(
-      (section) => !(shouldHideShiftsInPrint && section.title === 'نظام الخفارات')
+      (section) => !(shouldHideShiftsInPrint && section.title === 'نظام المناوبات')
     );
 
     let licenseSectionHtml = '';
@@ -1538,7 +1538,7 @@ const EmployeeModal: React.FC<Props> = ({
       timeStyle: 'medium'
     }).format(new Date());
     const printDate = printDateRaw.replace('،', '').replace(/\s+/g, ' ').trim();
-    const skipPrintFieldLabels = new Set(['الفئة', 'الرتبة', 'الاسم الكامل']);
+    const skipPrintFieldLabels = new Set(['الفئة', 'المسمى الوظيفي', 'الاسم الكامل']);
 
     const sectionsHtml = printableSections.map((section) => {
       const printableFields = section.fields.filter((field) => !skipPrintFieldLabels.has(field.label));
@@ -1575,7 +1575,10 @@ const EmployeeModal: React.FC<Props> = ({
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>تفاصيل الموظف</title>
           <style>
-            @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+            @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+            @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+            @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+            @font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
             * { box-sizing: border-box; margin: 0; padding: 0; }
             html, body { direction: rtl; }
             body {
@@ -1742,26 +1745,26 @@ const EmployeeModal: React.FC<Props> = ({
 
   // Generate view sections for display mode
   const viewSections = React.useMemo(() => {
-    const weaponAllowed = employee?.category === 'ضباط' || employee?.category === 'ضباط صف';
+    const weaponAllowed = employee?.category === 'قيادات' || employee?.category === 'مشرفون';
     const isInactive = employee?.status === 'inactive';
-    const includeInShiftsView = employee?.category === 'مدنيين'
+    const includeInShiftsView = employee?.category === 'إداريون'
       ? false
       : employee?.includeInShifts !== false;
-    const hideShiftsSection = hideShifts || employee?.category === 'مدنيين';
+    const hideShiftsSection = hideShifts || employee?.category === 'إداريون';
     const monthName = new Intl.DateTimeFormat('ar-UK', { month: 'long' }).format(new Date());
     const educationTypeLabel = employee?.educationCertificateType || 'بدون شهادة';
     const lastShiftStatusLabel = employee?.lastShiftStatus
       ? (employee.lastShiftStatus === 'attended' ? 'داوم' : 'لم يداوم')
       : '-';
     const monthlyShiftLabel = employee?.monthlyShiftCount != null
-      ? `${employee.monthlyShiftCount} خفارة`
+      ? `${employee.monthlyShiftCount} مناوبة`
       : '-';
 
     const ageDurationLabel = formatDuration(employee?.birthDate);
     const serviceDurationLabel = formatDuration(employee?.hiringDate);
     const isGovernmenti = isGovernmentiNationality(employee?.nationality || '');
     const isOtherMaritalStatus = employee?.maritalStatus === 'أخرى' || employee?.maritalStatus === 'اخرى';
-    const resolvedProfessionalGroup = employee?.category === 'مهنيين'
+    const resolvedProfessionalGroup = employee?.category === 'فنيون'
       ? (employee?.professionalGroup || 'أخرى')
       : '';
 
@@ -1788,11 +1791,11 @@ const EmployeeModal: React.FC<Props> = ({
         gradient: 'from-blue-50 to-blue-100',
         fields: [
           { label: 'الفئة', value: employee?.category || '-', icon: <Icons.user className="w-4 h-4" /> },
-          { label: 'الرتبة', value: employee?.rank || '-', icon: <Icons.award className="w-4 h-4" /> },
+          { label: 'المسمى الوظيفي', value: employee?.rank || '-', icon: <Icons.award className="w-4 h-4" /> },
           { label: 'الاسم الكامل', value: displayName || '-', icon: <Icons.user className="w-4 h-4" /> },
           { label: 'المسمى الوظيفي', value: employee?.jobTitle || '-', icon: <Icons.briefcase className="w-4 h-4" /> },
-          { label: 'فئة المهنيين', value: resolvedProfessionalGroup || 'أخرى', hide: employee?.category !== 'مهنيين', icon: <Icons.list className="w-4 h-4" /> },
-          { label: 'الدرجة الوظيفية', value: employee?.jobGrade || '-', hide: employee?.category !== 'مدنيين', icon: <Icons.award className="w-4 h-4" /> },
+          { label: 'فئة الفنيين', value: resolvedProfessionalGroup || 'أخرى', hide: employee?.category !== 'فنيون', icon: <Icons.list className="w-4 h-4" /> },
+          { label: 'الدرجة الوظيفية', value: employee?.jobGrade || '-', hide: employee?.category !== 'إداريون', icon: <Icons.award className="w-4 h-4" /> },
           {
             label: 'الإدارة',
             value: formatDepartmentLabel(employee?.department, departmentNameMap) || '-',
@@ -1824,10 +1827,10 @@ const EmployeeModal: React.FC<Props> = ({
         gradient: 'from-emerald-50 to-emerald-100',
         fields: [
           { label: 'الرقم المدني', value: employee?.civilId || '-', icon: <Icons.id className="w-4 h-4" /> },
-          { label: 'رقم الملف', value: employee?.fileNumber || '-', hide: employee?.category === 'مدنيين', icon: <Icons.hash className="w-4 h-4" /> },
+          { label: 'رقم الملف', value: employee?.fileNumber || '-', hide: employee?.category === 'إداريون', icon: <Icons.hash className="w-4 h-4" /> },
           { label: 'رقم المرجع', value: employee?.referenceNumber || '-', icon: <Icons.clipboard className="w-4 h-4" /> },
-          { label: 'الرقم العسكري', value: employee?.militaryNumber || '-', hide: employee?.category === 'مدنيين' || employee?.category === 'ضباط', icon: <Icons.shield className="w-4 h-4" /> },
-          { label: 'رقم الأقدمية', value: employee?.seniorityNumber || '-', hide: employee?.category === 'مدنيين', icon: <Icons.award className="w-4 h-4" /> },
+          { label: 'الرقم الوظيفي', value: employee?.militaryNumber || '-', hide: employee?.category === 'إداريون' || employee?.category === 'قيادات', icon: <Icons.shield className="w-4 h-4" /> },
+          { label: 'رقم الأقدمية', value: employee?.seniorityNumber || '-', hide: employee?.category === 'إداريون', icon: <Icons.award className="w-4 h-4" /> },
           { label: 'رقم الهاتف', value: employee?.phone_number || '-', icon: <Icons.phone className="w-4 h-4" /> },
           { label: 'الجنسية', value: employee?.nationality || '-', icon: <Icons.globe className="w-4 h-4" /> },
           { label: 'رقم مادة الجنسية', value: employee?.nationalityArticleNumber || '-', hide: !isGovernmenti && !employee?.nationalityArticleNumber, icon: <Icons.hash className="w-4 h-4" /> },
@@ -1856,34 +1859,34 @@ const EmployeeModal: React.FC<Props> = ({
       },
       {
         title: 'المعدات والمرافق',
-        description: 'بيانات السلاح والمواقف',
+        description: 'بيانات جهاز الاتصال والمواقف',
         icon: <Icons.shield className="w-6 h-6" />,
         gradient: 'from-purple-50 to-purple-100',
         fields: [
-          { label: 'هل لديه سلاح؟', value: employee?.hasWeapon || false, type: 'boolean' as const, hide: !weaponAllowed, icon: <Icons.shield className="w-4 h-4" /> },
-          { label: 'مرفقات السلاح', value: employee?.weaponAttachments || '-', hide: !weaponAllowed || !employee?.hasWeapon, icon: <Icons.clipboard className="w-4 h-4" /> },
+          { label: 'هل لديه جهاز اتصال؟', value: employee?.hasWeapon || false, type: 'boolean' as const, hide: !weaponAllowed, icon: <Icons.shield className="w-4 h-4" /> },
+          { label: 'ملحقات جهاز الاتصال', value: employee?.weaponAttachments || '-', hide: !weaponAllowed || !employee?.hasWeapon, icon: <Icons.clipboard className="w-4 h-4" /> },
           { label: 'هل لديه موقف سيارات؟', value: employee?.hasParking || false, type: 'boolean' as const, icon: <Icons.car className="w-4 h-4" /> },
           { label: 'مكان موقف السيارات', value: employee?.parkingLocation || '-', hide: !employee?.hasParking, icon: <Icons.car className="w-4 h-4" /> },
           { label: 'رقم موقف السيارات', value: employee?.parkingNumber || '-', hide: !employee?.hasParking, icon: <Icons.hash className="w-4 h-4" /> }
         ]
       },
       {
-        title: 'نظام الخفارات',
-        description: 'تفاصيل المشاركة في الخفارات وأحدث البيانات',
+        title: 'نظام المناوبات',
+        description: 'تفاصيل المشاركة في المناوبات وأحدث البيانات',
         icon: <Icons.settings className="w-6 h-6" />,
         gradient: 'from-orange-50 to-orange-100',
         fields: [
-          { label: 'إدراج في الخفارات', value: includeInShiftsView, type: 'boolean' as const, icon: <Icons.settings className="w-4 h-4" /> },
-          { label: 'ملاحظات الخفارات', value: employee?.shiftNotes || '-', hide: includeInShiftsView, icon: <Icons.clipboard className="w-4 h-4" /> },
-          { label: 'آخر خفارة', value: employee?.lastShiftDate || '', type: 'date' as const, icon: <Icons.calendar className="w-4 h-4" />, hide: !includeInShiftsView },
-          { label: 'حالة آخر خفارة', value: lastShiftStatusLabel, hide: !includeInShiftsView, icon: <Icons.check className="w-4 h-4" /> },
-          { label: `عدد الخفارات خلال شهر ${monthName}`, value: monthlyShiftLabel, hide: !includeInShiftsView, icon: <Icons.list className="w-4 h-4" /> }
+          { label: 'إدراج في المناوبات', value: includeInShiftsView, type: 'boolean' as const, icon: <Icons.settings className="w-4 h-4" /> },
+          { label: 'ملاحظات المناوبات', value: employee?.shiftNotes || '-', hide: includeInShiftsView, icon: <Icons.clipboard className="w-4 h-4" /> },
+          { label: 'آخر مناوبة', value: employee?.lastShiftDate || '', type: 'date' as const, icon: <Icons.calendar className="w-4 h-4" />, hide: !includeInShiftsView },
+          { label: 'حالة آخر مناوبة', value: lastShiftStatusLabel, hide: !includeInShiftsView, icon: <Icons.check className="w-4 h-4" /> },
+          { label: `عدد المناوبات خلال شهر ${monthName}`, value: monthlyShiftLabel, hide: !includeInShiftsView, icon: <Icons.list className="w-4 h-4" /> }
         ]
       }
     ];
 
     const visibleSections = hideShiftsSection
-      ? sections.filter((section) => section.title !== 'نظام الخفارات')
+      ? sections.filter((section) => section.title !== 'نظام المناوبات')
       : sections;
 
     const processedSections = visibleSections.map((section) => ({
@@ -2032,7 +2035,7 @@ const EmployeeModal: React.FC<Props> = ({
                         disabled={hideShifts}
                         className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      إخفاء قسم الخفارات في الطباعة
+                      إخفاء قسم المناوبات في الطباعة
                     </label>
                     <label className={`inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 ${hideLicenses ? 'opacity-60' : ''}`}>
                       <input
@@ -2092,13 +2095,13 @@ const EmployeeModal: React.FC<Props> = ({
 
                   <div className="lg:col-span-1">
                     <FormField
-                      label="الرتبة"
+                      label="المسمى الوظيفي"
                       icon={<Icons.shield className="w-4 h-4" />}
                     >
                       {isCreateCivilian ? (
                         <input
                           type="text"
-                          value="مدني"
+                          value="إداري"
                           disabled
                           className="w-full rounded-xl border border-slate-200 bg-slate-100 px-3.5 py-2.5 text-sm font-semibold text-slate-600 cursor-not-allowed"
                         />
@@ -2109,7 +2112,7 @@ const EmployeeModal: React.FC<Props> = ({
                           options={rankOptions}
                           value={rankOptions.find((opt) => opt.value === (form.rank || '')) || null}
                           onChange={(option) => handleSelectChange('rank', option as { value: string; label: string } | null)}
-                          placeholder="اختر الرتبة"
+                          placeholder="اختر المسمى الوظيفي"
                           noOptionsMessage={() => 'لا توجد نتائج'}
                           styles={selectStyles}
                           menuPortalTarget={document.body}
@@ -2224,27 +2227,27 @@ const EmployeeModal: React.FC<Props> = ({
                     </FormField>
                   </div>
 
-                  {form.category === 'مهنيين' && (
+                  {form.category === 'فنيون' && (
                     <div className="lg:col-span-1">
-                      <FormField label="فئة المهنيين" icon={<Icons.list className="w-4 h-4" />}>
+                      <FormField label="فئة الفنيين" icon={<Icons.list className="w-4 h-4" />}>
                         <Select
                           isDisabled={readOnly}
                           isClearable
                           options={professionalGroupOptions}
                           value={professionalGroupOptions.find((opt) => opt.value === (form.professionalGroup || '')) || null}
                           onChange={(option) => handleSelectChange('professionalGroup', option as { value: string; label: string } | null)}
-                          placeholder="اختر فئة المهنيين"
+                          placeholder="اختر فئة الفنيين"
                           noOptionsMessage={() => 'لا توجد نتائج'}
                           styles={selectStyles}
                           menuPortalTarget={document.body}
                           menuPosition="fixed"
                         />
-                        <p className="text-xs text-gray-500 mt-1">تظهر هذه الفئة في تقارير المهنيين.</p>
+                        <p className="text-xs text-gray-500 mt-1">تظهر هذه الفئة في تقارير الفنيين.</p>
                       </FormField>
                     </div>
                   )}
 
-                  {form.category === 'مدنيين' && (
+                  {form.category === 'إداريون' && (
                     <div className="lg:col-span-1">
                       <FormField label="الدرجة الوظيفية" icon={<Icons.award className="w-4 h-4" />}>
                         <select
@@ -2417,7 +2420,7 @@ const EmployeeModal: React.FC<Props> = ({
 
                   {showMilitaryNumberField && (
                     <div>
-                      <FormField label="الرقم العسكري" icon={<Icons.shield className="w-4 h-4" />}>
+                      <FormField label="الرقم الوظيفي" icon={<Icons.shield className="w-4 h-4" />}>
                         <input
                           type="text"
                           name="militaryNumber"
@@ -2425,13 +2428,13 @@ const EmployeeModal: React.FC<Props> = ({
                           onChange={handleInputChange}
                           className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-800 transition focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-100"
                           disabled={readOnly}
-                          placeholder="أدخل الرقم العسكري"
+                          placeholder="أدخل الرقم الوظيفي"
                         />
                       </FormField>
                     </div>
                   )}
 
-                  {form.category !== 'مدنيين' && (
+                  {form.category !== 'إداريون' && (
                     <div>
                       <FormField label="رقم الأقدمية" icon={<Icons.award className="w-4 h-4" />}>
                         <input
@@ -2694,7 +2697,7 @@ const EmployeeModal: React.FC<Props> = ({
                 {/* Equipment and Facilities Section */}
                 <SectionCard
                   title="المعدات والمرافق"
-                  description="السلاح والمواقف"
+                  description="جهاز الاتصال والمواقف"
                   icon={<Icons.shield className="w-6 h-6" />}
                   gradient="from-purple-50 to-purple-100"
                   isInactive={isInactiveContext}
@@ -2705,8 +2708,8 @@ const EmployeeModal: React.FC<Props> = ({
                         name="hasWeapon"
                         checked={!!form.hasWeapon}
                         onChange={handleCheckboxChange}
-                        label="هل لديه سلاح؟"
-                        description="تفعيل هذا الحقل للموظفين من فئة الضباط وضباط الصف"
+                        label="هل لديه جهاز اتصال؟"
+                        description="تفعيل هذا الحقل للموظفين من فئة القيادات والمشرفون"
                         disabled={readOnly}
                       />
                     )}
@@ -2722,7 +2725,7 @@ const EmployeeModal: React.FC<Props> = ({
 
                     {canHaveWeapon && form.hasWeapon && (
                       <div className="bg-gray-50 rounded-xl p-4">
-                        <FormField label="مرفقات السلاح" icon={<Icons.clipboard className="w-4 h-4" />}>
+                        <FormField label="ملحقات جهاز الاتصال" icon={<Icons.clipboard className="w-4 h-4" />}>
                           <textarea
                             name="weaponAttachments"
                             value={form.weaponAttachments || ''}
@@ -2730,7 +2733,7 @@ const EmployeeModal: React.FC<Props> = ({
                             rows={3}
                             className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-800 transition focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-100 resize-none"
                             disabled={readOnly}
-                            placeholder="أدخل تفاصيل مرفقات السلاح"
+                            placeholder="أدخل تفاصيل ملحقات جهاز الاتصال"
                           />
                         </FormField>
                       </div>
@@ -2769,10 +2772,10 @@ const EmployeeModal: React.FC<Props> = ({
                 </SectionCard>
 
                 {/* Shift Settings Section */}
-                {!hideShifts && form.category !== 'مدنيين' && (
+                {!hideShifts && form.category !== 'إداريون' && (
                   <SectionCard
-                    title="إعدادات الخفارات"
-                    description="حالة إدراج الموظف في الخفارات"
+                    title="إعدادات المناوبات"
+                    description="حالة إدراج الموظف في المناوبات"
                     icon={<Icons.settings className="w-6 h-6" />}
                     gradient="from-orange-50 to-orange-100"
                     isInactive={isInactiveContext}
@@ -2782,14 +2785,14 @@ const EmployeeModal: React.FC<Props> = ({
                         name="includeInShifts"
                         checked={includeInShiftsActive}
                         onChange={handleCheckboxChange}
-                        label="يدرج في الخفارات"
-                        description="تحديد ما إذا كان الموظف مدرج في جدول الخفارات والدوريات"
+                        label="يدرج في المناوبات"
+                        description="تحديد ما إذا كان الموظف مدرج في جدول المناوبات والدوريات"
                         disabled={readOnly}
                       />
 
                       {!includeInShiftsActive && (
                         <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-                          <FormField label="ملاحظات الخفارات" icon={<Icons.settings className="w-4 h-4" />}>
+                          <FormField label="ملاحظات المناوبات" icon={<Icons.settings className="w-4 h-4" />}>
                             <textarea
                               name="shiftNotes"
                               value={form.shiftNotes || ''}
@@ -2797,7 +2800,7 @@ const EmployeeModal: React.FC<Props> = ({
                               rows={3}
                               className="w-full px-4 py-3 border-2 border-yellow-300 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white transition-all duration-200 resize-none"
                               disabled={readOnly}
-                              placeholder="أدخل ملاحظات خاصة بالاستثناء من الخفارات"
+                              placeholder="أدخل ملاحظات خاصة بالاستثناء من المناوبات"
                             />
                           </FormField>
                         </div>

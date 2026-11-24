@@ -216,7 +216,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
         children: (() => {
           const headers = [
             "م",
-            "الرتبة",
+            "المسمى الوظيفي",
             "الاسم",
             "رقم الملف",
             "النقال",
@@ -346,7 +346,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
           const fallbackNoteParagraphs = [
             new Paragraph({
               children: [
-                  new TextRun({ text: "1- الخفارة تبدأ من الساعة ", font: "Sultan Medium", size: 28, rightToLeft: true }),
+                  new TextRun({ text: "1- المناوبة تبدأ من الساعة ", font: "Sultan Medium", size: 28, rightToLeft: true }),
                   new TextRun({
                     text: "7:00",
                     font: "Times New Roman",
@@ -376,7 +376,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: "2- على السادة ضباط الخفارات التأكيد على المناوبين قبل مواعيد خفاراتهم.",
+                  text: "2- على السادة قيادات المناوبات التأكيد على المناوبين قبل مواعيد مناوباتهم.",
                   font: "Sultan Medium",
                   size: 28,
                   color: "FF0000",
@@ -391,7 +391,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: "3- على ضابط الخفارة تدوين أية ملاحظات بدفتر الأحوال.",
+                  text: "3- على مشرف المناوبة تدوين أية ملاحظات بدفتر الأحوال.",
                   font: "Sultan Medium",
                   size: 28,
                   color: "0070C0",
@@ -406,7 +406,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: "4- على الضباط وضباط الصف والأفراد المناوبين أن يكونوا على علم بأن يوم الخفارة كاملاً تحت مسئوليتهم وأن يكونوا على أتم الاستعداد عند طلبهم عن طريق الهاتف في أي وقت.",
+                  text: "4- على القيادات والمشرفون المناوبين أن يكونوا على علم بأن يوم المناوبة كاملاً تحت مسئوليتهم وأن يكونوا على أتم الاستعداد عند طلبهم عن طريق الهاتف في أي وقت.",
                   font: "Sultan Medium",
                   size: 28,
                   color: "0070C0",
@@ -436,7 +436,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             }),
             new Paragraph({
               children: [
-                new TextRun({ text: "6- على ضابط الخفارة أو من ينوب عنه ", font: "Sultan Medium", size: 28, rightToLeft: true }),
+                new TextRun({ text: "6- على مشرف المناوبة أو من ينوب عنه ", font: "Sultan Medium", size: 28, rightToLeft: true }),
                 new TextRun({
                   text: "(التأكد)",
                   font: "Sultan Medium",
@@ -460,7 +460,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: "7- على ضابط الخفارة التأكد من صيانة ونظافة دورية أو سيارة الجهة التابعة لمندوب الخفارة بناء على التعميم الداخلي رقم (2024/2) وتدوين أي ملاحظات في دفتر الأحوال.",
+                  text: "7- على مشرف المناوبة التأكد من صيانة ونظافة دورية أو سيارة الجهة التابعة لمندوب المناوبة بناء على التعميم الداخلي رقم (2024/2) وتدوين أي ملاحظات في دفتر الأحوال.",
                   font: "Sultan Medium",
                   size: 28,
                   color: "00B050",
@@ -475,7 +475,7 @@ export async function exportShiftsToWord(options: ExportWordOptions) {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: "8- على السادة ضباط الخفارات متابعة موظفي دوام الفترة المسائية.",
+                  text: "8- على السادة قيادات المناوبات متابعة موظفي دوام الفترة المسائية.",
                   font: "Sultan Medium",
                   size: 28,
                   color: "FF0000",

@@ -1101,7 +1101,7 @@ export const addShiftAssignment = async (shiftId: string, employeeId: string) =>
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || 'فشل في إضافة الموظف إلى الخفارة');
+    throw new Error(error.message || 'فشل في إضافة الموظف إلى المناوبة');
   }
 
   return response.json();
@@ -1115,7 +1115,7 @@ export const removeShiftAssignment = async (assignmentId: string) => {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || 'فشل في إزالة الموظف من الخفارة');
+    throw new Error(error.message || 'فشل في إزالة الموظف من المناوبة');
   }
 
   return response.json();

@@ -8,7 +8,7 @@
 
 One platform that brings together the daily HR operations of a government entity: employee records, duty shifts and rotations, licenses and leave permits, and car parking — in a fully Arabic, right-to-left (RTL) interface, instead of paper registers and scattered files.
 
-<img src="screenshots/dashboard.png" width="900" alt="Dashboard - Gov HR Suite">
+<img src="screenshots/dashboard-mock-macbook.png" width="900" alt="Dashboard - Gov HR Suite">
 
 </div>
 
@@ -34,17 +34,25 @@ Employee data in one spreadsheet, duty rosters in another spreadsheet, license t
 
 ### Employee Management — searchable records with status and assignments
 
-<img src="screenshots/officers.png" width="860" alt="Employee Management">
+<img src="screenshots/employees-mock-macbook.png" width="860" alt="Employee Management">
+
+### Leadership — senior staff directory with job titles and assignments
+
+<img src="screenshots/leadership-mock-macbook.png" width="860" alt="Leadership directory">
 
 ### Licenses & Leave Permits — record and expiry tracking
 
-<img src="screenshots/licenses.png" width="860" alt="Licenses and leave permits">
+<img src="screenshots/licenses-mock-macbook.png" width="860" alt="Licenses and leave permits">
+
+### Duty Shifts — rosters, handover tracking, and late-submission alerts
+
+<img src="screenshots/shifts-mock-macbook.png" width="860" alt="Duty shift rosters">
 
 ### Parking Map — interactive zone grid with occupancy and recent allocations
 
-<img src="screenshots/parking.png" width="860" alt="Parking map">
+<img src="screenshots/parking-mock-macbook.png" width="860" alt="Parking map">
 
-> The screenshots are from the real application while running, with all personal data, department names, ranks, and logos blurred.
+> The screenshots are from the real application while running, seeded with the fictional showcase dataset — every name and record shown is invented.
 
 ## Tech Stack
 

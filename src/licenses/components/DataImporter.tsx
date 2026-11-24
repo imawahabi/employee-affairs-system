@@ -194,19 +194,19 @@ const DataImporter: React.FC = () => {
               </div>
               <div className="text-center p-4 bg-green-50 rounded-lg">
                 <div className="text-2xl font-bold text-green-600">{stats.officers}</div>
-                <div className="text-sm text-green-800">ضباط</div>
+                <div className="text-sm text-green-800">قيادات</div>
               </div>
               <div className="text-center p-4 bg-yellow-50 rounded-lg">
                 <div className="text-2xl font-bold text-yellow-600">{stats.nonCommissioned}</div>
-                <div className="text-sm text-yellow-800">ضباط صف</div>
+                <div className="text-sm text-yellow-800">مشرفون</div>
               </div>
               <div className="text-center p-4 bg-purple-50 rounded-lg">
                 <div className="text-2xl font-bold text-purple-600">{stats.professional}</div>
-                <div className="text-sm text-purple-800">مهنيين</div>
+                <div className="text-sm text-purple-800">فنيون</div>
               </div>
               <div className="text-center p-4 bg-gray-50 rounded-lg">
                 <div className="text-2xl font-bold text-gray-600">{stats.civilian}</div>
-                <div className="text-sm text-gray-800">مدنيين</div>
+                <div className="text-sm text-gray-800">إداريون</div>
               </div>
             </div>
           </div>
@@ -310,7 +310,7 @@ const DataImporter: React.FC = () => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الاسم</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الرتبة</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المسمى الوظيفي</th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">رقم الملف</th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الفئة</th>
                   </tr>
@@ -329,9 +329,9 @@ const DataImporter: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          employee.category === 'ضابط' ? 'bg-green-100 text-green-800' :
-                          employee.category === 'ضابط صف' ? 'bg-blue-100 text-blue-800' :
-                          employee.category === 'مهني' ? 'bg-purple-100 text-purple-800' :
+                          employee.category === 'قيادات' ? 'bg-green-100 text-green-800' :
+                          employee.category === 'مشرفون' ? 'bg-blue-100 text-blue-800' :
+                          employee.category === 'فني' ? 'bg-purple-100 text-purple-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
                           {employee.category}

@@ -12,10 +12,10 @@ interface JobTitleModalProps {
 }
 
 const categoryOptions = [
-  { value: 'ضباط', label: 'ضباط' },
-  { value: 'ضباط صف', label: 'ضباط صف' },
-  { value: 'مهنيين', label: 'مهنيين' },
-  { value: 'مدنيين', label: 'مدنيين' }
+  { value: 'قيادات', label: 'قيادات' },
+  { value: 'مشرفون', label: 'مشرفون' },
+  { value: 'فنيون', label: 'فنيون' },
+  { value: 'إداريون', label: 'إداريون' }
 ];
 
 const JobTitleModal: React.FC<JobTitleModalProps> = ({
@@ -26,14 +26,14 @@ const JobTitleModal: React.FC<JobTitleModalProps> = ({
   title
 }) => {
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('ضباط');
+  const [category, setCategory] = useState('قيادات');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (isOpen) {
       setName(jobTitle?.name || '');
-      setCategory(jobTitle?.category || 'ضباط');
+      setCategory(jobTitle?.category || 'قيادات');
       setError('');
     }
   }, [isOpen, jobTitle]);

@@ -186,7 +186,7 @@ const ProfessionalExtensions: React.FC = () => {
       const response = await fetchProfessionalExtensionStatus();
       setData(response);
     } catch (err) {
-      setError('تعذر تحميل بيانات تمديدات المهنيين');
+      setError('تعذر تحميل بيانات تمديدات الفنيين');
       console.error(err);
     } finally {
       setLoading(false);
@@ -364,7 +364,7 @@ const ProfessionalExtensions: React.FC = () => {
   };
 
   if (loading) {
-    return <LoadingPage variant="dashboard" title="جاري تحميل تمديدات المهنيين" subtitle="يرجى الانتظار..." />;
+    return <LoadingPage variant="dashboard" title="جاري تحميل تمديدات الفنيين" subtitle="يرجى الانتظار..." />;
   }
 
   if (error) {
@@ -575,8 +575,8 @@ const ProfessionalExtensions: React.FC = () => {
       <div className="mx-auto space-y-6">
         <PageHeader
           icon={<Settings size={36} />}
-          title="تمديدات المهنيين"
-          description="متابعة الموظفين المهنيين بين 60 و65 سنة وإدارة قرارات التمديد السنوية"
+          title="تمديدات الفنيين"
+          description="متابعة الموظفين الفنيون بين 60 و65 سنة وإدارة قرارات التمديد السنوية"
           actions={(
             <>
               <div className="bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-700">
@@ -638,7 +638,7 @@ const ProfessionalExtensions: React.FC = () => {
               </div>
               <input
                 type="text"
-                placeholder="ابحث بالاسم، رقم الملف، الرتبة، أو الإدارة..."
+                placeholder="ابحث بالاسم، رقم الملف، المسمى الوظيفي، أو الإدارة..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pr-14 pl-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 bg-white transition-all duration-200 text-md placeholder-gray-400"
@@ -712,7 +712,7 @@ const ProfessionalExtensions: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-900">أرشيف التمديدات</h3>
-                    <p className="text-sm text-gray-600">تمديدات المهنيين خارج الخدمة</p>
+                    <p className="text-sm text-gray-600">تمديدات الفنيين خارج الخدمة</p>
                   </div>
                 </div>
                 <div className="flex-1 max-w-md relative">
@@ -746,7 +746,7 @@ const ProfessionalExtensions: React.FC = () => {
         <Modal
           isOpen={modalOpen}
           onClose={closeModal}
-          title={modalMode === 'create' ? 'إضافة تمديد مهني' : 'تعديل تمديد مهني'}
+          title={modalMode === 'create' ? 'إضافة تمديد فني' : 'تعديل تمديد فني'}
           size="lg"
         >
           <div className="space-y-8">

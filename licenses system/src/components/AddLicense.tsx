@@ -561,7 +561,7 @@ const AddLicense: React.FC<AddLicenseProps> = ({ onNavigate }) => {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="ابحث بالاسم، الرتبة، رقم الملف، أو الفئة..."
+                        placeholder="ابحث بالاسم، المسمى الوظيفي، رقم الملف، أو الفئة..."
                         className="w-full pr-10 pl-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-right"
                       />
                     </div>
@@ -629,9 +629,9 @@ const AddLicense: React.FC<AddLicenseProps> = ({ onNavigate }) => {
                               </div>
                               <div className="text-left">
                                 <div className={`text-sm px-2 py-1 rounded-full ${
-                                  employee.category === 'ضابط' ? 'bg-blue-100 text-blue-800' :
-                                  employee.category === 'ضابط صف' ? 'bg-green-100 text-green-800' :
-                                  employee.category === 'مهني' ? 'bg-green-100 text-green-800' :
+                                  employee.category === 'قيادات' ? 'bg-blue-100 text-blue-800' :
+                                  employee.category === 'قيادات صف' ? 'bg-green-100 text-green-800' :
+                                  employee.category === 'فني' ? 'bg-green-100 text-green-800' :
                                   'bg-gray-100 text-gray-800'
                                 }`}>
                                   {employee.category}

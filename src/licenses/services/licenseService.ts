@@ -5,21 +5,21 @@ const API_BASE_URL = getApiBaseUrl();
 
 // Mock data for development - Real employees from database
 const mockEmployees = [
-  { id: '9', full_name: 'مشاري سامي الوهيب', rank: 'رائد حقوقي', file_number: '612154', category: 'ضابط', created_at: '2025-07-16 06:19:50', updated_at: '2025-07-29 06:44:44' },
-  { id: '10', full_name: 'خالد طارق بن شعبان', rank: 'ملازم أول', file_number: '743542', category: 'ضابط', created_at: '2025-07-16 06:20:18', updated_at: '2025-07-16 06:20:18' },
-  { id: '11', full_name: 'محمد إبراهيم الحميدي', rank: 'ملازم أول حقوقي', file_number: '887981', category: 'ضابط', created_at: '2025-07-16 06:20:32', updated_at: '2025-07-16 06:20:32' },
-  { id: '12', full_name: 'أحمد محمد ملا علي', rank: 'ملازم أول', file_number: '458325', category: 'ضابط', created_at: '2025-07-16 06:20:47', updated_at: '2025-07-16 06:20:47' },
-  { id: '13', full_name: 'عمر صبحي الهندي', rank: 'و.أ.ضابط', file_number: '457515', category: 'ضابط', created_at: '2025-07-16 06:21:00', updated_at: '2025-07-16 06:21:00' },
-  { id: '14', full_name: 'عقاب ميسر العياف', rank: 'و.أ.ضابط', file_number: '744212', category: 'ضابط صف', created_at: '2025-07-16 06:21:11', updated_at: '2025-07-16 06:21:17' },
-  { id: '15', full_name: 'محمد مناحي القحطاني', rank: 'و.أ.ضابط', file_number: '237388', category: 'ضابط صف', created_at: '2025-07-16 06:21:30', updated_at: '2025-07-16 06:21:30' },
-  { id: '16', full_name: 'حمود ناجي الجمعه', rank: 'و.أ.ضابط', file_number: '805521', category: 'ضابط صف', created_at: '2025-07-16 06:21:45', updated_at: '2025-07-16 06:21:45' },
-  { id: '17', full_name: 'مساعد غصاب الفضلي', rank: 'و.أ.ضابط', file_number: '290947', category: 'ضابط صف', created_at: '2025-07-16 06:22:02', updated_at: '2025-07-16 06:22:02' },
-  { id: '18', full_name: 'أنور علي النجار', rank: 'و.أ.ضابط', file_number: '289531', category: 'ضابط صف', created_at: '2025-07-16 06:22:17', updated_at: '2025-07-16 06:22:17' },
-  { id: '34', full_name: 'عبدالمطلب محمد فوزي حجاج', rank: 'باحث قانوني', file_number: '882885', category: 'مهني', created_at: '2025-07-16 06:25:40', updated_at: '2025-07-16 06:26:08' },
-  { id: '35', full_name: 'أحمد يسري ابو العلا', rank: 'طباع', file_number: '637998', category: 'مهني', created_at: '2025-07-16 06:25:51', updated_at: '2025-07-16 06:25:51' },
-  { id: '73', full_name: 'محمد محمد قاسم أحمد', rank: 'رئيس قسم', file_number: '273112300976', category: 'مدني', created_at: '2025-07-24 07:14:30', updated_at: '2025-07-24 07:17:46' },
-  { id: '76', full_name: 'حميده سعيد التحو', rank: 'رئيس قسم', file_number: '283072601334', category: 'مدني', created_at: '2025-07-24 07:18:18', updated_at: '2025-07-24 07:18:18' },
-  { id: '80', full_name: 'عائشة صلاح محمد العميري', rank: 'سكرتيرة', file_number: '298050600105', category: 'مدني', created_at: '2025-07-24 07:19:40', updated_at: '2025-07-24 07:19:40' }
+  { id: '9', full_name: 'مشاري سامي الوهيب', rank: 'مشرف أول', file_number: '612154', category: 'قيادات', created_at: '2025-07-16 06:19:50', updated_at: '2025-07-29 06:44:44' },
+  { id: '10', full_name: 'خالد طارق بن شعبان', rank: 'موظف أول', file_number: '743542', category: 'قيادات', created_at: '2025-07-16 06:20:18', updated_at: '2025-07-16 06:20:18' },
+  { id: '11', full_name: 'محمد إبراهيم الحميدي', rank: 'موظف أول', file_number: '887981', category: 'قيادات', created_at: '2025-07-16 06:20:32', updated_at: '2025-07-16 06:20:32' },
+  { id: '12', full_name: 'أحمد محمد ملا علي', rank: 'موظف أول', file_number: '458325', category: 'قيادات', created_at: '2025-07-16 06:20:47', updated_at: '2025-07-16 06:20:47' },
+  { id: '13', full_name: 'عمر صبحي الهندي', rank: 'موظف أول', file_number: '457515', category: 'قيادات', created_at: '2025-07-16 06:21:00', updated_at: '2025-07-16 06:21:00' },
+  { id: '14', full_name: 'عقاب ميسر العياف', rank: 'موظف أول', file_number: '744212', category: 'مشرفون', created_at: '2025-07-16 06:21:11', updated_at: '2025-07-16 06:21:17' },
+  { id: '15', full_name: 'محمد مناحي القحطاني', rank: 'موظف أول', file_number: '237388', category: 'مشرفون', created_at: '2025-07-16 06:21:30', updated_at: '2025-07-16 06:21:30' },
+  { id: '16', full_name: 'حمود ناجي الجمعه', rank: 'موظف أول', file_number: '805521', category: 'مشرفون', created_at: '2025-07-16 06:21:45', updated_at: '2025-07-16 06:21:45' },
+  { id: '17', full_name: 'مساعد غصاب الفضلي', rank: 'موظف أول', file_number: '290947', category: 'مشرفون', created_at: '2025-07-16 06:22:02', updated_at: '2025-07-16 06:22:02' },
+  { id: '18', full_name: 'أنور علي النجار', rank: 'موظف أول', file_number: '289531', category: 'مشرفون', created_at: '2025-07-16 06:22:17', updated_at: '2025-07-16 06:22:17' },
+  { id: '34', full_name: 'عبدالمطلب محمد فوزي حجاج', rank: 'باحث قانوني', file_number: '882885', category: 'فني', created_at: '2025-07-16 06:25:40', updated_at: '2025-07-16 06:26:08' },
+  { id: '35', full_name: 'أحمد يسري ابو العلا', rank: 'طباع', file_number: '637998', category: 'فني', created_at: '2025-07-16 06:25:51', updated_at: '2025-07-16 06:25:51' },
+  { id: '73', full_name: 'محمد محمد قاسم أحمد', rank: 'رئيس قسم', file_number: '273112300976', category: 'إداري', created_at: '2025-07-24 07:14:30', updated_at: '2025-07-24 07:17:46' },
+  { id: '76', full_name: 'حميده سعيد التحو', rank: 'رئيس قسم', file_number: '283072601334', category: 'إداري', created_at: '2025-07-24 07:18:18', updated_at: '2025-07-24 07:18:18' },
+  { id: '80', full_name: 'عائشة صلاح محمد العميري', rank: 'سكرتيرة', file_number: '298050600105', category: 'إداري', created_at: '2025-07-24 07:19:40', updated_at: '2025-07-24 07:19:40' }
 ];
 
 // Mock licenses for current month testing
@@ -45,9 +45,9 @@ let mockLicenses: any[] = [
     created_at: getCreatedAt(1, 2), // 1 day and 2 hours ago
     updated_at: new Date().toISOString(),
     full_name: 'أحمد محمد ملا علي',
-    rank: 'ملازم أول',
+    rank: 'موظف أول',
     file_number: '458325',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-2',
@@ -60,9 +60,9 @@ let mockLicenses: any[] = [
     created_at: getCreatedAt(0, 1), // 1 hour ago
     updated_at: new Date().toISOString(),
     full_name: 'أحمد محمد ملا علي',
-    rank: 'ملازم أول',
+    rank: 'موظف أول',
     file_number: '458325',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-3',
@@ -75,9 +75,9 @@ let mockLicenses: any[] = [
     created_at: getCreatedAt(2, 3), // 2 days and 3 hours ago
     updated_at: new Date().toISOString(),
     full_name: 'أحمد محمد ملا علي',
-    rank: 'ملازم أول',
+    rank: 'موظف أول',
     file_number: '458325',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-4',
@@ -90,9 +90,9 @@ let mockLicenses: any[] = [
     created_at: getCreatedAt(3, 1), // 3 days and 1 hour ago
     updated_at: new Date().toISOString(),
     full_name: 'أحمد محمد ملا علي',
-    rank: 'ملازم أول',
+    rank: 'موظف أول',
     file_number: '458325',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-5',
@@ -105,9 +105,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'أحمد محمد ملا علي',
-    rank: 'ملازم أول',
+    rank: 'موظف أول',
     file_number: '458325',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   // خالد طارق - ضمن الحد (2 استئذانات قصيرة)
   {
@@ -121,9 +121,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'خالد طارق بن شعبان',
-    rank: 'ملازم أول',
+    rank: 'موظف أول',
     file_number: '743542',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-7',
@@ -136,9 +136,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'خالد طارق بن شعبان',
-    rank: 'ملازم أول',
+    rank: 'موظف أول',
     file_number: '743542',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   // محمد الحميدي - استئذان طويل واحد
   {
@@ -152,9 +152,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'محمد إبراهيم الحميدي',
-    rank: 'ملازم أول حقوقي',
+    rank: 'موظف أول',
     file_number: '887981',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   // بيانات إضافية للتقارير المخصصة
   {
@@ -170,7 +170,7 @@ let mockLicenses: any[] = [
     full_name: 'عبدالمطلب محمد فوزي حجاج',
     rank: 'باحث قانوني',
     file_number: '882885',
-    category: 'مهني'
+    category: 'فني'
   },
   {
     id: 'test-10',
@@ -185,7 +185,7 @@ let mockLicenses: any[] = [
     full_name: 'محمد محمد قاسم أحمد',
     rank: 'رئيس قسم',
     file_number: '273112300976',
-    category: 'مدني'
+    category: 'إداري'
   },
   {
     id: 'test-11',
@@ -198,9 +198,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'عقاب ميسر العياف',
-    rank: 'و.أ.ضابط',
+    rank: 'موظف أول',
     file_number: '744212',
-    category: 'ضابط صف'
+    category: 'مشرفون'
   },
   // عمر الهندي - وصل لحد الساعات (12 ساعة = 3 استئذانات قصيرة)
   {
@@ -214,9 +214,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'عمر صبحي الهندي',
-    rank: 'و.أ.ضابط',
+    rank: 'موظف أول',
     file_number: '457515',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-13',
@@ -229,9 +229,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'عمر صبحي الهندي',
-    rank: 'و.أ.ضابط',
+    rank: 'موظف أول',
     file_number: '457515',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-14',
@@ -244,9 +244,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'عمر صبحي الهندي',
-    rank: 'و.أ.ضابط',
+    rank: 'موظف أول',
     file_number: '457515',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   // مشاري الوهيب - وصل لحد الاستئذانات الطويلة (3 أيام كاملة)
   {
@@ -260,9 +260,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'مشاري سامي الوهيب',
-    rank: 'رائد حقوقي',
+    rank: 'مشرف أول',
     file_number: '612154',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-16',
@@ -275,9 +275,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'مشاري سامي الوهيب',
-    rank: 'رائد حقوقي',
+    rank: 'مشرف أول',
     file_number: '612154',
-    category: 'ضابط'
+    category: 'قيادات'
   },
   {
     id: 'test-17',
@@ -290,9 +290,9 @@ let mockLicenses: any[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     full_name: 'مشاري سامي الوهيب',
-    rank: 'رائد حقوقي',
+    rank: 'مشرف أول',
     file_number: '612154',
-    category: 'ضابط'
+    category: 'قيادات'
   }
 ];
 

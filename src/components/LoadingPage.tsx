@@ -28,8 +28,8 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
       case 'shifts':
         return {
           icon: Calendar,
-          title: title || 'جاري تحميل الخفارات',
-          subtitle: subtitle || 'يرجى الانتظار بينما نحضر بيانات الخفارات...',
+          title: title || 'جاري تحميل المناوبات',
+          subtitle: subtitle || 'يرجى الانتظار بينما نحضر بيانات المناوبات...',
           gradient: 'from-blue-500 to-blue-700',
           bgGradient: 'from-blue-50 via-blue-50/30 to-blue-100/50'
         };
@@ -52,8 +52,8 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
       case 'ranks':
         return {
           icon: Award,
-          title: title || 'جاري تحميل الرتب',
-          subtitle: subtitle || 'يرجى الانتظار بينما نحضر بيانات الرتب...',
+          title: title || 'جاري تحميل المسميات الوظيفية',
+          subtitle: subtitle || 'يرجى الانتظار بينما نحضر بيانات المسميات الوظيفية...',
           gradient: 'from-blue-500 to-blue-700',
           bgGradient: 'from-blue-50 via-blue-50/30 to-blue-100/50'
         };
@@ -68,7 +68,7 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
       case 'new-shift':
         return {
           icon: Calendar,
-          title: title || 'جاري تحضير نظام تسجيل الخفارة',
+          title: title || 'جاري تحضير نظام تسجيل المناوبة',
           subtitle: subtitle || 'يرجى الانتظار بينما نحضر بيانات الموظفين وإعدادات النظام...',
           gradient: 'from-blue-500 to-blue-700',
           bgGradient: 'from-blue-50 via-blue-50/30 to-blue-100/50'

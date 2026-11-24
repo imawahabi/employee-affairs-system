@@ -143,11 +143,11 @@ const ReportsNew: React.FC = () => {
   const progressPercent = ((currentStepIndex + 1) / reportSteps.length) * 100;
   const monthLabel = availableMonths.find(month => month.value === filters.selectedMonth)?.label || 'جميع الشهور';
   const categoryOptions = [
-    { value: 'ضابط', label: 'ضابط' },
-    { value: 'ضابط صف', label: 'ضابط صف' },
-    { value: 'جندي', label: 'جندي' },
-    { value: 'مهني', label: 'مهني' },
-    { value: 'مدني', label: 'مدني' }
+    { value: 'قيادات', label: 'قيادات' },
+    { value: 'مشرفون', label: 'مشرفون' },
+    { value: 'موظف خدمات', label: 'موظف خدمات' },
+    { value: 'فني', label: 'فني' },
+    { value: 'إداري', label: 'إداري' }
   ];
 
   const highlightedEmployees = useMemo(() => {
@@ -294,7 +294,7 @@ const ReportsNew: React.FC = () => {
                   </label>
                   <input
                     type="text"
-                    placeholder="ابحث بالاسم، الرتبة أو رقم الملف"
+                    placeholder="ابحث بالاسم، المسمى الوظيفي أو رقم الملف"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"

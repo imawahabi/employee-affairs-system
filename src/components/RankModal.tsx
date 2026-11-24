@@ -20,22 +20,22 @@ const RankModal: React.FC<RankModalProps> = ({
   title
 }) => {
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('ضباط');
+  const [category, setCategory] = useState('قيادات');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const categories = [
-    { value: 'ضباط', label: 'ضباط' },
-    { value: 'ضباط صف', label: 'ضباط صف' },
-    { value: 'مهنيين', label: 'مهنيين' },
-    { value: 'مدنيين', label: 'مدنيين' }
+    { value: 'قيادات', label: 'قيادات' },
+    { value: 'مشرفون', label: 'مشرفون' },
+    { value: 'فنيون', label: 'فنيون' },
+    { value: 'إداريون', label: 'إداريون' }
   ];
 
   // Reset form when modal opens/closes or rank changes
   useEffect(() => {
     if (isOpen) {
       setName(rank?.name || '');
-      setCategory(rank?.category || 'ضباط');
+      setCategory(rank?.category || 'قيادات');
       setError('');
     }
   }, [isOpen, rank]);
@@ -44,12 +44,12 @@ const RankModal: React.FC<RankModalProps> = ({
     e.preventDefault();
     
     if (!name.trim()) {
-      setError('اسم الرتبة مطلوب');
+      setError('اسم المسمى الوظيفي مطلوب');
       return;
     }
 
     if (name.trim().length < 2) {
-      setError('اسم الرتبة يجب أن يكون على الأقل حرفين');
+      setError('اسم المسمى الوظيفي يجب أن يكون على الأقل حرفين');
       return;
     }
 
@@ -86,14 +86,14 @@ const RankModal: React.FC<RankModalProps> = ({
             <Award className="w-6 h-6" />
           </div>
           <div>
-            <h4 className="font-semibold text-blue-900">بيانات الرتبة</h4>
-            <p className="text-sm text-blue-700">يتم ترتيب الرتب تلقائياً حسب النظام المعتمد</p>
+            <h4 className="font-semibold text-blue-900">بيانات المسمى الوظيفي</h4>
+            <p className="text-sm text-blue-700">يتم ترتيب المسميات الوظيفية تلقائياً حسب النظام المعتمد</p>
           </div>
         </div>
 
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-700">
-            اسم الرتبة <span className="text-red-500">*</span>
+            اسم المسمى الوظيفي <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -105,7 +105,7 @@ const RankModal: React.FC<RankModalProps> = ({
             className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
               error ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'
             }`}
-            placeholder="أدخل اسم الرتبة"
+            placeholder="أدخل اسم المسمى الوظيفي"
             disabled={loading}
             autoFocus
           />

@@ -133,12 +133,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
   const activeEmployees = statisticsEmployees.included.filter(e => e.status === 'active');
   const inactiveEmployees = employees.filter(e => e.status === 'inactive');
   const activeCounts = {
-    officers: activeEmployees.filter(e => e.category === 'ضباط').length,
-    ncos: activeEmployees.filter(e => e.category === 'ضباط صف').length,
-    professionals: activeEmployees.filter(e => e.category === 'مهنيين').length,
-    civilians: activeEmployees.filter(e => e.category === 'مدنيين').length,
+    officers: activeEmployees.filter(e => e.category === 'قيادات').length,
+    ncos: activeEmployees.filter(e => e.category === 'مشرفون').length,
+    professionals: activeEmployees.filter(e => e.category === 'فنيون').length,
+    civilians: activeEmployees.filter(e => e.category === 'إداريون').length,
   };
-  const activeMilitaryTotal = activeCounts.officers + activeCounts.ncos + activeCounts.professionals;
   const activeGeneralTotal = activeEmployees.length;
   const inactiveCount = inactiveEmployees.length;
 
@@ -290,10 +289,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
 
   // Category order: Officers, NCOs, Professionals, Civilians
   const categoryOrder: Record<Employee['category'], number> = {
-    'ضباط': 0,
-    'ضباط صف': 1,
-    'مهنيين': 2,
-    'مدنيين': 3,
+    'قيادات': 0,
+    'مشرفون': 1,
+    'فنيون': 2,
+    'إداريون': 3,
   };
 
   // Build rank order by category from ranks
@@ -348,7 +347,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
     .filter(Boolean)
     .sort()
     .slice(-1)[0] || '';
-  // لا توجد خفارات بعد اليوم الحالي؟ (نفس منطق تحذير التأخير في السايدبار)
+  // لا توجد مناوبات بعد اليوم الحالي؟ (نفس منطق تحذير التأخير في السايدبار)
   const isShiftPlanMissing = !latestPlannedDateKey || latestPlannedDateKey < todayDateString;
 
   // For detailed card: show today's shift if exists, otherwise latest shift (skip if today is exceptional)
@@ -385,7 +384,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
 
   const isShiftEmployee = (emp: Employee | undefined): emp is Employee => {
     if (!emp) return false;
-    return emp.category !== 'مدنيين';
+    return emp.category !== 'إداريون';
   };
 
   const displayShiftEmployees = displayShift
@@ -409,7 +408,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
     });
   })();
 
-  // تم حذف منطق الخفارة القادمة
+  // تم حذف منطق المناوبة القادمة
 
   const getSeniorEmployeeForShift = (shiftId: string): Employee | null => {
     const assignedEmployees = shiftAssignments
@@ -470,8 +469,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
               <div className="relative z-10">
                 <div className="flex items-start justify-between mb-6">
                   <div className="space-y-1">
-                    <div className="text-blue-200 text-sm font-medium tracking-wide">إجمالي القوة</div>
-                    <div className="text-6xl font-black text-white leading-none tracking-tight">{activeGeneralTotal}</div>
+                    <div className="text-blue-200 text-sm font-medium tracking-wide">إجمالي الموظفين</div>
+                    <div className="text-6xl font-black text-white leading-none tracking-tight">{activeGeneralTotal + inactiveCount}</div>
                   </div>
                   <div className="relative">
                     <div className="w-16 h-16 rounded-2xl bg-white/10 border border-blue-400/50 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">
@@ -484,7 +483,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 </div>
                 <div className="flex items-center gap-2 pt-2">
                   <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                  <span className="text-blue-100 text-sm">العسكريين ● المدنيين</span>
+                  <span className="text-blue-100 text-sm">جميع فئات الموظفين</span>
                 </div>
               </div>
             </div>
@@ -499,8 +498,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
               <div className="relative z-10">
                 <div className="flex items-start justify-between mb-6">
                   <div className="space-y-1">
-                    <div className="text-emerald-200 text-sm font-medium tracking-wide">القوة العسكرية</div>
-                    <div className="text-6xl font-black text-white leading-none tracking-tight">{activeMilitaryTotal}</div>
+                    <div className="text-emerald-200 text-sm font-medium tracking-wide">الموظفون النشطون</div>
+                    <div className="text-6xl font-black text-white leading-none tracking-tight">{activeGeneralTotal}</div>
                   </div>
                   <div className="relative">
                     <div className="w-16 h-16 rounded-2xl border border-green-500/50 bg-white/10 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">
@@ -513,7 +512,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 </div>
                 <div className="flex items-center gap-2 pt-2">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                  <span className="text-emerald-100 text-sm">ضباط ● ضباط صف وأفراد ● مهنيين</span>
+                  <span className="text-emerald-100 text-sm">قيادات ● مشرفون ● فنيون ● إداريون</span>
                 </div>
               </div>
             </div>
@@ -560,7 +559,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 <div className="text-right flex-1">
                   <div className="text-5xl font-black text-blue-700 mb-1">{activeCounts.officers}</div>
                   <div className="text-md font-bold  leading-tight text-gray-900">
-                    ضابط
+                    قيادات
                   </div>
                 </div>
               </div>
@@ -576,7 +575,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 <div className="text-right flex-1">
                   <div className="text-5xl font-black text-blue-700 mb-1">{activeCounts.ncos}</div>
                   <div className="text-md font-bold leading-tight text-gray-900">
-                    ضباط صف وأفراد
+                    مشرفون
                   </div>
                 </div>
               </div>
@@ -592,7 +591,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 <div className="text-right flex-1">
                   <div className="text-5xl font-black text-blue-700 mb-1">{activeCounts.professionals}</div>
                   <div className="text-md font-bold  leading-tight text-gray-900">
-                    مهني
+                    فنيون
                   </div>
                 </div>
               </div>
@@ -608,7 +607,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 <div className="text-right flex-1">
                   <div className="text-5xl font-black text-slate-600 mb-1">{activeCounts.civilians}</div>
                   <div className="text-md font-bold  leading-tight text-gray-900">
-                    مدني
+                    إداريون
                   </div>
                 </div>
               </div>
@@ -625,8 +624,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
               <CalendarCheck size={22} className="text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-gray-900">ملخص نظام الخفارات</h2>
-              <p className="text-xs text-gray-600">متابعة الاستلام وآخر الخفارات المسجلة</p>
+              <h2 className="text-xl font-black text-gray-900">ملخص نظام المناوبات</h2>
+              <p className="text-xs text-gray-600">متابعة الاستلام وآخر المناوبات المسجلة</p>
             </div>
             <div className="flex-1 h-px bg-slate-200/80" aria-hidden="true" />
           </div>
@@ -643,8 +642,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                         <Calendar size={20} className="text-gray-700" />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-gray-900">آخر خفارة ومتابعة الاستلام</h3>
-                        <p className="text-xs text-gray-600">ملخص سريع لنظام الخفارات</p>
+                        <h3 className="text-base font-bold text-gray-900">آخر مناوبة ومتابعة الاستلام</h3>
+                        <p className="text-xs text-gray-600">ملخص سريع لنظام المناوبات</p>
                       </div>
                     </div>
                     <div className={`px-2.5 py-1 rounded-full text-xs font-bold ${overdueShiftsCount > 0 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
@@ -664,11 +663,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                             }`}>
                             <Calendar size={14} />
                           </div>
-                          <div className="text-sm font-bold text-slate-800">آخر خفارة مسجلة</div>
+                          <div className="text-sm font-bold text-slate-800">آخر مناوبة مسجلة</div>
                         </div>
                         <span className={`text-[11px] font-bold px-2 py-1 rounded-full ${isShiftPlanMissing ? 'text-red-700 bg-red-100' : 'text-blue-700 bg-blue-100'
                           }`}>
-                          {isShiftPlanMissing ? 'تنبيه' : 'أحدث خفارة'}
+                          {isShiftPlanMissing ? 'تنبيه' : 'أحدث مناوبة'}
                         </span>
                       </div>
                       <div className="flex flex-col items-center gap-1 pt-5">
@@ -676,7 +675,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                           }`}>
                           {latestShift ? new Date(latestShift.shiftDate).toLocaleDateString('ar-US', {
                             weekday: 'long'
-                          }) : 'لم يتم تسجيل خفارات'}
+                          }) : 'لم يتم تسجيل مناوبات'}
                         </div>
                         <div className="text-2xl font-black text-slate-900">
                           {latestShift ? new Date(latestShift.shiftDate).toLocaleDateString('ar-US', {
@@ -687,7 +686,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                         </div>
                         {isShiftPlanMissing && (
                           <div className="mt-2 inline-flex items-center text-center rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">
-                            لا توجد خفارات أو أيام استثنائية بعد تاريخ اليوم الحالي
+                            لا توجد مناوبات أو أيام استثنائية بعد تاريخ اليوم الحالي
                           </div>
                         )}
                       </div>
@@ -721,11 +720,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                         <div className="text-sm font-bold text-gray-800">مراقبة الاستلام</div>
                       </div>
                       <div className="text-xl font-black text-gray-900 text-center mt-12">
-                        {overdueShiftsCount > 0 ? `${overdueShiftsCount} خفارات متأخرة` : 'لا توجد خفارات متأخرة'}
+                        {overdueShiftsCount > 0 ? `${overdueShiftsCount} مناوبات متأخرة` : 'لا توجد مناوبات متأخرة'}
                       </div>
                       <div className="text-xs text-gray-500 text-center mt-2">
                         {overdueShiftsCount > 0
-                          ? 'يرجى متابعة ورقيات الخفارات'
+                          ? 'يرجى متابعة ورقيات المناوبات'
                           : latestReceivedShift
                             ? `آخر استلام: ${new Date(latestReceivedShift.shiftDate).toLocaleDateString('ar-US', {
                               year: 'numeric',
@@ -748,7 +747,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                       <CalendarCheck size={20} className="text-gray-700" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-gray-900">لوحة نظام الخفارات</h3>
+                      <h3 className="text-base font-bold text-gray-900">لوحة نظام المناوبات</h3>
                       <p className="text-xs text-gray-600">معلومات مركزة للمتابعة السريعة</p>
                     </div>
                   </div>
@@ -757,7 +756,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                     <div className="flex items-center gap-2">
-                      <span>الخفارات غير المستلمة</span>
+                      <span>المناوبات غير المستلمة</span>
                     </div>
                     <span className={`px-2 py-0.5 rounded-full ${overdueShiftsCount > 0 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}`}>
                       {overdueShiftsCount}
@@ -775,11 +774,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                             disabled={!canOpenShift}
                             className={`w-full text-right flex items-center justify-between gap-3 rounded-lg border px-3 py-2 transition ${canOpenShift ? 'cursor-pointer hover:border-blue-200 hover:bg-blue-50' : 'cursor-default opacity-70'
                               }`}
-                            title={canOpenShift ? 'فتح الخفارة' : undefined}
+                            title={canOpenShift ? 'فتح المناوبة' : undefined}
                           >
                             <div>
                               <div className="text-sm font-bold text-gray-900">
-                                <p className="inline text-gray-500 text-xs font-normal">خفارة يوم : </p>
+                                <p className="inline text-gray-500 text-xs font-normal">مناوبة يوم : </p>
                                 {new Date(shift.shiftDate).toLocaleDateString('ar-US', {
                                   weekday: 'long',
                                   year: 'numeric',
@@ -788,7 +787,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                                 })}
                               </div>
                               <div className="text-xs text-gray-600">
-                                مسؤول الخفارة:{' '}
+                                مسؤول المناوبة:{' '}
                                 <span className="font-bold text-blue-600"> {senior ? `${senior.rank} / ${formatShiftEmployeeDisplayName(senior) || senior.name}` : 'غير محدد'}</span>  - {formatDepartmentLabel(senior?.department) || 'غير مسجل'}
                               </div>
                             </div>
@@ -802,7 +801,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                   ) : (
                     <div className="flex justify-center font-black mt-6 mb-6 text-center">
                       <span className="bg-green-100 p-2 rounded-xl mt-11"><Check size={16} className="text-green-800" /></span>&nbsp;
-                      <span className="text-sm text-green-600 mt-12 mr-2">كافة الخفارات السابقة مستلمة</span>
+                      <span className="text-sm text-green-600 mt-12 mr-2">كافة المناوبات السابقة مستلمة</span>
                     </div>
                   )}
                 </div>
@@ -822,7 +821,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                     </div>
                     <div>
                       <h3 className="text-xl font-black text-gray-900">
-                        {todayExceptional ? 'يوم استثنائي' : todayShift ? 'خفارة اليوم الحالي' : 'آخر خفارة مسجلة'}
+                        {todayExceptional ? 'يوم استثنائي' : todayShift ? 'مناوبة اليوم الحالي' : 'آخر مناوبة مسجلة'}
                       </h3>
                     </div>
                   </div>
@@ -835,7 +834,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                             <Calendar size={16} className="text-slate-700" />
                           </span>
                           <span className="hidden sm:inline text-[11px] font-bold tracking-wide text-slate-500">
-                            {todayExceptional ? 'يوم استثنائي' : todayShift ? 'خفارة يوم' : 'تاريخ الخفارة'}
+                            {todayExceptional ? 'يوم استثنائي' : todayShift ? 'مناوبة يوم' : 'تاريخ المناوبة'}
                           </span>
                         </div>
                         <span className="h-6 w-px bg-slate-200" />
@@ -875,7 +874,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                                   م
                                 </th>
                                 <th className="px-6 py-3 text-right text-xs uppercase tracking-wider">
-                                  الرتبة
+                                  المسمى الوظيفي
                                 </th>
                                 <th className="px-6 py-3 text-right text-xs uppercase tracking-wider">
                                   الاسم
@@ -937,7 +936,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                       <ShieldCheck size={28} />
                     </div>
                     <h3 className="text-lg font-bold text-amber-900 mb-2">يوم استثنائي</h3>
-                    <p className="text-sm text-amber-700">لا يوجد خفارة</p>
+                    <p className="text-sm text-amber-700">لا يوجد مناوبة</p>
                     <p className="text-sm text-amber-700">القوة بالكامل متواجدة</p>
                     <p className="text-sm text-amber-700 mt-1">
                       السبب : <span className="font-semibold">{todayExceptional.reason || 'غير محدد'}</span>
@@ -951,8 +950,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                 ) : (
                   <div className="text-center py-12">
                     <Calendar size={48} className="mx-auto text-gray-400 mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد خفارات مسجلة</h3>
-                    <p className="text-gray-500">لم يتم تسجيل أي خفارات في النظام بعد</p>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد مناوبات مسجلة</h3>
+                    <p className="text-gray-500">لم يتم تسجيل أي مناوبات في النظام بعد</p>
                   </div>
                 )}
               </div>
@@ -1168,7 +1167,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onPageChange }) => {
                     <CalendarCheck size={18} className="text-amber-600" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-gray-900">تمديدات المهنيين</h3>
+                    <h3 className="text-base font-bold text-gray-900">تمديدات الفنيين</h3>
                     <p className="text-xs text-gray-600">ملخص حالة التمديدات</p>
                   </div>
                 </div>

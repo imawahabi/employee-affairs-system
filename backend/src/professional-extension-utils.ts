@@ -65,7 +65,7 @@ export const computeExtensionStatusForEmployee = (
     extensions: ProfessionalExtensionRecord[],
     today: Date
 ): ExtensionStatusResult | null => {
-    if (employee.category !== 'مهنيين') return null;
+    if (employee.category !== 'فنيون') return null;
     const birthDate = parseDateOnly(employee.birthDate);
     if (!birthDate) return null;
 

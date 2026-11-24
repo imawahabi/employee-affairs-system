@@ -173,7 +173,7 @@ const EmployeeList: React.FC = () => {
             <div className="search-input flex-grow">
               <input
                 type="text"
-                placeholder="بحث بالاسم، الرتبة، أو رقم الملف..."
+                placeholder="بحث بالاسم، المسمى الوظيفي، أو رقم الملف..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 border border-secondary-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white transition-all duration-200 shadow-sm hover:shadow-md"
@@ -189,10 +189,10 @@ const EmployeeList: React.FC = () => {
                 className="filter-select w-full"
               >
                 <option value="">جميع الفئات</option>
-                <option value="ضابط">ضباط</option>
-                <option value="ضابط صف">ضباط صف</option>
-                <option value="مهني">مهنيين</option>
-                <option value="مدني">مدنيين</option>
+                <option value="قيادات">قيادات</option>
+                <option value="مشرفون">مشرفون</option>
+                <option value="فني">فنيون</option>
+                <option value="إداري">إداريون</option>
               </select>
             </div>
           </div>
@@ -203,7 +203,7 @@ const EmployeeList: React.FC = () => {
             <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
               <tr>
                 <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">م</th>
-                <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">الرتبة</th>
+                <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">المسمى الوظيفي</th>
                 <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">الاسم الكامل</th>
                 <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">رقم الملف</th>
                 <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">الفئة</th>
@@ -219,7 +219,7 @@ const EmployeeList: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-700">
-                    {employee.category === 'ضابط' || employee.category === 'ضابط صف'
+                    {employee.category === 'قيادات' || employee.category === 'مشرفون'
                       ? employee.rank
                       : employee.category}
                   </td>
@@ -227,9 +227,9 @@ const EmployeeList: React.FC = () => {
                   <td className="px-6 py-4 text-sm text-gray-700">{employee.file_number}</td>
                   <td className="px-6 py-4 text-sm">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      employee.category === 'ضابط' ? 'bg-blue-100 text-blue-800' :
-                      employee.category === 'ضابط صف' ? 'bg-purple-100 text-purple-800' :
-                      employee.category === 'مهني' ? 'bg-green-100 text-green-800' :
+                      employee.category === 'قيادات' ? 'bg-blue-100 text-blue-800' :
+                      employee.category === 'مشرفون' ? 'bg-purple-100 text-purple-800' :
+                      employee.category === 'فني' ? 'bg-green-100 text-green-800' :
                       'bg-orange-100 text-orange-800'
                     }`}>
                       {employee.category}

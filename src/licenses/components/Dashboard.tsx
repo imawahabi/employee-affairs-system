@@ -62,10 +62,10 @@ const Dashboard: React.FC = () => {
 
     // Employee categories
     const categories = {
-      officers: activeEmployees.filter(e => e.category === 'ضابط').length,
-      ncos: activeEmployees.filter(e => e.category === 'ضابط صف').length,
-      professionals: activeEmployees.filter(e => e.category === 'مهني').length,
-      civilians: activeEmployees.filter(e => e.category === 'مدني').length
+      officers: activeEmployees.filter(e => e.category === 'قيادات').length,
+      ncos: activeEmployees.filter(e => e.category === 'مشرفون').length,
+      professionals: activeEmployees.filter(e => e.category === 'فني').length,
+      civilians: activeEmployees.filter(e => e.category === 'إداري').length
     };
 
     setCurrentMonthStats({ total: currentMonthLicenses.length, fullDay: currentMonthFullDay, hourly: currentMonthHourly, medical: currentMonthMedical });
@@ -333,19 +333,19 @@ const Dashboard: React.FC = () => {
             <div className="pt-2 border-t border-slate-100">
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center">
-                  <div className="text-xs font-medium text-slate-600 mb-1">الضباط</div>
+                  <div className="text-xs font-medium text-slate-600 mb-1">القيادات</div>
                   <div className="text-lg font-bold text-orange-600">{employeeCategories.officers}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xs font-medium text-slate-600 mb-1">ضباط الصف</div>
+                  <div className="text-xs font-medium text-slate-600 mb-1">المشرفون</div>
                   <div className="text-lg font-bold text-orange-600">{employeeCategories.ncos}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xs font-medium text-slate-600 mb-1">المهنيين</div>
+                  <div className="text-xs font-medium text-slate-600 mb-1">الفنيون</div>
                   <div className="text-lg font-bold text-orange-600">{employeeCategories.professionals}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xs font-medium text-slate-600 mb-1">المدنيين</div>
+                  <div className="text-xs font-medium text-slate-600 mb-1">الإداريون</div>
                   <div className="text-lg font-bold text-orange-600">{employeeCategories.civilians}</div>
                 </div>
               </div>
@@ -381,7 +381,7 @@ const Dashboard: React.FC = () => {
               <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
                 <tr>
                   <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">م</th>
-                  <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">الرتبة</th>
+                  <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">المسمى الوظيفي</th>
                   <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">اسم الموظف</th>
                   <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">نوع الرخصة/الاستئذان</th>
                   <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">تاريخ الرخصة/الاستئذان</th>
@@ -399,7 +399,7 @@ const Dashboard: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700">
-                      {license.employee?.category === 'ضابط' || license.employee?.category === 'ضابط صف'
+                      {license.employee?.category === 'قيادات' || license.employee?.category === 'مشرفون'
                         ? license.employee?.rank
                         : license.employee?.category}
                     </td>

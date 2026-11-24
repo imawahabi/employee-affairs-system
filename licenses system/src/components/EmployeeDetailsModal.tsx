@@ -73,7 +73,7 @@ const EmployeeDetailsModal: React.FC<EmployeeDetailsModalProps> = ({ employee, l
     doc.text(`:الاسم`, 190, 40, { align: 'right' });
     doc.text(employee.full_name, 160, 40, { align: 'right' });
 
-    doc.text(`:الرتبة`, 190, 50, { align: 'right' });
+    doc.text(`:المسمى الوظيفي`, 190, 50, { align: 'right' });
     doc.text(employee.rank, 160, 50, { align: 'right' });
 
     doc.text(`:رقم الملف`, 80, 40, { align: 'right' });

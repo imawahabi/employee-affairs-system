@@ -33,7 +33,7 @@ const compareEmployeesByPriority = (left: Employee, right: Employee) => {
   const categoryDiff = getCategoryOrder(left.category) - getCategoryOrder(right.category);
   if (categoryDiff !== 0) return categoryDiff;
 
-  const isOfficerCategory = left.category === 'ضباط' || left.category === 'ضباط صف';
+  const isOfficerCategory = left.category === 'قيادات' || left.category === 'مشرفون';
   if (isOfficerCategory) {
     const rankDiff = getRankOrder(left.rank, left.category) - getRankOrder(right.rank, right.category);
     if (rankDiff !== 0) return rankDiff;
@@ -101,7 +101,7 @@ const EmployeeShiftHistory: React.FC = () => {
         setAssignments(assignmentsData);
       } catch (loadError) {
         console.error('Failed to load employee shift history data:', loadError);
-        setError('تعذر تحميل سجل الخفارات حالياً');
+        setError('تعذر تحميل سجل المناوبات حالياً');
       } finally {
         setLoading(false);
       }
@@ -328,12 +328,12 @@ const EmployeeShiftHistory: React.FC = () => {
       return { key: 'unknown' as const, label: 'غير محدد', className: 'bg-slate-50 text-slate-700 border-slate-200' };
     }
     if (relationKey === 'today') {
-      return { key: 'today' as const, label: 'خفارة اليوم', className: 'bg-blue-50 text-blue-700 border-blue-200' };
+      return { key: 'today' as const, label: 'مناوبة اليوم', className: 'bg-blue-50 text-blue-700 border-blue-200' };
     }
     if (relationKey === 'past') {
-      return { key: 'past' as const, label: 'خفارة سابقة', className: 'bg-amber-50 text-amber-700 border-amber-200' };
+      return { key: 'past' as const, label: 'مناوبة سابقة', className: 'bg-amber-50 text-amber-700 border-amber-200' };
     }
-    return { key: 'future' as const, label: 'خفارة قادمة', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+    return { key: 'future' as const, label: 'مناوبة قادمة', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
   };
 
   const goToShiftDay = (shiftDate: string) => {
@@ -348,7 +348,7 @@ const EmployeeShiftHistory: React.FC = () => {
   };
 
   if (loading) {
-    return <LoadingPage variant="shifts" title="جاري تحميل سجل خفارات الموظف" />;
+    return <LoadingPage variant="shifts" title="جاري تحميل سجل مناوبات الموظف" />;
   }
 
   const handleSelectEmployee = (employee: Employee) => {
@@ -386,7 +386,7 @@ const EmployeeShiftHistory: React.FC = () => {
                 handleSelectEmployee(employeeSearchResults[0]);
               }
             }}
-            placeholder="أدخل الإسم أو الرتبة أو رقم الملف..."
+            placeholder="أدخل الإسم أو المسمى الوظيفي أو رقم الملف..."
             className="w-full rounded-xl border border-slate-300 bg-white pr-10 pl-10 py-3 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
           {employeeSearchTerm && (
@@ -406,7 +406,7 @@ const EmployeeShiftHistory: React.FC = () => {
           {isSearchOpen && (
             <div className="absolute z-40 mt-2 w-full rounded-xl border border-slate-200 bg-white shadow-xl max-h-72 overflow-auto">
               {!employeeSearchTerm.trim() ? (
-                <div className="p-4 text-sm text-slate-500">ابدأ بكتابة الاسم أو الرتبة أو رقم الملف...</div>
+                <div className="p-4 text-sm text-slate-500">ابدأ بكتابة الاسم أو المسمى الوظيفي أو رقم الملف...</div>
               ) : employeeSearchResults.length === 0 ? (
                 <div className="p-4 text-sm text-slate-500">لا توجد نتائج مطابقة.</div>
               ) : (
@@ -445,7 +445,7 @@ const EmployeeShiftHistory: React.FC = () => {
           <UserRound className="w-10 h-10 text-slate-400 mx-auto mb-3" />
           <h3 className="text-xl font-bold text-slate-800">لم يتم تحديد موظف للسجل</h3>
           <p className="text-sm text-slate-500 mt-2">
-            افتح سجل الخفارات من البحث في الهيدر أو من كشف الخفارات عبر الضغط على اسم الموظف.
+            افتح سجل المناوبات من البحث في الهيدر أو من كشف المناوبات عبر الضغط على اسم الموظف.
           </p>
         </div>
       )}
@@ -453,9 +453,9 @@ const EmployeeShiftHistory: React.FC = () => {
       {selectedEmployee && isSelectedEmployeeExcludedFromShifts && (
         <div className="bg-white rounded-2xl border border-amber-200 shadow-sm p-10 text-center">
           <Info className="w-10 h-10 text-amber-500 mx-auto mb-3" />
-          <h3 className="text-xl font-bold text-slate-800">هذا الموظف غير مدرج بالخفارات</h3>
+          <h3 className="text-xl font-bold text-slate-800">هذا الموظف غير مدرج بالمناوبات</h3>
           <p className="text-sm text-slate-600 mt-2">
-            الموظف المحدد حالياً لا يتم إدراجه ضمن الخفارات، لذلك تم إخفاء جميع أقسام السجل.
+            الموظف المحدد حالياً لا يتم إدراجه ضمن المناوبات، لذلك تم إخفاء جميع أقسام السجل.
           </p>
         </div>
       )}
@@ -468,13 +468,13 @@ const EmployeeShiftHistory: React.FC = () => {
                 <UserRound className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-md font-bold text-blue-700">سجل خفارات</p>
+                <p className="text-md font-bold text-blue-700">سجل مناوبات</p>
                 <h2 className="text-3xl font-black text-slate-900 mt-3 mb-5">
                  {selectedEmployee.rank
                     ? `${selectedEmployee.rank} / ${formatShiftEmployeeDisplayName(selectedEmployee) || selectedEmployee.name}`
                     : formatShiftEmployeeDisplayName(selectedEmployee) || selectedEmployee.name}
                 </h2>
-                <p className="text-sm text-slate-600 mt-1">هذه الصفحة تعرض سجل خفارات هذا الموظف فقط.</p>
+                <p className="text-sm text-slate-600 mt-1">هذه الصفحة تعرض سجل مناوبات هذا الموظف فقط.</p>
               </div>
             </div>
 
@@ -505,7 +505,7 @@ const EmployeeShiftHistory: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             <div className="rounded-2xl border border-blue-200 bg-blue-50 shadow-sm p-4">
-              <p className="text-xs text-blue-700 font-semibold">معدل الخفارات الشهري</p>
+              <p className="text-xs text-blue-700 font-semibold">معدل المناوبات الشهري</p>
               <p className="text-3xl font-black text-blue-900 mt-2">{summary.monthlyAverage.toFixed(2)}</p>
               <p className="text-xs text-blue-700 mt-1">على {summary.activeMonths} شهر مسجل</p>
             </div>
@@ -520,7 +520,7 @@ const EmployeeShiftHistory: React.FC = () => {
               <p className="text-xs text-red-700 mt-1">{summary.absent} من {summary.total}</p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 shadow-sm p-4">
-              <p className="text-xs text-slate-700 font-semibold">إجمالي الخفارات</p>
+              <p className="text-xs text-slate-700 font-semibold">إجمالي المناوبات</p>
               <p className="text-3xl font-black text-slate-900 mt-2">{summary.total}</p>
               <p className="text-xs text-slate-600 mt-1">ضمن {summary.activeMonths} شهر</p>
             </div>
@@ -529,9 +529,9 @@ const EmployeeShiftHistory: React.FC = () => {
           {upcomingRecords.length > 0 && (
             <div className="rounded-2xl border border-emerald-200 bg-white shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-emerald-200 bg-emerald-50/70 flex items-center justify-between">
-                <h3 className="text-lg font-black text-emerald-900">الخفارات القادمة</h3>
+                <h3 className="text-lg font-black text-emerald-900">المناوبات القادمة</h3>
                 <span className="text-xs font-bold text-emerald-700 bg-white border border-emerald-200 px-3 py-1 rounded-full">
-                  {upcomingRecords.length} خفارة
+                  {upcomingRecords.length} مناوبة
                 </span>
               </div>
 
@@ -542,8 +542,8 @@ const EmployeeShiftHistory: React.FC = () => {
                       <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">م</th>
                       <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">اليوم</th>
                       <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">التاريخ</th>
-                      <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">عنوان الخفارة</th>
-                      <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">مسؤول الخفارة</th>
+                      <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">عنوان المناوبة</th>
+                      <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">مسؤول المناوبة</th>
                       <th className="px-4 py-3 text-center text-xs font-bold text-slate-700">إجراء</th>
                     </tr>
                   </thead>
@@ -555,7 +555,7 @@ const EmployeeShiftHistory: React.FC = () => {
                       const hasShiftTitle = Boolean(rawShiftTitle);
                       const shiftLead = shiftLeadByShiftId.get(record.shift.id);
                       const shiftLeadLabel = shiftLead
-                        ? `${shiftLead.rank || 'بدون رتبة'} / ${formatShiftEmployeeDisplayName(shiftLead) || shiftLead.name}`
+                        ? `${shiftLead.rank || 'بدون مسمى وظيفي'} / ${formatShiftEmployeeDisplayName(shiftLead) || shiftLead.name}`
                         : 'غير محدد';
 
                       return (
@@ -577,7 +577,7 @@ const EmployeeShiftHistory: React.FC = () => {
                               className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700 hover:bg-blue-100 transition-colors"
                             >
                               <ArrowUpRight className="w-3.5 h-3.5" />
-                              عرض الخفارة
+                              عرض المناوبة
                             </button>
                           </td>
                         </tr>
@@ -594,8 +594,8 @@ const EmployeeShiftHistory: React.FC = () => {
             {groupedRecords.length === 0 && (
               <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-10 text-center">
                 <Info className="w-10 h-10 text-slate-400 mx-auto mb-3" />
-                <h4 className="text-lg font-bold text-slate-800">لا توجد خفارات سابقة لهذا الموظف</h4>
-                <p className="text-sm text-slate-500 mt-2">لم يتم العثور على أي سجل خفارة قبل اليوم.</p>
+                <h4 className="text-lg font-bold text-slate-800">لا توجد مناوبات سابقة لهذا الموظف</h4>
+                <p className="text-sm text-slate-500 mt-2">لم يتم العثور على أي سجل مناوبة قبل اليوم.</p>
               </div>
             )}
 
@@ -617,7 +617,7 @@ const EmployeeShiftHistory: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-black text-slate-800">سنة {yearGroup.year}</h3>
                       <span className="text-xs font-bold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                        داوم {yearAttendedCount} من أصل {yearTotalCount} خفارة
+                        داوم {yearAttendedCount} من أصل {yearTotalCount} مناوبة
                       </span>
                     </div>
                   </div>
@@ -631,8 +631,8 @@ const EmployeeShiftHistory: React.FC = () => {
                           <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">التاريخ</th>
                           <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">الحالة</th>
                           <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">الملاحظة</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">عنوان الخفارة</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">مسؤول الخفارة</th>
+                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">عنوان المناوبة</th>
+                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-700">مسؤول المناوبة</th>
                           <th className="px-4 py-3 text-center text-xs font-bold text-slate-700">إجراء</th>
                         </tr>
                       </thead>
@@ -646,7 +646,7 @@ const EmployeeShiftHistory: React.FC = () => {
                                     {monthGroup.monthLabel} {yearGroup.year}
                                   </h4>
                                   <span className="text-xs font-bold text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full">
-                                    {monthGroup.records.length} خفارة
+                                    {monthGroup.records.length} مناوبة
                                   </span>
                                 </div>
                               </td>
@@ -661,7 +661,7 @@ const EmployeeShiftHistory: React.FC = () => {
                               const hasShiftTitle = Boolean(rawShiftTitle);
                               const shiftLead = shiftLeadByShiftId.get(record.shift.id);
                               const shiftLeadLabel = shiftLead
-                                ? `${shiftLead.rank || 'بدون رتبة'} / ${formatShiftEmployeeDisplayName(shiftLead) || shiftLead.name}`
+                                ? `${shiftLead.rank || 'بدون مسمى وظيفي'} / ${formatShiftEmployeeDisplayName(shiftLead) || shiftLead.name}`
                                 : 'غير محدد';
                               const shiftRelativeStatus = getShiftRelativeStatus(record.shift.shiftDate);
                               const statusLabel = isAbsent
@@ -709,7 +709,7 @@ const EmployeeShiftHistory: React.FC = () => {
                                       className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700 hover:bg-blue-100 transition-colors"
                                     >
                                       <ArrowUpRight className="w-3.5 h-3.5" />
-                                      عرض الخفارة
+                                      عرض المناوبة
                                     </button>
                                   </td>
                                 </tr>

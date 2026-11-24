@@ -39,7 +39,7 @@ interface NavigationItem {
 
 const otherSettingsChildren: NavigationItem[] = [
   { id: 'settings-departments', name: 'الإدارات والأقسام', icon: Network },
-  { id: 'settings-ranks', name: 'الرتب العسكرية', icon: BadgeCheck },
+  { id: 'settings-ranks', name: 'المسميات الوظيفية', icon: BadgeCheck },
   { id: 'settings-job-titles', name: 'المسميات والمناصب', icon: Briefcase },
   { id: 'settings-nationalities', name: 'الجنسيات', icon: Flag },
 ];
@@ -51,11 +51,11 @@ const navigation: NavigationItem[] = [
   { id: 'employees', name: 'إدارة الموظفين', icon: UsersRound, category: 'overview' },
   { id: 'employee-reports', name: 'تقارير مخصصة ', icon: FileText, category: 'overview' },
   { id: 'parking-map', name: 'مواقف الموظفين', icon: ParkingCircle, category: 'overview' },
-  { id: 'professional-extensions', name: 'تمديدات المهنيين', icon: CalendarClock, category: 'overview' },
-  { id: 'view-shifts', name: 'كشف الخفارات', icon: ListChecks, category: 'shifts' },
-  { id: 'shifts', name: 'تسجيل خفارة جديدة', icon: CalendarPlus, category: 'shifts' },
-  { id: 'next-queue', name: 'أولوية الخفارات', icon: ListOrdered, category: 'shifts' },
-  { id: 'employee-shift-history', name: 'سجلات الخفارات', icon: ClipboardList, category: 'shifts' },
+  { id: 'professional-extensions', name: 'تمديدات الفنيين', icon: CalendarClock, category: 'overview' },
+  { id: 'view-shifts', name: 'كشف المناوبات', icon: ListChecks, category: 'shifts' },
+  { id: 'shifts', name: 'تسجيل مناوبة جديدة', icon: CalendarPlus, category: 'shifts' },
+  { id: 'next-queue', name: 'أولوية المناوبات', icon: ListOrdered, category: 'shifts' },
+  { id: 'employee-shift-history', name: 'سجلات المناوبات', icon: ClipboardList, category: 'shifts' },
   { id: 'reports', name: 'التقارير والإحصائيات', icon: LineChart, category: 'shifts' },
   { id: 'licenses-list', name: 'سجلات رخص واستئذانات', icon: FileText, category: 'licenses' },
   { id: 'licenses-add', name: 'تسجيل رخصة/استئذان', icon: FilePlus, category: 'licenses' },
@@ -70,7 +70,7 @@ const navigation: NavigationItem[] = [
 const categoryLabels = {
   overview: 'نظام شؤون الموظفين',
   licenses: 'نظام الرخص والاستئذانات',
-  shifts: 'نظام الخفارات',
+  shifts: 'نظام المناوبات',
   system: 'إعدادات النظام'
 };
 
@@ -151,14 +151,14 @@ export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChan
       const plannedDates = [...shiftDateKeys, ...exceptionDateKeys].sort();
 
       if (!plannedDates.length) {
-        // لا توجد خفارات أو أيام استثنائية => تعتبر حالة تأخير/نقص في الجدولة
+        // لا توجد مناوبات أو أيام استثنائية => تعتبر حالة تأخير/نقص في الجدولة
         setShiftDelayActive(true);
         return;
       }
 
       const latestDate = plannedDates[plannedDates.length - 1];
       const todayKey = getTodayKey();
-      // إذا لم يوجد أي خفارة/استثناء بعد تاريخ اليوم الحالي نُفعّل تحذير التأخير
+      // إذا لم يوجد أي مناوبة/استثناء بعد تاريخ اليوم الحالي نُفعّل تحذير التأخير
       const hasUpcomingShift = latestDate > todayKey;
       setShiftDelayActive(!hasUpcomingShift);
     } catch (error) {
@@ -417,7 +417,7 @@ export default function Sidebar({ isCollapsed, onToggle, currentPage, onPageChan
                         )}
                         {showShiftDelayBadge && (
                           isCollapsed ? (
-                            <span className="absolute left-2 bottom-2 h-2 w-2 rounded-full bg-red-500" title="تأخير الخفارات"></span>
+                            <span className="absolute left-2 bottom-2 h-2 w-2 rounded-full bg-red-500" title="تأخير المناوبات"></span>
                           ) : (
                             <span className="inline-flex items-center rounded-full bg-red-500 px-2 py-0.5 text-[11px] font-bold text-white">
                               تنبيه

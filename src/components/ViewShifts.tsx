@@ -73,7 +73,7 @@ const ViewShifts: React.FC = () => {
       setShifts(prevShifts => 
         prevShifts.map(s => s.id === updatedShift.id ? updatedShift : s)
       );
-      toast.success('تم حفظ تفاصيل الخفارة بنجاح');
+      toast.success('تم حفظ تفاصيل المناوبة بنجاح');
       closeDetailsModal();
     } catch (error) {
       console.error('Failed to save shift details:', error);
@@ -233,7 +233,7 @@ const ViewShifts: React.FC = () => {
       <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[9999] p-4" dir="rtl">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95 hover:scale-100">
           <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="text-xl font-bold text-gray-800">إضافة موظف إلى الخفارة</h3>
+            <h3 className="text-xl font-bold text-gray-800">إضافة موظف إلى المناوبة</h3>
             <button onClick={closeAddEmployeeModal} className="text-gray-400 hover:text-gray-600 transition-colors">
               <X className="w-6 h-6" />
             </button>
@@ -315,7 +315,7 @@ const ViewShifts: React.FC = () => {
       
       setShifts(shiftsData);
       setAssignments(assignmentsData);
-      setEmployees(employeesData.filter((e: Employee) => e.category !== 'مدنيين'));
+      setEmployees(employeesData.filter((e: Employee) => e.category !== 'إداريون'));
       setExceptionalDays(Array.isArray(exceptionData) ? exceptionData : []);
     } catch (err) {
       setError('فشل في تحميل البيانات');
@@ -342,7 +342,7 @@ const ViewShifts: React.FC = () => {
     }
   }, []);
 
-  // استمع للأحداث السريعة حتى لو كنا بالفعل في صفحة الخفارات
+  // استمع للأحداث السريعة حتى لو كنا بالفعل في صفحة المناوبات
   useEffect(() => {
     const onQuickSearchDate = (e: Event) => {
       const ce = e as CustomEvent;
@@ -409,7 +409,7 @@ const ViewShifts: React.FC = () => {
       const catDiff = getCategoryOrder(a.employee.category) - getCategoryOrder(b.employee.category);
       if (catDiff !== 0) return catDiff;
 
-      const isOfficerCategory = a.employee.category === 'ضباط' || a.employee.category === 'ضباط صف';
+      const isOfficerCategory = a.employee.category === 'قيادات' || a.employee.category === 'مشرفون';
       if (isOfficerCategory) {
         const rankDiff = getRankOrder(a.employee.rank, a.employee.category) - getRankOrder(b.employee.rank, b.employee.category);
         if (rankDiff !== 0) return rankDiff;
@@ -489,7 +489,7 @@ const ViewShifts: React.FC = () => {
       const created = await addShiftAssignment(selectedShiftForAdd.id, newEmployeeId);
       // Optimistic local insert
       setAssignments(prev => [...prev, created]);
-      toast.success('تم إضافة الموظف إلى الخفارة');
+      toast.success('تم إضافة الموظف إلى المناوبة');
       closeAddEmployeeModal();
       // Light refresh of assignments to ensure consistency
       try {
@@ -508,7 +508,7 @@ const ViewShifts: React.FC = () => {
     setIsProcessingAssignment(true);
     try {
       await removeShiftAssignment(assignmentId);
-      toast.success('تم إزالة الموظف من الخفارة');
+      toast.success('تم إزالة الموظف من المناوبة');
       await fetchData();
     } catch (error) {
       console.error('Failed to remove assignment:', error);
@@ -534,12 +534,12 @@ const ViewShifts: React.FC = () => {
       setShifts(shiftsData);
       setAssignments(assignmentsData);
 
-      toast.success('تم حذف الخفارة بنجاح');
+      toast.success('تم حذف المناوبة بنجاح');
       setShowDeleteModal(false);
       setShiftToDelete(null);
     } catch (error) {
       console.error('Error deleting shift:', error);
-      toast.error('فشل في حذف الخفارة');
+      toast.error('فشل في حذف المناوبة');
     } finally {
       setIsDeleting(false);
     }
@@ -953,7 +953,7 @@ const ViewShifts: React.FC = () => {
     }
   };
 
-  // تحديث نتائج البحث عند تغيير البحث - يبحث في جميع الخفارات
+  // تحديث نتائج البحث عند تغيير البحث - يبحث في جميع المناوبات
   useEffect(() => {
     if (searchTerm.trim()) {
       const searchLower = normalizeArabic(searchTerm.trim());
@@ -1033,7 +1033,7 @@ const ViewShifts: React.FC = () => {
               <p className="text-base font-bold text-gray-900">{assignment.employee.rank} / {formatShiftEmployeeDisplayName(assignment.employee) || assignment.employee.name}</p>
               {shift && (
                 <p className="mt-1 text-xs text-gray-500">
-                  خفارة يوم {format(new Date(shift.shiftDate), 'eeee', { locale: arSA })} الموافق {format(new Date(shift.shiftDate), 'yyyy/MM/dd')}
+                  مناوبة يوم {format(new Date(shift.shiftDate), 'eeee', { locale: arSA })} الموافق {format(new Date(shift.shiftDate), 'yyyy/MM/dd')}
                 </p>
               )}
             </div>
@@ -1120,7 +1120,7 @@ const ViewShifts: React.FC = () => {
               {" "}
               <strong>{assignmentToRemove.employee.rank} - {formatShiftEmployeeDisplayName(assignmentToRemove.employee) || assignmentToRemove.employee.name}</strong>
               {" "}
-              من هذه الخفارة؟
+              من هذه المناوبة؟
             </p>
             <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6">
               <p className="text-red-800 text-sm font-medium">
@@ -1167,7 +1167,7 @@ const ViewShifts: React.FC = () => {
       <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[9999] p-4" dir="rtl">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95 hover:scale-100">
           <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="text-xl font-bold text-gray-800">تعديل الموظف في الخفارة</h3>
+            <h3 className="text-xl font-bold text-gray-800">تعديل الموظف في المناوبة</h3>
             <button onClick={closeEditAssignmentModal} className="text-gray-400 hover:text-gray-600 transition-colors">
               <X className="w-6 h-6" />
             </button>
@@ -1226,16 +1226,16 @@ const ViewShifts: React.FC = () => {
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Trash2 className="w-8 h-8 text-red-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">تأكيد حذف الخفارة</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">تأكيد حذف المناوبة</h3>
             <p className="text-gray-600 mb-2">
-              هل أنت متأكد من حذف خفارة تاريخ <strong>{format(new Date(shiftToDelete.shiftDate), 'yyyy/MM/dd', { locale: arSA })}</strong>؟
+              هل أنت متأكد من حذف مناوبة تاريخ <strong>{format(new Date(shiftToDelete.shiftDate), 'yyyy/MM/dd', { locale: arSA })}</strong>؟
             </p>
             <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6">
               <p className="text-red-800 text-sm font-medium">
                 ⚠️ تحذير: هذا الإجراء نهائي ولا يمكن التراجع عنه
               </p>
               <p className="text-red-700 text-sm mt-1">
-                سيتم حذف الخفارة وجميع التعيينات المرتبطة بها نهائياً
+                سيتم حذف المناوبة وجميع التعيينات المرتبطة بها نهائياً
               </p>
             </div>
           </div>
@@ -1278,7 +1278,7 @@ const ViewShifts: React.FC = () => {
       <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[9999] p-4" dir="rtl">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg transform transition-all duration-300 scale-95 hover:scale-100">
           <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="text-xl font-bold text-gray-800">تعديل تفاصيل الخفارة</h3>
+            <h3 className="text-xl font-bold text-gray-800">تعديل تفاصيل المناوبة</h3>
             <button onClick={closeDetailsModal} className="text-gray-400 hover:text-gray-600 transition-colors">
               <X className="w-6 h-6" />
             </button>
@@ -1286,7 +1286,7 @@ const ViewShifts: React.FC = () => {
           <div className="p-6 space-y-4">
             <div>
               <label htmlFor="editShiftTitle" className="block text-sm font-medium text-gray-700 text-right mb-1">
-                عنوان الخفارة
+                عنوان المناوبة
               </label>
               <input
                 type="text"
@@ -1344,8 +1344,8 @@ const ViewShifts: React.FC = () => {
 
       <PageHeader
         icon={<FileText size={36} />}
-        title="كشوفات الخفارات"
-        description="عرض وإدارة جميع الخفارات المسجلة في النظام"
+        title="كشوفات المناوبات"
+        description="عرض وإدارة جميع المناوبات المسجلة في النظام"
       />
 
       {/* Smart Controls Section */}
@@ -1360,7 +1360,7 @@ const ViewShifts: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white">البحث والتنقل</h3>
-                  <p className="text-xs text-blue-100">تنقّل سريع بين الخفارات</p>
+                  <p className="text-xs text-blue-100">تنقّل سريع بين المناوبات</p>
                 </div>
               </div>
             </div>
@@ -1384,7 +1384,7 @@ const ViewShifts: React.FC = () => {
                   )}
                   <input
                     type="text"
-                    placeholder="ابحث بالاسم أو الرتبة أو رقم الملف..."
+                    placeholder="ابحث بالاسم أو المسمى الوظيفي أو رقم الملف..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pr-12 pl-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white shadow-sm"
@@ -1559,8 +1559,8 @@ const ViewShifts: React.FC = () => {
                   <AlertTriangle className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">الخفارات غير المستلمة</h3>
-                  <p className="text-xs text-amber-100">متابعة الخفارات المتأخرة</p>
+                  <h3 className="text-lg font-bold text-white">المناوبات غير المستلمة</h3>
+                  <p className="text-xs text-amber-100">متابعة المناوبات المتأخرة</p>
                 </div>
               </div>
               <span className="hidden md:inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white">
@@ -1570,7 +1570,7 @@ const ViewShifts: React.FC = () => {
                   shiftDate.setHours(0, 0, 0, 0);
                   today.setHours(0, 0, 0, 0);
                   return !s.paperCopyReceived && shiftDate < today;
-                }).length} خفارة متأخرة
+                }).length} مناوبة متأخرة
               </span>
             </div>
           </div>
@@ -1579,7 +1579,7 @@ const ViewShifts: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                 <span className="w-2.5 h-2.5 bg-red-500 rounded-full"></span>
-                خفارات متأخرة في التسليم
+                مناوبات متأخرة في التسليم
               </div>
               <span className="text-xs font-semibold bg-red-100 text-red-700 px-3 py-1 rounded-full">
                 {shifts.filter(s => {
@@ -1588,7 +1588,7 @@ const ViewShifts: React.FC = () => {
                   shiftDate.setHours(0, 0, 0, 0);
                   today.setHours(0, 0, 0, 0);
                   return !s.paperCopyReceived && shiftDate < today;
-                }).length} خفارة
+                }).length} مناوبة
               </span>
             </div>
             
@@ -1628,7 +1628,7 @@ const ViewShifts: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-4 text-slate-500 text-sm">
-                جميع الخفارات مستلمة
+                جميع المناوبات مستلمة
               </div>
             )}
           </div>
@@ -1703,7 +1703,7 @@ const ViewShifts: React.FC = () => {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-blue-900">جدول خفارة {format(selectedDate, 'yyyy/MM/dd', { locale: arSA })}</h3>
+                <h3 className="text-xl font-bold text-blue-900">جدول مناوبة {format(selectedDate, 'yyyy/MM/dd', { locale: arSA })}</h3>
                 <p className="text-blue-700 text-sm">عرض تفاصيل الموظفين والحضور</p>
               </div>
               <div className="flex gap-2">
@@ -1739,7 +1739,7 @@ const ViewShifts: React.FC = () => {
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200/70 bg-white/80 px-4 py-3">
               <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                ملخص جدول الخفارة
+                ملخص جدول المناوبة
               </div>
               <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
                 <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-700">
@@ -1758,7 +1758,7 @@ const ViewShifts: React.FC = () => {
               <thead className="bg-gradient-to-r from-green-50 to-green-100">
                 <tr>
                   <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">م</th>
-                  <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">الرتبة</th>
+                  <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">المسمى الوظيفي</th>
                   <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">الاسم</th>
                   <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">رقم الملف</th>
                   <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">رقم الهاتف</th>
@@ -1769,7 +1769,7 @@ const ViewShifts: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {(() => {
-                  // الحصول على خفارة التاريخ المحدد فقط
+                  // الحصول على مناوبة التاريخ المحدد فقط
                   const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
                   const selectedDayShifts = filteredShifts.find(([day]) => day === selectedDateStr);
 
@@ -1790,7 +1790,7 @@ const ViewShifts: React.FC = () => {
                               type="button"
                               onClick={() => goToEmployeeShiftHistory(assignment.employee)}
                               className="flex items-center font-bold gap-2 text-blue-700 hover:text-blue-800 hover:underline underline-offset-2 transition-colors"
-                              title="عرض سجل خفارات الموظف"
+                              title="عرض سجل مناوبات الموظف"
                             >
                               {highlightSearchTerm(formatShiftEmployeeDisplayName(assignment.employee) || assignment.employee.name, searchTerm)}
                               {assignment.note && (
@@ -1857,7 +1857,7 @@ const ViewShifts: React.FC = () => {
                 })()}
               </div>
               <div className="text-gray-500">
-                تاريخ الخفارة: {format(selectedDate, 'EEEE، dd MMMM yyyy', { locale: arSA })}
+                تاريخ المناوبة: {format(selectedDate, 'EEEE، dd MMMM yyyy', { locale: arSA })}
               </div>
             </div>
           </div>
@@ -1872,7 +1872,7 @@ const ViewShifts: React.FC = () => {
                 <h3 className="text-lg font-bold text-amber-900">
                   يوم استثنائي بتاريخ {format(selectedDate, 'yyyy/MM/dd', { locale: arSA })}
                 </h3>
-                <p className="text-sm text-amber-700">لا يوجد خفارة</p>
+                <p className="text-sm text-amber-700">لا يوجد مناوبة</p>
                 <p className="text-sm text-amber-700">القوة بالكامل متواجدة</p>
               </div>
             </div>
@@ -1903,9 +1903,9 @@ const ViewShifts: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">لا توجد خفارة في هذا التاريخ</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">لا توجد مناوبة في هذا التاريخ</h3>
             <p className="text-gray-600 mb-4">
-              لم يتم العثور على خفارة مسجلة في تاريخ {format(selectedDate, 'yyyy/MM/dd', { locale: arSA })}
+              لم يتم العثور على مناوبة مسجلة في تاريخ {format(selectedDate, 'yyyy/MM/dd', { locale: arSA })}
             </p>
             <button
               onClick={() => {
@@ -1930,12 +1930,12 @@ const ViewShifts: React.FC = () => {
               <FileText className="w-8 h-8 text-gray-400 mb-4" />
           </div>  
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {searchTerm.trim() ? 'لا توجد خفارات تطابق البحث' : 'لا توجد خفارات لهذا الشهر'}
+            {searchTerm.trim() ? 'لا توجد مناوبات تطابق البحث' : 'لا توجد مناوبات لهذا الشهر'}
           </h3>
           <p className="text-gray-500">
             {searchTerm.trim()
-              ? 'لا توجد خفارات مطابقة لكلمة البحث المدخلة.'
-              : `لا توجد خفارات مسجلة خلال شهر ${format(monthCursor, 'MMMM yyyy', { locale: arSA })}.`}
+              ? 'لا توجد مناوبات مطابقة لكلمة البحث المدخلة.'
+              : `لا توجد مناوبات مسجلة خلال شهر ${format(monthCursor, 'MMMM yyyy', { locale: arSA })}.`}
           </p>
         </div>
       ) : (
@@ -1995,7 +1995,7 @@ const ViewShifts: React.FC = () => {
                               }`}>
                                 <Calendar className={`w-4 h-4 ${dateAccent}`} />
                               </span>
-                              <span className="text-slate-500 mt-0.5 mr-2">تاريخ الخفارة</span>
+                              <span className="text-slate-500 mt-0.5 mr-2">تاريخ المناوبة</span>
                             </div>
                             <span className="hidden md:inline-block h-4 w-px bg-slate-200"></span>
                             <div className="flex flex-wrap items-center justify-center gap-2 font-black text-slate-800">
@@ -2094,7 +2094,7 @@ const ViewShifts: React.FC = () => {
                                 openDetailsModal(shift);
                               }}
                               className="p-2.5 rounded-full transition-colors bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200"
-                              title="تعديل تفاصيل الخفارة"
+                              title="تعديل تفاصيل المناوبة"
                             >
                               <Pencil className="w-4 h-4" />
                             </button>
@@ -2112,7 +2112,7 @@ const ViewShifts: React.FC = () => {
                                 onClick={(e) => { e.stopPropagation(); openAddEmployeeModal(shift); }}
                                 disabled={isProcessingAssignment}
                                 className="p-2.5 rounded-full transition-colors bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                title="إضافة موظف للخفارة"
+                                title="إضافة موظف للمناوبة"
                               >
                                 <Plus className="w-4 h-4" />
                               </button>
@@ -2122,7 +2122,7 @@ const ViewShifts: React.FC = () => {
                                   openDeleteModal(shift);
                                 }}
                                 className="p-2.5 rounded-full transition-colors bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
-                                title="حذف الخفارة نهائياً"
+                                title="حذف المناوبة نهائياً"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -2148,7 +2148,7 @@ const ViewShifts: React.FC = () => {
                     {isExceptionalDay ? (
                       <div className="flex flex-col items-center justify-center py-12 text-center text-amber-900">
                         <div className="text-xl font-black">يوم استثنائي</div>
-                        <div className="text-sm font-semibold mt-2">لا يوجد خفارة</div>
+                        <div className="text-sm font-semibold mt-2">لا يوجد مناوبة</div>
                         <div className="text-sm font-semibold">القوة بالكامل متواجدة</div>
                         <div className="text-sm font-semibold mt-1">
                           السبب : {exceptional?.reason || 'غير محدد'}
@@ -2160,7 +2160,7 @@ const ViewShifts: React.FC = () => {
                         <thead className={`bg-gradient-to-t from-${isReceived ? 'green-100' : 'gray-50'} to-${isReceived ? 'green-50' : 'gray-50'}`}>
                           <tr>
                             <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">م</th>
-                            <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">الرتبة</th>
+                            <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">المسمى الوظيفي</th>
                             <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">الاسم</th>
                             <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">رقم الملف</th>
                             <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">رقم الهاتف</th>
@@ -2185,7 +2185,7 @@ const ViewShifts: React.FC = () => {
                                   type="button"
                                   onClick={() => goToEmployeeShiftHistory(assignment.employee)}
                                   className="flex items-center font-bold gap-2 hover:text-blue-700 transition-colors"
-                                  title="عرض سجل خفارات الموظف"
+                                  title="عرض سجل مناوبات الموظف"
                                 >
                                   {highlightSearchTerm(formatShiftEmployeeDisplayName(assignment.employee) || assignment.employee.name, searchTerm)}
                                   {assignment.note && (
@@ -2254,7 +2254,7 @@ const ViewShifts: React.FC = () => {
                                     onClick={() => openRemoveModal(assignment)}
                                     disabled={isProcessingAssignment}
                                     className="p-1.5 text-red-600 hover:text-red-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                    title="إزالة من الخفارة"
+                                    title="إزالة من المناوبة"
                                   >
                                     <X className="w-4 h-4" />
                                   </button>
@@ -2282,7 +2282,7 @@ const ViewShifts: React.FC = () => {
   );
 };
 
-// تصدير الخفارة الحالية إلى Word
+// تصدير المناوبة الحالية إلى Word
 async function handleExportWord(shift: Shift, dayShifts: { shiftDate: string; assignments: ShiftAssignment[] }[], employees: Employee[]) {
   // تجهيز بيانات الجدول
   const rows = dayShifts[0].assignments.map((assignment: ShiftAssignment, idx: number) => {
@@ -2307,12 +2307,12 @@ async function handleExportWord(shift: Shift, dayShifts: { shiftDate: string; as
   // تجهيز الملاحظات (مطابقة للصورة)
   const notes = [
     'ملاحظات:',
-    '1- الخفارة تبدأ من الساعة 7:00 مساءً إلى الساعة 12:00 صباحاً.',
-    '2- على السادة ضباط الخفارات التأكد على المناوبين قبل مواعيد خفاراتهم وتدوين أية ملاحظات بدفتر الأحوال.',
-    '3- على الضباط وضباط الصف والأفراد المناوبين أن يكونوا على علم بأن يوم الخفارة كاملاً تحت مسؤوليتهم وأن يكونوا على أتم الاستعداد عند طلبهم عن طريق الهاتف في أي وقت.',
-    '4- على السادة ضباط الخفارات إبلاغ المدير العام في حال حضور أو مغادرة المدير العام.',
+    '1- المناوبة تبدأ من الساعة 7:00 مساءً إلى الساعة 12:00 صباحاً.',
+    '2- على السادة قيادات المناوبات التأكد على المناوبين قبل مواعيد مناوباتهم وتدوين أية ملاحظات بدفتر الأحوال.',
+    '3- على القيادات والمشرفون المناوبين أن يكونوا على علم بأن يوم المناوبة كاملاً تحت مسؤوليتهم وأن يكونوا على أتم الاستعداد عند طلبهم عن طريق الهاتف في أي وقت.',
+    '4- على السادة قيادات المناوبات إبلاغ المدير العام في حال حضور أو مغادرة المدير العام.',
     '5- عبر جهة الالتزام بما جاء بالقرار الوزاري رقم (2020/696) بشأن حظر التدخين بالجهة.',
-    '6- على ضابط الخفارة التأكد من صيانة ونظافة دورية وسيارة الجهة التابعة لمندوب الخفارة بناءً على التعميم الداخلي رقم (2024/2) وتدوين أي ملاحظات في دفتر الأحوال.',
+    '6- على مشرف المناوبة التأكد من صيانة ونظافة دورية وسيارة الجهة التابعة لمندوب المناوبة بناءً على التعميم الداخلي رقم (2024/2) وتدوين أي ملاحظات في دفتر الأحوال.',
   ];
 
   // توقيع المدير

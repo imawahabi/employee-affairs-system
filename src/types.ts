@@ -7,7 +7,7 @@ export interface Employee {
   thirdName?: string | null;
   fourthName?: string | null;
   familyName?: string | null;
-  category: 'ضباط' | 'ضباط صف' | 'مهنيين' | 'مدنيين';
+  category: 'قيادات' | 'مشرفون' | 'فنيون' | 'إداريون';
   rank: string;
   jobTitle: string | null;
   jobGrade?: string | null;

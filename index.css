@@ -1,11 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+/* Cairo — bundled locally as woff2 so the app renders in Cairo fully offline (no Google Fonts dependency) */
+@font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-ExtraLight.woff2') format('woff2'); font-weight: 200; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Light.woff2') format('woff2'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cairo'; src: url('/fonts/Cairo-Black.woff2') format('woff2'); font-weight: 900; font-style: normal; font-display: swap; }
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Cairo', sans-serif;
+html, body, #root {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
 }
 
 @keyframes red-soft-pulse {

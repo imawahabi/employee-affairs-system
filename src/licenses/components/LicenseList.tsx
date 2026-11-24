@@ -84,7 +84,7 @@ const matchesSearchText = (haystackValues: unknown[], query: string) => {
 
 const getRankBadgeClasses = (employee?: Employee) => {
   const category = employee?.category || '';
-  if (category === 'مدني') return 'bg-amber-50 text-amber-700 border-amber-200';
+  if (category === 'إداري') return 'bg-amber-50 text-amber-700 border-amber-200';
   return 'bg-blue-50 text-blue-700 border-blue-200';
 };
 
@@ -256,7 +256,7 @@ const EditLicenseModal: React.FC<EditLicenseModalProps> = ({
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="ابحث بالاسم، الرتبة، أو رقم الملف..."
+                  placeholder="ابحث بالاسم، المسمى الوظيفي، أو رقم الملف..."
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
@@ -726,7 +726,7 @@ const LicenseList: React.FC = () => {
   const jumpToEmployee = (employee?: Employee) => {
     if (!employee?.id) return;
     const categoryLabel = String(employee.category || '');
-    const showCivilians = categoryLabel.includes('مدني');
+    const showCivilians = categoryLabel.includes('إداري');
     try {
       localStorage.setItem('employeeHighlightId', String(employee.id));
       localStorage.setItem('employeeHighlightAt', String(Date.now()));
@@ -892,7 +892,7 @@ const LicenseList: React.FC = () => {
       if (!query.trim()) {
         return [
           'ابحث بالاسم',
-          'ابحث بالرتبة',
+          'ابحث بالمسمى الوظيفي',
           'ابحث برقم الملف',
           'ابحث بالرقم المدني',
           'ابحث بالقسم',
@@ -1202,14 +1202,14 @@ const LicenseList: React.FC = () => {
     });
 
     const tableHeader = new TableRow({
-      children: ['م', 'الرتبة', 'اسم الموظف', 'رقم الملف/المدني', 'الإدارة', 'نوع الرخصة/الاستئذان', 'تاريخ الرخصة/الاستئذان', 'الساعات', 'السنة'].map(text => createCell(text, true)),
+      children: ['م', 'المسمى الوظيفي', 'اسم الموظف', 'رقم الملف/الإداري', 'الإدارة', 'نوع الرخصة/الاستئذان', 'تاريخ الرخصة/الاستئذان', 'الساعات', 'السنة'].map(text => createCell(text, true)),
       height: { value: 567, rule: HeightRule.EXACT }, // 1cm
     });
 
     const tableRows = sortedAndFilteredLicenses.map((license, index) => new TableRow({
       children: [
         createCell(String(index + 1), false),
-        createCell(license.employee?.category === 'ضابط' || license.employee?.category === 'ضابط صف'
+        createCell(license.employee?.category === 'قيادات' || license.employee?.category === 'مشرفون'
           ? license.employee?.rank || ''
           : license.employee?.category || '', false),
         createCell(license.employee?.full_name || '', false),
@@ -1268,7 +1268,7 @@ const LicenseList: React.FC = () => {
       return;
     }
     let csvContent = "\uFEFF"; // BOM for UTF-8
-    csvContent += "م,الرتبة,اسم الموظف,رقم الملف/المدني,الإدارة,نوع الرخصة/الاستئذان,تاريخ الرخصة/الاستئذان,الساعات,الشهر,السنة\r\n";
+    csvContent += "م,المسمى الوظيفي,اسم الموظف,رقم الملف/الإداري,الإدارة,نوع الرخصة/الاستئذان,تاريخ الرخصة/الاستئذان,الساعات,الشهر,السنة\r\n";
     sortedAndFilteredLicenses.forEach((license, index) => {
       const row = [
         index + 1,
@@ -1353,7 +1353,7 @@ const LicenseList: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-900">البحث السريع</h2>
-                  <p className="text-xs text-gray-600">ابحث بالاسم، الرتبة، رقم الملف، الإدارة أو القسم</p>
+                  <p className="text-xs text-gray-600">ابحث بالاسم، المسمى الوظيفي، رقم الملف، الإدارة أو القسم</p>
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -1388,7 +1388,7 @@ const LicenseList: React.FC = () => {
                   <input
                     ref={searchInputRef}
                     type="text"
-                    placeholder="ابحث بالاسم، الرتبة، رقم الملف، القسم، نوع الرخصة..."
+                    placeholder="ابحث بالاسم، المسمى الوظيفي، رقم الملف، القسم، نوع الرخصة..."
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
                     onFocus={() => setShowSuggestions(true)}
@@ -1648,7 +1648,7 @@ const LicenseList: React.FC = () => {
                     currentPageLicenses.map((license, index) => {
                       const isHighlighted = String(license.id) === highlightLicenseId;
                       const identifier = getEmployeeIdentifierDetails(license.employee);
-                      const rankLabel = license.employee?.category === 'ضابط' || license.employee?.category === 'ضابط صف'
+                      const rankLabel = license.employee?.category === 'قيادات' || license.employee?.category === 'مشرفون'
                         ? license.employee?.rank
                         : license.employee?.category;
                       return (

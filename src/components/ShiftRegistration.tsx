@@ -308,7 +308,7 @@ const ShiftRegistration: React.FC = () => {
 
         setEmployees(
           employeesData.filter(
-            (e: Employee) => e.category !== 'مدنيين' && e.status !== 'inactive'
+            (e: Employee) => e.category !== 'إداريون' && e.status !== 'inactive'
           )
         );
 
@@ -497,7 +497,7 @@ const ShiftRegistration: React.FC = () => {
     return employees
       .filter(e => selectedEmployees.includes(e.id) && e.status !== 'inactive')
       .sort((a, b) => {
-        // First sort by category: الضباط -> ضباط الصف -> المهنيين
+        // First sort by category: القيادات -> المشرفون -> الفنيون
         const categoryOrderA = getCategoryOrder(a.category);
         const categoryOrderB = getCategoryOrder(b.category);
         if (categoryOrderA !== categoryOrderB) {
@@ -529,7 +529,7 @@ const ShiftRegistration: React.FC = () => {
     // Build a set of normalized titles for selected professionals
     const normalizedSelected = new Set(
       selectedEmployeeDetails
-        .filter(e => e.category === 'مهنيين')
+        .filter(e => e.category === 'فنيون')
         .map(e => normalizeProfessionalGroup(e.professionalGroup) || '')
     );
 
@@ -540,9 +540,9 @@ const ShiftRegistration: React.FC = () => {
     }));
 
     const stats = {
-      officers: selectedEmployeeDetails.filter(e => e.category === 'ضباط').length,
-      ncos: selectedEmployeeDetails.filter(e => e.category === 'ضباط صف').length,
-      professionals: selectedEmployeeDetails.filter(e => e.category === 'مهنيين').length,
+      officers: selectedEmployeeDetails.filter(e => e.category === 'قيادات').length,
+      ncos: selectedEmployeeDetails.filter(e => e.category === 'مشرفون').length,
+      professionals: selectedEmployeeDetails.filter(e => e.category === 'فنيون').length,
       total: selectedEmployeeDetails.length,
     };
 
@@ -581,7 +581,7 @@ const ShiftRegistration: React.FC = () => {
       if (!shouldContinue) return;
 
       if (employee.includeInShifts === false) {
-        toast('تنبيه: الموظف لا يدرج بالخفارات وتمت إضافته', { icon: '⚠️', id: `excluded-${employeeId}` });
+        toast('تنبيه: الموظف لا يدرج بالمناوبات وتمت إضافته', { icon: '⚠️', id: `excluded-${employeeId}` });
       }
     }
 
@@ -663,10 +663,10 @@ const ShiftRegistration: React.FC = () => {
       toast('تنبيه: يوجد رقم ملف مكرر في البيانات', { icon: '⚠️' });
     }
     if (excluded.length > 0) {
-      toast('تنبيه: تمت إضافة موظفين غير مدرجين بالخفارات', { icon: '⚠️' });
+      toast('تنبيه: تمت إضافة موظفين غير مدرجين بالمناوبات', { icon: '⚠️' });
     }
     if (skippedRecentShift.length > 0) {
-      toast(`تم تخطي ${skippedRecentShift.length} موظف بسبب وجود خفارة خلال آخر ${RECENT_SHIFT_WINDOW_DAYS} أيام`, { icon: '⚠️' });
+      toast(`تم تخطي ${skippedRecentShift.length} موظف بسبب وجود مناوبة خلال آخر ${RECENT_SHIFT_WINDOW_DAYS} أيام`, { icon: '⚠️' });
     }
     if (idsToAdd.length === 0 && missing.length === 0 && skippedRecentShift.length === 0) {
       toast('كل الأرقام كانت مضافة مسبقًا', { icon: 'ℹ️' });
@@ -680,14 +680,14 @@ const ShiftRegistration: React.FC = () => {
 
   const getCategoryLabel = (category: Employee['category'] | 'all') => {
     switch (category) {
-      case 'ضباط':
-        return 'الضباط';
-      case 'ضباط صف':
-        return 'ضباط الصف';
-      case 'مهنيين':
-        return 'المهنيين';
-      case 'مدنيين':
-        return 'المدنيين';
+      case 'قيادات':
+        return 'القيادات';
+      case 'مشرفون':
+        return 'المشرفون';
+      case 'فنيون':
+        return 'الفنيون';
+      case 'إداريون':
+        return 'الإداريون';
       case 'all':
       default:
         return 'الكل';
@@ -696,19 +696,19 @@ const ShiftRegistration: React.FC = () => {
 
   const getCategoryColor = (category: Employee['category']) => {
     const colors = {
-      ضباط: { bg: 'bg-blue-100', text: 'text-blue-800' },
-      'ضباط صف': { bg: 'bg-green-100', text: 'text-green-800' },
-      مهنيين: { bg: 'bg-yellow-100', text: 'text-yellow-800' },
-      مدنيين: { bg: 'bg-orange-100', text: 'text-orange-800' },
+      قيادات: { bg: 'bg-blue-100', text: 'text-blue-800' },
+      'مشرفون': { bg: 'bg-green-100', text: 'text-green-800' },
+      فنيون: { bg: 'bg-yellow-100', text: 'text-yellow-800' },
+      إداريون: { bg: 'bg-orange-100', text: 'text-orange-800' },
     };
     return colors[category] || { bg: 'bg-gray-100', text: 'text-gray-800' };
   };
 
   // Step management functions
   const steps = [
-    { id: 'date', title: 'اختيار التاريخ', icon: Calendar, description: 'حدد تاريخ الخفارة' },
+    { id: 'date', title: 'اختيار التاريخ', icon: Calendar, description: 'حدد تاريخ المناوبة' },
     { id: 'selection', title: 'اختيار الموظفين', icon: Users, description: 'ابحث واختر الموظفين' },
-    { id: 'review', title: 'المراجعة والحفظ', icon: Save, description: 'تأكيد وحفظ الخفارة' }
+    { id: 'review', title: 'المراجعة والحفظ', icon: Save, description: 'تأكيد وحفظ المناوبة' }
   ];
 
   const getCurrentStepIndex = () => steps.findIndex(step => step.id === currentStep);
@@ -778,7 +778,7 @@ const ShiftRegistration: React.FC = () => {
         console.error('Failed to refresh shift history cache:', refreshError);
       }
 
-      toast.success('تم حفظ الخفارة بنجاح');
+      toast.success('تم حفظ المناوبة بنجاح');
       
       // Reset form
       hasManualDateChangeRef.current = false;
@@ -793,7 +793,7 @@ const ShiftRegistration: React.FC = () => {
       setCurrentStep('date');
     } catch (error) {
       console.error('Error saving shift:', error);
-      const message = error instanceof Error ? error.message : 'حدث خطأ أثناء حفظ الخفارة';
+      const message = error instanceof Error ? error.message : 'حدث خطأ أثناء حفظ المناوبة';
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -884,8 +884,8 @@ const ShiftRegistration: React.FC = () => {
               <div className="bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-200 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-lg">
                 <Calendar className="h-8 w-8 text-blue-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-3">اختر تاريخ الخفارة</h2>
-              <p className="text-gray-600 mb-8 text-lg">حدد التاريخ المطلوب لتسجيل الخفارة</p>
+              <h2 className="text-2xl font-bold text-gray-800 mb-3">اختر تاريخ المناوبة</h2>
+              <p className="text-gray-600 mb-8 text-lg">حدد التاريخ المطلوب لتسجيل المناوبة</p>
               
               <div className="max-w-lg mx-auto">
                 <div className="relative" ref={calendarRef}>
@@ -1013,7 +1013,7 @@ const ShiftRegistration: React.FC = () => {
 
                     {hasExceptionalDay ? (
                       <div className="mt-3 space-y-2">
-                        <div className="text-xs text-amber-800">لا يوجد خفارة</div>
+                        <div className="text-xs text-amber-800">لا يوجد مناوبة</div>
                         <div className="text-xs text-amber-800">القوة بالكامل متواجدة</div>
                         <div className="text-xs text-amber-800">
                           السبب : <span className="font-bold">{selectedExceptionalDay?.reason || 'غير محدد'}</span>
@@ -1098,7 +1098,7 @@ const ShiftRegistration: React.FC = () => {
                         <div className="space-y-4">
                           <div>
                             <label htmlFor="shiftTitle" className="block text-sm font-medium text-gray-600 text-right mb-2">
-                              عنوان الخفارة
+                              عنوان المناوبة
                             </label>
                             <input
                               type="text"
@@ -1106,7 +1106,7 @@ const ShiftRegistration: React.FC = () => {
                               value={shiftTitle}
                               onChange={(e) => setShiftTitle(e.target.value)}
                               className="w-full pr-4 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 transition-all bg-white/80 text-gray-800 placeholder-gray-400"
-                              placeholder="مثال: خفارة عيد الأضحى المبارك"
+                              placeholder="مثال: مناوبة عيد الأضحى المبارك"
                             />
                           </div>
                           <div>
@@ -1119,7 +1119,7 @@ const ShiftRegistration: React.FC = () => {
                               onChange={(e) => setShiftNotes(e.target.value)}
                               rows={3}
                               className="w-full pr-4 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 transition-all bg-white/80 text-gray-800 placeholder-gray-400 resize-none"
-                              placeholder="أضف أي تفاصيل أو تعليمات خاصة بهذه الخفارة..."
+                              placeholder="أضف أي تفاصيل أو تعليمات خاصة بهذه المناوبة..."
                             />
                           </div>
                         </div>
@@ -1139,7 +1139,7 @@ const ShiftRegistration: React.FC = () => {
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                   <h2 className="text-xl font-black text-slate-900">اختيار الموظفين</h2>
-                  <p className="text-sm text-slate-500">اختر الموظفين المطلوبين للخفارة الحالية</p>
+                  <p className="text-sm text-slate-500">اختر الموظفين المطلوبين للمناوبة الحالية</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
@@ -1183,7 +1183,7 @@ const ShiftRegistration: React.FC = () => {
                   </div>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex flex-wrap gap-2">
-                      {(['all', 'ضباط', 'ضباط صف', 'مهنيين'] as const).map(cat => (
+                      {(['all', 'قيادات', 'مشرفون', 'فنيون'] as const).map(cat => (
                         <button
                           key={cat}
                           onClick={() => setActiveFilter(cat)}
@@ -1291,7 +1291,7 @@ const ShiftRegistration: React.FC = () => {
                           <div>مكررة في البيانات: {formatTokenList(bulkAddSummary.duplicateMatches)}</div>
                         )}
                         {bulkAddSummary.excludedCount > 0 && (
-                          <div>غير مدرجين بالخفارات: {bulkAddSummary.excludedCount}</div>
+                          <div>غير مدرجين بالمناوبات: {bulkAddSummary.excludedCount}</div>
                         )}
                         {bulkAddSummary.skippedRecentShiftCount > 0 && (
                           <div>تم التخطي بسبب تكرار خلال آخر 10 أيام: {bulkAddSummary.skippedRecentShiftCount}</div>
@@ -1339,7 +1339,7 @@ const ShiftRegistration: React.FC = () => {
                                   <span className="text-xs text-slate-500">({getCategoryLabel(employee.category)})</span>
                                   {isExcludedFromShifts && (
                                     <span className="px-2 py-0.5 text-xs rounded border border-red-200 bg-red-50 text-red-700">
-                                      لا يدرج بالخفارات
+                                      لا يدرج بالمناوبات
                                     </span>
                                   )}
                                 </div>
@@ -1401,7 +1401,7 @@ const ShiftRegistration: React.FC = () => {
                       <thead className="sticky top-0 z-10 bg-slate-50">
                         <tr className="text-xs font-semibold text-slate-500">
                           <th className="px-4 py-3">م</th>
-                          <th className="px-4 py-3">الرتبة</th>
+                          <th className="px-4 py-3">المسمى الوظيفي</th>
                           <th className="px-4 py-3">الموظف</th>
                           <th className="px-4 py-3">رقم الملف</th>
                           <th className="px-4 py-3">الهاتف</th>
@@ -1420,7 +1420,7 @@ const ShiftRegistration: React.FC = () => {
                                 <span className="font-semibold text-slate-900">{formatShiftEmployeeDisplayName(emp) || emp.name || '-'}</span>
                                 {emp.includeInShifts === false && (
                                   <span className="text-[11px] font-semibold text-red-700 bg-red-50 border border-red-200 rounded-full px-2 py-0.5">
-                                    لا يدرج بالخفارات
+                                    لا يدرج بالمناوبات
                                   </span>
                                 )}
                               </div>
@@ -1473,7 +1473,7 @@ const ShiftRegistration: React.FC = () => {
                     <FileText className="h-6 w-6" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-slate-900">مراجعة نهائية وحفظ الخفارة</h2>
+                    <h2 className="text-xl font-bold text-slate-900">مراجعة نهائية وحفظ المناوبة</h2>
                     <p className="text-sm text-slate-500">تأكد من صحة البيانات قبل الحفظ</p>
                   </div>
                 </div>
@@ -1493,7 +1493,7 @@ const ShiftRegistration: React.FC = () => {
                 <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
                   <div className="flex items-center gap-2 text-blue-700 text-sm font-semibold">
                     <Calendar className="h-4 w-4" />
-                    تاريخ الخفارة
+                    تاريخ المناوبة
                   </div>
                   <p className="mt-2 text-base font-bold text-blue-700">
                     {format(selectedDate, 'EEEE، dd MMMM yyyy', { locale: arSA })}
@@ -1507,21 +1507,21 @@ const ShiftRegistration: React.FC = () => {
                   <p className="mt-2 text-2xl font-bold text-emerald-700">{selectedEmployees.length}</p>
                 </div>
                 <div className={`rounded-xl border p-4 ${officersReady ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
-                  <div className="text-sm font-semibold text-slate-700">الضباط</div>
+                  <div className="text-sm font-semibold text-slate-700">القيادات</div>
                   <div className={`mt-2 text-lg font-bold ${officersReady ? 'text-emerald-700' : 'text-amber-700'}`}>
                     {validation.stats.officers.count} / {validation.stats.officers.required}
                   </div>
                   <div className="text-xs text-slate-500">الحد الأدنى المطلوب</div>
                 </div>
                 <div className={`rounded-xl border p-4 ${ncosReady ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
-                  <div className="text-sm font-semibold text-slate-700">ضباط الصف</div>
+                  <div className="text-sm font-semibold text-slate-700">المشرفون</div>
                   <div className={`mt-2 text-lg font-bold ${ncosReady ? 'text-emerald-700' : 'text-amber-700'}`}>
                     {validation.stats.ncos.count} / {validation.stats.ncos.required}
                   </div>
                   <div className="text-xs text-slate-500">الحد الأدنى المطلوب</div>
                 </div>
                 <div className={`rounded-xl border p-4 ${professionalsReady ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
-                  <div className="text-sm font-semibold text-slate-700">المهنيين</div>
+                  <div className="text-sm font-semibold text-slate-700">الفنيون</div>
                   <div className={`mt-2 text-lg font-bold ${professionalsReady ? 'text-emerald-700' : 'text-amber-700'}`}>
                     {validation.stats.professionals.count} / {validation.stats.professionals.required}
                   </div>
@@ -1533,7 +1533,7 @@ const ShiftRegistration: React.FC = () => {
                 <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-4 flex items-start gap-3">
                   <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5" />
                   <div>
-                    <p className="text-amber-800 font-semibold">تنبيه: يوجد موظفون غير مدرجين في الخفارات ضمن القائمة.</p>
+                    <p className="text-amber-800 font-semibold">تنبيه: يوجد موظفون غير مدرجين في المناوبات ضمن القائمة.</p>
                     <p className="text-amber-700 text-sm mt-1">
                       {selectedEmployeeDetails.filter(e => e.includeInShifts === false).map(e => formatShiftEmployeeDisplayName(e) || e.name).join('، ')}
                     </p>
@@ -1542,7 +1542,7 @@ const ShiftRegistration: React.FC = () => {
               )}
 
               <div className="space-y-4">
-                {['ضباط', 'ضباط صف', 'مهنيين'].map(category => {
+                {['قيادات', 'مشرفون', 'فنيون'].map(category => {
                   const catEmployees = selectedEmployeeDetails.filter(e => e.category === category);
                   if (catEmployees.length === 0) return null;
                   return (
@@ -1561,7 +1561,7 @@ const ShiftRegistration: React.FC = () => {
                             <UserCheck className="h-4 w-4 text-emerald-500" />
                             <span className="font-semibold text-slate-800">{emp.rank}</span>
                             <span className="text-slate-900">{formatShiftEmployeeDisplayName(emp) || emp.name}</span>
-                            {category === 'مهنيين' && emp.jobTitle && (
+                            {category === 'فنيون' && emp.jobTitle && (
                               <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
                                 {emp.jobTitle}
                               </span>
@@ -1595,25 +1595,25 @@ const ShiftRegistration: React.FC = () => {
                         <div className={`flex items-center justify-between p-2 rounded text-sm ${
                           officersReady ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
                         }`}>
-                          <span>الضباط</span>
+                          <span>القيادات</span>
                           <span>{validation.stats.officers.count} / {validation.stats.officers.required}</span>
                         </div>
                         <div className={`flex items-center justify-between p-2 rounded text-sm ${
                           ncosReady ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
                         }`}>
-                          <span>ضباط الصف</span>
+                          <span>المشرفون</span>
                           <span>{validation.stats.ncos.count} / {validation.stats.ncos.required}</span>
                         </div>
                         <div className={`flex items-center justify-between p-2 rounded text-sm ${
                           professionalsReady ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
                         }`}>
-                          <span>المهنيين</span>
+                          <span>الفنيون</span>
                           <span>{validation.stats.professionals.count} / {validation.stats.professionals.required}</span>
                         </div>
                       </div>
                     </div>
                     <div>
-                      <h4 className="font-medium text-slate-700 mb-2">الوظائف المهنية</h4>
+                      <h4 className="font-medium text-slate-700 mb-2">الوظائف الفنية</h4>
                       <div className="space-y-1">
                         {validation.stats.professionals.jobGroupsStatus.map(group => (
                           <div key={group.name} className={`flex items-center justify-between p-2 rounded text-sm ${
@@ -1651,7 +1651,7 @@ const ShiftRegistration: React.FC = () => {
                 <Calendar className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-black text-slate-900">تسجيل خفارة جديدة</h1>
+                <h1 className="text-3xl font-black text-slate-900">تسجيل مناوبة جديدة</h1>
                 <p className="text-slate-600 mt-1">تنظيم التاريخ، اختيار الموظفين، ثم المراجعة والحفظ</p>
               </div>
             </div>
@@ -1661,7 +1661,7 @@ const ShiftRegistration: React.FC = () => {
               </div>
               {currentStep !== 'date' && (
                 <div className="rounded-full border border-blue-200 bg-blue-50 px-7 py-2 text-sm font-semibold text-gray-500">
-                  تاريخ الخفارة: <p className="font-black inline text-blue-700">{format(selectedDate, 'EEEE، dd MMMM yyyy', { locale: arSA })}</p>
+                  تاريخ المناوبة: <p className="font-black inline text-blue-700">{format(selectedDate, 'EEEE، dd MMMM yyyy', { locale: arSA })}</p>
                 </div>
               )}
             </div>
@@ -1743,7 +1743,7 @@ const ShiftRegistration: React.FC = () => {
               }`}
             >
               <Save className="h-4 w-4" />
-              {isSubmitting ? 'جاري الحفظ...' : 'تأكيد وحفظ الخفارة'}
+              {isSubmitting ? 'جاري الحفظ...' : 'تأكيد وحفظ المناوبة'}
             </button>
           ) : (
             <button
@@ -1778,8 +1778,8 @@ const ShiftRegistration: React.FC = () => {
                   <AlertTriangle className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-extrabold text-slate-900">تنبيه تكرار خفارة</h3>
-                  <p className="text-sm text-slate-600">الموظف لديه خفارة قريبة خلال آخر 10 أيام</p>
+                  <h3 className="text-lg font-extrabold text-slate-900">تنبيه تكرار مناوبة</h3>
+                  <p className="text-sm text-slate-600">الموظف لديه مناوبة قريبة خلال آخر 10 أيام</p>
                 </div>
               </div>
             </div>
@@ -1791,11 +1791,11 @@ const ShiftRegistration: React.FC = () => {
                   <span className="font-bold text-slate-900">{recentShiftWarning.employeeName}</span>
                 </div>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-slate-500">تاريخ آخر خفارة</span>
+                  <span className="text-slate-500">تاريخ آخر مناوبة</span>
                   <span className="font-semibold text-slate-800">{formatShortDate(recentShiftWarning.previousShiftDate)}</span>
                 </div>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-slate-500">تاريخ الخفارة الجديدة</span>
+                  <span className="text-slate-500">تاريخ المناوبة الجديدة</span>
                   <span className="font-semibold text-slate-800">{formatShortDate(recentShiftWarning.newShiftDate)}</span>
                 </div>
                 <div className="flex items-center justify-between gap-3">
@@ -1805,7 +1805,7 @@ const ShiftRegistration: React.FC = () => {
               </div>
 
               <div className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 font-bold">
-                هل تريد الاستمرار في إضافة الموظف رغم وجود خفارة حديثة له؟
+                هل تريد الاستمرار في إضافة الموظف رغم وجود مناوبة حديثة له؟
               </div>
             </div>
 

@@ -7,7 +7,7 @@ interface NewShiftLoadingPageProps {
 }
 
 const NewShiftLoadingPage: React.FC<NewShiftLoadingPageProps> = ({ 
-  title = "جاري تحضير نظام تسجيل الخفارة",
+  title = "جاري تحضير نظام تسجيل المناوبة",
   subtitle = "يرجى الانتظار بينما نحضر بيانات الموظفين وإعدادات النظام..."
 }) => {
   return (

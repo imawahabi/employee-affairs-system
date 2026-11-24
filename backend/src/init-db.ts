@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Departments (
     name TEXT NOT NULL UNIQUE
 );
 
--- جدول الرتب (Ranks)
+-- جدول المسميات الوظيفية (Ranks)
 CREATE TABLE IF NOT EXISTS Ranks (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL UNIQUE,
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS ShiftAssignments (
     FOREIGN KEY (employeeId) REFERENCES Employees(id)
 );
 
--- جدول أيام الاستثناء للخفارات (ShiftDayExceptions)
+-- جدول أيام الاستثناء للمناوبات (ShiftDayExceptions)
 CREATE TABLE IF NOT EXISTS ShiftDayExceptions (
     id TEXT PRIMARY KEY,
     date TEXT NOT NULL UNIQUE,
@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS Alerts (
     FOREIGN KEY (employeeId) REFERENCES Employees(id)
 );
 
--- جدول تمديدات المهنيين
+-- جدول تمديدات الفنيون
 CREATE TABLE IF NOT EXISTS ProfessionalExtensions (
     id TEXT PRIMARY KEY,
     employeeId TEXT NOT NULL,
@@ -295,27 +295,27 @@ INSERT OR IGNORE INTO Departments (id, name) VALUES
 ('6', 'م.م.ع. شئون الفنية'),
 ('7', 'م.م.ع. شئون المكتب');
 
--- بيانات الرتب (Ranks)
+-- بيانات المسميات الوظيفية (Ranks)
 INSERT OR IGNORE INTO Ranks (id, name, category, "order") VALUES
-('1', 'مقدم', 'ضباط', 1),
-('2', 'مقدم حقوقي', 'ضباط', 2),
-('3', 'رائد', 'ضباط', 3),
-('4', 'رائد حقوقي', 'ضباط', 4),
-('5', 'نقيب', 'ضباط', 5),
-('6', 'نقيب حقوقي', 'ضباط', 6),
-('7', 'ملازم أول', 'ضباط', 7),
-('8', 'ملازم أول حقوقي', 'ضباط', 8),
-('9', 'ملازم', 'ضباط', 9),
-('10', 'ملازم حقوقي', 'ضباط', 10),
-('11', 'و.أ.ضابط', 'ضباط صف', 1),
-('12', 'و.ضابط', 'ضباط صف', 2),
-('13', 'رقيب أول', 'ضباط صف', 3),
-('14', 'رقيب', 'ضباط صف', 4),
-('15', 'عريف', 'ضباط صف', 5),
-('16', 'وكيل عريف', 'ضباط صف', 6),
-('17', 'شرطي', 'ضباط صف', 7),
-('18', 'مهني', 'مهنيين', 1),
-('19', 'مدني', 'مدنيين', 1);
+('1', 'رئيس قسم', 'قيادات', 1),
+('2', 'رئيس قسم', 'قيادات', 2),
+('3', 'مشرف أول', 'قيادات', 3),
+('4', 'مشرف أول', 'قيادات', 4),
+('5', 'مشرف', 'قيادات', 5),
+('6', 'مشرف', 'قيادات', 6),
+('7', 'موظف أول', 'قيادات', 7),
+('8', 'موظف أول', 'قيادات', 8),
+('9', 'موظف أول', 'قيادات', 9),
+('10', 'موظف أول', 'قيادات', 10),
+('11', 'موظف أول', 'مشرفون', 1),
+('12', 'موظف', 'مشرفون', 2),
+('13', 'مشرف', 'مشرفون', 3),
+('14', 'مشرف مساعد', 'مشرفون', 4),
+('15', 'موظف أول', 'مشرفون', 5),
+('16', 'موظف', 'مشرفون', 6),
+('17', 'موظف خدمات', 'مشرفون', 7),
+('18', 'فني', 'فنيون', 1),
+('19', 'إداري', 'إداريون', 1);
 
 -- بيانات الإعدادات الافتراضية (Settings)
 INSERT OR IGNORE INTO Settings (id, key, value, description) VALUES
@@ -324,20 +324,20 @@ INSERT OR IGNORE INTO Settings (id, key, value, description) VALUES
 ('setting_company_phone', 'company_phone', '+966-11-1234567', 'هاتف المؤسسة'),
 ('setting_company_email', 'company_email', 'admin@ministry.gov.sa', 'البريد الإلكتروني للمؤسسة'),
 ('setting_company_address', 'company_address', 'الرياض، المملكة العربية السعودية', 'عنوان المؤسسة'),
-('setting_alert_overdue_days', 'alert_overdue_days', '3', 'عدد الأيام قبل إرسال تنبيه عدم استلام الخفارة'),
-('setting_alert_upcoming_days', 'alert_upcoming_days', '3', 'عدد الأيام للتنبيه عند عدم وجود خفارات مجدولة'),
+('setting_alert_overdue_days', 'alert_overdue_days', '3', 'عدد الأيام قبل إرسال تنبيه عدم استلام المناوبة'),
+('setting_alert_upcoming_days', 'alert_upcoming_days', '3', 'عدد الأيام للتنبيه عند عدم وجود مناوبات مجدولة'),
 ('setting_email_notifications', 'email_notifications', 'true', 'تفعيل إشعارات البريد الإلكتروني'),
-('setting_hide_shifts', 'hide_shifts', 'false', 'إخفاء نظام الخفارات في الواجهة'),
+('setting_hide_shifts', 'hide_shifts', 'false', 'إخفاء نظام المناوبات في الواجهة'),
 ('setting_hide_licenses', 'hide_licenses', 'false', 'إخفاء نظام الرخص في الواجهة'),
 ('setting_auto_backup', 'auto_backup', 'false', 'تفعيل النسخ الاحتياطي التلقائي'),
 ('setting_backup_frequency', 'backup_frequency', 'daily', 'تكرار النسخ الاحتياطي (daily, weekly, monthly)'),
-('setting_notification_check_days', 'notification_check_days', '3', 'عدد الأيام للتحقق من الخفارات القادمة'),
+('setting_notification_check_days', 'notification_check_days', '3', 'عدد الأيام للتحقق من المناوبات القادمة'),
 ('setting_weekend_days', 'weekend_days', '5,6', 'أيام العطل الأسبوعية (0=الأحد, 1=الاثنين, ... 6=السبت)'),
-('setting_exclude_weekend_shifts', 'exclude_weekend_shifts', 'true', 'استثناء الجمعة والسبت من الخفارات'),
+('setting_exclude_weekend_shifts', 'exclude_weekend_shifts', 'true', 'استثناء الجمعة والسبت من المناوبات'),
 ('setting_notification_enabled', 'notification_enabled', 'true', 'تفعيل نظام التنبيهات'),
 ('setting_notification_frequency', 'notification_frequency', 'daily', 'تكرار فحص التنبيهات (hourly, daily)'),
-('setting_extension_reminder_days', 'extension_reminder_days', '30', 'أيام التنبيه لتمديد المهنيين قبل الانتهاء (مثال: 90,60,30)'),
-('setting_extension_critical_days', 'extension_critical_days', '30', 'عدد الأيام للتنبيه الخطير لتمديد المهنيين');
+('setting_extension_reminder_days', 'extension_reminder_days', '30', 'أيام التنبيه لتمديد الفنيون قبل الانتهاء (مثال: 90,60,30)'),
+('setting_extension_critical_days', 'extension_critical_days', '30', 'عدد الأيام للتنبيه الخطير لتمديد الفنيون');
 
 -- إعدادات الإشعارات الافتراضية للمستخدم الافتراضي
 INSERT OR IGNORE INTO NotificationSettings (id, userId) VALUES
@@ -351,9 +351,9 @@ INSERT OR IGNORE INTO Nationalities (id, name) VALUES
 
 -- بيانات المسميات الوظيفية / المناصب
 INSERT OR IGNORE INTO JobTitles (id, name, category) VALUES
-('job_officer_cmd', 'قائد وحدة', 'ضباط'),
-('job_pro_worker', 'عامل', 'مهنيين'),
-('job_civil', 'موظف مدني', 'مدنيين');
+('job_officer_cmd', 'قائد وحدة', 'قيادات'),
+('job_pro_worker', 'عامل', 'فنيون'),
+('job_civil', 'موظف إداري', 'إداريون');
 
 -- بيانات الأقسام الفرعية
 INSERT OR IGNORE INTO Sections (id, name, departmentId) VALUES

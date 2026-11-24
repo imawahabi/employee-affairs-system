@@ -1098,7 +1098,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
         };
         await updateRank(rankData.id, payload);
         setRanks(prev => prev.map(rank => rank.id === rankData.id ? { ...rank, ...payload } : rank));
-        toast.success('تم تحديث الرتبة بنجاح');
+        toast.success('تم تحديث المسمى الوظيفي بنجاح');
       } else {
         const payload = {
           name: rankData.name,
@@ -1107,11 +1107,11 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
         };
         const created = await createRank(payload);
         setRanks(prev => [...prev, created]);
-        toast.success('تم إضافة الرتبة بنجاح');
+        toast.success('تم إضافة المسمى الوظيفي بنجاح');
       }
     } catch (error) {
       console.error('Error saving rank:', error);
-      toast.error('فشل في حفظ الرتبة');
+      toast.error('فشل في حفظ المسمى الوظيفي');
       throw error;
     }
   };
@@ -1220,7 +1220,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
       } else if (deleteTarget.type === 'rank') {
         await deleteRank(deleteTarget.id);
         setRanks((prev) => prev.filter((rank) => rank.id !== deleteTarget.id));
-        toast.success('تم حذف الرتبة بنجاح');
+        toast.success('تم حذف المسمى الوظيفي بنجاح');
       } else if (deleteTarget.type === 'nationality') {
         await deleteNationality(deleteTarget.id);
         setNationalities((prev) => prev.filter((n) => n.id !== deleteTarget.id));
@@ -1255,7 +1255,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
       icon: Building
     },
     ranks: {
-      title: 'الرتب',
+      title: 'المسميات الوظيفية',
       description: 'إدارة رتب الفئات المختلفة',
       icon: Award
     },
@@ -1403,8 +1403,8 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <ModuleToggleCard
-                              label="إخفاء نظام الخفارات"
-                              description="إخفاء جميع صفحات الخفارات والتنبيهات المرتبطة بها."
+                              label="إخفاء نظام المناوبات"
+                              description="إخفاء جميع صفحات المناوبات والتنبيهات المرتبطة بها."
                               checked={settings.hideShifts}
                               onChange={(checked) => handleSettingChange('hideShifts', checked)}
                               icon={Clock}
@@ -1424,8 +1424,8 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                               icon={HardDrive}
                             />
                             <ModuleToggleCard
-                              label="إخفاء تمديدات المهنيين"
-                              description="إخفاء صفحة تمديدات المهنيين من القائمة."
+                              label="إخفاء تمديدات الفنيين"
+                              description="إخفاء صفحة تمديدات الفنيين من القائمة."
                               checked={settings.hideProfessionalExtensions}
                               onChange={(checked) => handleSettingChange('hideProfessionalExtensions', checked)}
                               icon={ClipboardList}
@@ -1479,14 +1479,14 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                                 <Clock className="w-5 h-5 text-white" />
                               </div>
                               <div>
-                                <h4 className="font-bold text-emerald-900">عطلة نهاية الأسبوع للخفارات</h4>
+                                <h4 className="font-bold text-emerald-900">عطلة نهاية الأسبوع للمناوبات</h4>
                               </div>
                             </div>
                             <ToggleSwitch
                               checked={settings.excludeWeekendShifts}
                               onChange={(checked) => handleSettingChange('excludeWeekendShifts', checked)}
-                              label="اعتبار الجمعة والسبت عطلة (منع تسجيل الخفارات)"
-                              description="مفعّل: يمنع تسجيل خفارات الجمعة والسبت. غير مفعّل: يسمح بتسجيل الخفارات في جميع الأيام بما فيها الجمعة والسبت."
+                              label="اعتبار الجمعة والسبت عطلة (منع تسجيل المناوبات)"
+                              description="مفعّل: يمنع تسجيل مناوبات الجمعة والسبت. غير مفعّل: يسمح بتسجيل المناوبات في جميع الأيام بما فيها الجمعة والسبت."
                             />
                           </div>
                         )}
@@ -1510,13 +1510,13 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                             <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                               <AlertTriangle className="w-5 h-5 text-white" />
                             </div>
-                            <h4 className="font-semibold text-blue-900">تنبيهات الخفارات (المناوبات)</h4>
+                            <h4 className="font-semibold text-blue-900">تنبيهات المناوبات (المناوبات)</h4>
                           </div>
 
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div className="space-y-2">
                               <label className="block text-sm font-semibold text-gray-700">
-                                تنبيه تأخر استلام الخفارة (بالأيام)
+                                تنبيه تأخر استلام المناوبة (بالأيام)
                               </label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -1531,12 +1531,12 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                                   className="w-full px-4 py-3 pr-12 border-2 border-blue-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-white"
                                 />
                               </div>
-                              <p className="text-xs text-blue-700">عدد الأيام بعد تاريخ الخفارة لإرسال تنبيه عدم الاستلام</p>
+                              <p className="text-xs text-blue-700">عدد الأيام بعد تاريخ المناوبة لإرسال تنبيه عدم الاستلام</p>
                             </div>
 
                             <div className="space-y-2">
                               <label className="block text-sm font-semibold text-gray-700">
-                                تنبيه عدم وجود خفارة قادمة (بالأيام)
+                                تنبيه عدم وجود مناوبة قادمة (بالأيام)
                               </label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -1551,7 +1551,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                                   className="w-full px-4 py-3 pr-12 border-2 border-blue-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-white"
                                 />
                               </div>
-                              <p className="text-xs text-blue-700">إذا لم توجد خفارة مجدولة خلال هذا العدد يتم إرسال تنبيه</p>
+                              <p className="text-xs text-blue-700">إذا لم توجد مناوبة مجدولة خلال هذا العدد يتم إرسال تنبيه</p>
                             </div>
                           </div>
                         </div>
@@ -1562,7 +1562,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                             <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
                               <ClipboardList className="w-5 h-5 text-white" />
                             </div>
-                            <h4 className="font-semibold text-amber-900">تنبيهات تمديد المهنيين</h4>
+                            <h4 className="font-semibold text-amber-900">تنبيهات تمديد الفنيون</h4>
                           </div>
 
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -2133,16 +2133,16 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                 {showRanksSection && (
                   <div className="space-y-8">
                     <FormSection
-                      title="إدارة الرتب"
+                      title="إدارة المسميات الوظيفية"
                       icon={Award}
-                      badge={`${ranks.length} رتبة`}
+                      badge={`${ranks.length} مسمى وظيفي`}
                       actions={
                         <button
                           onClick={() => openRankModal()}
                           className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-200 shadow-lg hover:shadow-xl"
                         >
                           <Plus className="w-4 h-4" />
-                          إضافة رتبة جديدة
+                          إضافة مسمى وظيفي جديدة
                         </button>
                       }
                     >
@@ -2150,10 +2150,10 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                         {ranks.length > 0 ? (
                           <div className="grid gap-6">
                             {[
-                              { label: 'ضباط', color: 'from-blue-500 to-blue-600', text: 'الرتب المعتمدة' },
-                              { label: 'ضباط صف', color: 'from-blue-500 to-blue-600', text: 'الرتب المعتمدة' },
-                              { label: 'مهنيين', color: 'from-blue-500 to-blue-600', text: 'الرتب المعتمدة' },
-                              { label: 'مدنيين', color: 'from-blue-500 to-blue-600', text: 'الرتب المعتمدة' }
+                              { label: 'قيادات', color: 'from-blue-500 to-blue-600', text: 'المسميات الوظيفية المعتمدة' },
+                              { label: 'مشرفون', color: 'from-blue-500 to-blue-600', text: 'المسميات الوظيفية المعتمدة' },
+                              { label: 'فنيون', color: 'from-blue-500 to-blue-600', text: 'المسميات الوظيفية المعتمدة' },
+                              { label: 'إداريون', color: 'from-blue-500 to-blue-600', text: 'المسميات الوظيفية المعتمدة' }
                             ].map((cat) => {
                               const items = ranks
                                 .filter((rank) => rank.category === cat.label)
@@ -2171,7 +2171,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                                         <h3 className="text-xl font-black">{cat.label}</h3>
                                       </div>
                                       <span className="px-3 py-1 text-xs font-semibold bg-white/20 rounded-full">
-                                        {items.length} رتبة
+                                        {items.length} مسمى وظيفي
                                       </span>
                                     </div>
                                   </div>
@@ -2221,13 +2221,13 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                               <Award className="w-10 h-10 text-gray-400" />
                             </div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">لا توجد رتب</h3>
-                            <p className="text-gray-600 mb-6">ابدأ بإضافة الرتب والمناصب المختلفة</p>
+                            <p className="text-gray-600 mb-6">ابدأ بإضافة المسميات الوظيفية والمناصب المختلفة</p>
                             <button
                               onClick={() => openRankModal()}
                               className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20"
                             >
                               <Plus className="w-5 h-5" />
-                              إضافة أول رتبة
+                              إضافة أول مسمى وظيفي
                             </button>
                           </div>
                         )}
@@ -2348,16 +2348,16 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
                       }
                     >
                       <div className="space-y-6">
-                        {['ضباط', 'ضباط صف', 'مهنيين', 'مدنيين'].map((cat) => {
+                        {['قيادات', 'مشرفون', 'فنيون', 'إداريون'].map((cat) => {
                           const list = jobTitles.filter((jt) => jt.category === cat);
                           const titleText = cat;
-                          const descriptionText = cat === 'ضباط'
-                            ? 'الضباط - مناصب'
-                            : cat === 'ضباط صف'
-                              ? 'ضباط الصف - مسميات وظيفية'
-                              : cat === 'مهنيين'
-                                ? 'المهنيين - مسميات وظيفية'
-                                : 'المدنيين - مسميات وظيفية ومناصب';
+                          const descriptionText = cat === 'قيادات'
+                            ? 'القيادات - مناصب'
+                            : cat === 'مشرفون'
+                              ? 'المشرفون - مسميات وظيفية'
+                              : cat === 'فنيون'
+                                ? 'الفنيون - مسميات وظيفية'
+                                : 'الإداريون - مسميات وظيفية ومناصب';
                           return (
                             <div key={cat} className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
                               <div className="p-5 bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-between">
@@ -2486,7 +2486,7 @@ const Settings: React.FC<SettingsProps> = ({ mode = 'general' }) => {
         onClose={closeRankModal}
         onSave={handleSaveRank}
         rank={rankModal.rank}
-        title={rankModal.rank ? 'تعديل الرتبة' : 'إضافة رتبة جديدة'}
+        title={rankModal.rank ? 'تعديل المسمى الوظيفي' : 'إضافة مسمى وظيفي جديدة'}
       />
 
       <NationalityModal

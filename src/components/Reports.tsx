@@ -67,11 +67,11 @@ const columnDisplayOptions: Array<{
   code: string;
 }> = [
   { key: 'serialNumber', label: 'الترقيم', hint: 'رقم تسلسلي لكل موظف', code: 'م' },
-  { key: 'rank', label: 'الرتبة', hint: 'الرتبة أو المسمى المختصر', code: 'R' },
+  { key: 'rank', label: 'المسمى الوظيفي', hint: 'المسمى الوظيفي أو المسمى المختصر', code: 'R' },
   { key: 'name', label: 'الاسم', hint: 'اسم الموظف المعروض', code: 'N' },
   { key: 'department', label: 'الإدارة', hint: 'القسم أو الإدارة الحالية', code: 'D' },
-  { key: 'shifts', label: 'الخفارات', hint: 'تواريخ الخفارات والملاحظات', code: 'S' },
-  { key: 'totalShifts', label: 'الإجمالي', hint: 'إجمالي عدد الخفارات', code: 'T' },
+  { key: 'shifts', label: 'المناوبات', hint: 'تواريخ المناوبات والملاحظات', code: 'S' },
+  { key: 'totalShifts', label: 'الإجمالي', hint: 'إجمالي عدد المناوبات', code: 'T' },
 ];
 
 const Reports: React.FC = () => {
@@ -88,7 +88,7 @@ const Reports: React.FC = () => {
     style.textContent = `
       .employee-name,
       .employee-rank {
-        font-family: 'Sultan Bold', 'Times New Roman', serif;
+        font-family: 'Cairo', sans-serif;
         font-weight: normal;
       }
 
@@ -138,7 +138,7 @@ const Reports: React.FC = () => {
           color: black !important;
           border-bottom: 2px solid #000 !important;
           padding-bottom: 10px !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
         }
 
         .print-subtitle {
@@ -147,7 +147,7 @@ const Reports: React.FC = () => {
           text-align: center !important;
           margin-bottom: 10px !important;
           color: #dc2626 !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
         }
 
         .print-date-info {
@@ -161,7 +161,7 @@ const Reports: React.FC = () => {
           flex-wrap: wrap !important;
           justify-content: center !important;
           gap: 3px !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
         }
 
         .print-date-item {
@@ -193,7 +193,7 @@ const Reports: React.FC = () => {
           text-align: center !important;
           color: black !important;
           background: white !important;
-          font-family: 'Sultan Normal', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
         }
 
         th {
@@ -201,7 +201,7 @@ const Reports: React.FC = () => {
           font-weight: bold !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 17px !important;
         }
 
@@ -223,31 +223,31 @@ const Reports: React.FC = () => {
         }
 
         .employee-name {
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-weight: normal !important;
           font-size: 14px !important;
         }
 
         .employee-rank {
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-weight: normal !important;
           font-size: 13px !important;
         }
 
         .serial-column,
         .total-column {
-          font-family: 'Sultan Medium', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-weight: 700 !important;
           font-size: 13px !important;
         }
 
         .shift-date {
-          font-family: 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 14px !important;
         }
 
         .shift-note {
-          font-family: 'Sultan Normal', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 10px !important;
         }
 
@@ -296,7 +296,7 @@ const Reports: React.FC = () => {
           background: #e0e7ff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 14px !important;
           break-after: avoid;
           page-break-after: avoid;
@@ -306,7 +306,7 @@ const Reports: React.FC = () => {
           background: #e0e7ff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 16px !important;
         }
 
@@ -315,7 +315,7 @@ const Reports: React.FC = () => {
           color: #dc2626 !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 14px !important;
           break-after: avoid;
           page-break-after: avoid;
@@ -326,7 +326,7 @@ const Reports: React.FC = () => {
           color: #dc2626 !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 16px !important;
         }
 
@@ -335,7 +335,7 @@ const Reports: React.FC = () => {
           color: #ffffff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 14px !important;
           break-after: avoid;
           page-break-after: avoid;
@@ -351,7 +351,7 @@ const Reports: React.FC = () => {
           color: #ffffff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          font-family: 'Sultan Bold', 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-size: 16px !important;
         }
 
@@ -361,7 +361,7 @@ const Reports: React.FC = () => {
         }
 
         .print-date-info strong {
-          font-family: 'Times New Roman', serif !important;
+          font-family: 'Cairo', sans-serif !important;
           font-weight: 700 !important;
         }
 
@@ -427,7 +427,7 @@ const Reports: React.FC = () => {
   // فلاتر التقرير
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(['ضباط', 'ضباط صف', 'مهنيين']);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(['قيادات', 'مشرفون', 'فنيون']);
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   
@@ -457,11 +457,11 @@ const Reports: React.FC = () => {
 
   const excludedExemptRanks = useMemo(
     () => new Set([
-      'لواء',
-      'عميد',
-      'عميد حقوقي',
-      'عقيد',
-      'عقيد حقوقي',
+      'مدير عام',
+      'مدير إدارة',
+      'مدير إدارة',
+      'مساعد مدير إدارة',
+      'مساعد مدير إدارة',
       'فريق',
       'فريق أول',
     ].map(normalizeRankText)),
@@ -499,16 +499,7 @@ const Reports: React.FC = () => {
       .trim();
 
   const formatRankShort = (rawRank: string) => {
-    const normalized = normalizeRankText(rawRank);
-    if (normalized.includes('حقوقي')) {
-      if (normalized.startsWith('رائد')) return 'رائد ح';
-      if (normalized.startsWith('نقيب')) return 'نقيب ح';
-      if (normalized.startsWith('ملازم أول')) return 'ملازم أ ح';
-      if (normalized.startsWith('ملازم')) return 'ملازم ح';
-    }
-    if (normalized.startsWith('ملازم أول')) return 'ملازم أ';
-    if (normalized.startsWith('رقيب أول')) return 'رقيب أ';
-    return normalized;
+    return (rawRank || '').trim();
   };
 
   const normalizeProfessionalText = (value: string) => {
@@ -549,7 +540,7 @@ const Reports: React.FC = () => {
           fetchShiftAssignments(),
           fetchDepartments(),
         ]);
-        setEmployees(employeesData.filter((emp: Employee) => emp.category !== 'مدنيين' && emp.status !== 'inactive'));
+        setEmployees(employeesData.filter((emp: Employee) => emp.category !== 'إداريون' && emp.status !== 'inactive'));
         setShifts(shiftsData);
         setShiftAssignments(shiftAssignmentsData);
         setDepartments(departmentsData);
@@ -578,7 +569,7 @@ const Reports: React.FC = () => {
     return latestShiftDateValue ? parseISO(latestShiftDateValue) : null;
   }, [latestShiftDateValue]);
 
-  // تعيين الفترة الافتراضية بناءً على آخر خفارة (مرة واحدة ما لم يتم التعديل يدويًا)
+  // تعيين الفترة الافتراضية بناءً على آخر مناوبة (مرة واحدة ما لم يتم التعديل يدويًا)
   useEffect(() => {
     if (!latestShiftDateObject) return;
     if (startDate || endDate) return;
@@ -639,7 +630,7 @@ const Reports: React.FC = () => {
   const resetFilters = () => {
     setStartDate('');
     setEndDate('');
-    setSelectedCategories(['ضباط', 'ضباط صف', 'مهنيين']);
+    setSelectedCategories(['قيادات', 'مشرفون', 'فنيون']);
     setSelectedDepartments(departments.map(d => d.name));
     setSearchTerm('');
     setIncludeExemptPage(false);
@@ -680,7 +671,7 @@ const Reports: React.FC = () => {
         filteredShifts.some(shift => shift.id === assignment.shiftId)
       );
 
-      // تجميع الخفارات حسب الشهر مع سبب الغياب
+      // تجميع المناوبات حسب الشهر مع سبب الغياب
       const monthlyBreakdown: { [month: string]: { date: string; note?: string; isAbsent?: boolean }[] } = {};
       
       employeeAssignments.forEach(assignment => {
@@ -774,7 +765,7 @@ const Reports: React.FC = () => {
           employee,
           totalShifts: employeeAssignments.length,
           monthlyBreakdown,
-          exemptionReason: (employee.shiftNotes || '').trim() || 'معفى من الخفارات',
+          exemptionReason: (employee.shiftNotes || '').trim() || 'معفى من المناوبات',
         };
       })
       .sort((a, b) => {
@@ -819,7 +810,7 @@ const Reports: React.FC = () => {
     return monthColors[monthNumber] || 'text-slate-700';
   };
 
-  // تجميع البيانات حسب الفئات والإدارات (ومجموعات المهنيين الداخلية)
+  // تجميع البيانات حسب الفئات والإدارات (ومجموعات الفنيون الداخلية)
   const groupedData = useMemo(() => {
     const groups: Record<string, any> = {};
 
@@ -831,7 +822,7 @@ const Reports: React.FC = () => {
         groups[category] = {};
       }
 
-      if (category === 'مهنيين') {
+      if (category === 'فنيون') {
         const professionalGroup = resolveProfessionalGroupLabel(data.employee);
         if (!groups[category][professionalGroup]) {
           groups[category][professionalGroup] = {};
@@ -866,7 +857,7 @@ const Reports: React.FC = () => {
   }, [startDate, endDate]);
 
   const latestShiftDate = useMemo(() => {
-    if (!latestShiftDateValue) return 'لا توجد خفارات';
+    if (!latestShiftDateValue) return 'لا توجد مناوبات';
     return format(parseISO(latestShiftDateValue), 'd/M/yyyy');
   }, [latestShiftDateValue]);
 
@@ -874,7 +865,7 @@ const Reports: React.FC = () => {
     return reportData.reduce((sum, data) => sum + data.totalShifts, 0);
   }, [reportData]);
 
-  const categoryDisplayOrder = ['ضباط', 'ضباط صف', 'مهنيين'];
+  const categoryDisplayOrder = ['قيادات', 'مشرفون', 'فنيون'];
   const orderedSelectedCategories = useMemo(() => {
     const selectedSet = new Set(selectedCategories);
     return categoryDisplayOrder.filter((category) => selectedSet.has(category));
@@ -882,7 +873,7 @@ const Reports: React.FC = () => {
   const professionalGroupOrder = ['طباع', 'سائق', 'فراش', 'أخرى'];
   const showCategoryRows = selectedCategories.length > 1;
   const hideRankForProfessionalsOnly =
-    selectedCategories.length === 1 && selectedCategories[0] === 'مهنيين';
+    selectedCategories.length === 1 && selectedCategories[0] === 'فنيون';
   const showRankColumn = visibleColumns.rank && !hideRankForProfessionalsOnly;
   const visibleTableColumnCount = useMemo(() => {
     return Object.entries(visibleColumns).reduce((count, [key, isVisible]) => {
@@ -907,11 +898,11 @@ const Reports: React.FC = () => {
 
   const getCategoryBadgeClass = (category: string) => {
     switch (category) {
-      case 'ضباط':
+      case 'قيادات':
         return 'bg-blue-600 text-white border-blue-600';
-      case 'ضباط صف':
+      case 'مشرفون':
         return 'bg-emerald-600 text-white border-emerald-600';
-      case 'مهنيين':
+      case 'فنيون':
         return 'bg-amber-500 text-white border-amber-500';
       default:
         return 'bg-slate-600 text-white border-slate-600';
@@ -920,11 +911,11 @@ const Reports: React.FC = () => {
 
   const getCategorySlug = (category: string) => {
     switch (category) {
-      case 'ضباط':
+      case 'قيادات':
         return 'officers';
-      case 'ضباط صف':
+      case 'مشرفون':
         return 'ncos';
-      case 'مهنيين':
+      case 'فنيون':
         return 'professionals';
       default:
         return 'default';
@@ -972,17 +963,17 @@ const Reports: React.FC = () => {
         <PageHeader
           icon={<BarChart3 className="h-7 w-7" />}
           title="التقارير والإحصائيات"
-          description="استعراض وتحليل خفارات الموظفين بحسب الفئات والإدارات"
+          description="استعراض وتحليل مناوبات الموظفين بحسب الفئات والإدارات"
           actions={(
             <>
               <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
                 الموظفون: {employees.length}
               </span>
               <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
-                الخفارات: {shifts.length}
+                المناوبات: {shifts.length}
               </span>
               <span className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-                آخر خفارة: {latestShiftDate}
+                آخر مناوبة: {latestShiftDate}
               </span>
               <button
                 onClick={resetFilters}
@@ -1128,7 +1119,7 @@ const Reports: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3 gap-3 h-32">
                 {[
                   {
-                    value: 'ضباط',
+                    value: 'قيادات',
                     icon: Shield,
                     activeCard: 'border-blue-500 bg-blue-50 ring-2 ring-blue-100 hover:border-blue-500 hover:bg-blue-50',
                     inactiveHover: 'hover:border-slate-300 hover:bg-slate-100',
@@ -1137,7 +1128,7 @@ const Reports: React.FC = () => {
                     soft: 'bg-blue-100 text-blue-700',
                   },
                   {
-                    value: 'ضباط صف',
+                    value: 'مشرفون',
                     icon: ShieldCheck,
                     activeCard: 'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-100 hover:border-emerald-500 hover:bg-emerald-50',
                     inactiveHover: 'hover:border-slate-300 hover:bg-slate-100',
@@ -1146,7 +1137,7 @@ const Reports: React.FC = () => {
                     soft: 'bg-emerald-100 text-emerald-700',
                   },
                   {
-                    value: 'مهنيين',
+                    value: 'فنيون',
                     icon: Briefcase,
                     activeCard: 'border-amber-500 bg-amber-50 ring-2 ring-amber-100 hover:border-amber-500 hover:bg-amber-50',
                     inactiveHover: 'hover:border-slate-300 hover:bg-slate-100',
@@ -1273,7 +1264,7 @@ const Reports: React.FC = () => {
           </div>
           {includeExemptPage && (
             <p className="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-full px-4 py-1.5">
-              سيتم إنشاء صفحة منفصلة بعنوان: معفيين من الخفارات
+              سيتم إنشاء صفحة منفصلة بعنوان: معفيين من المناوبات
             </p>
           )}
         </div>
@@ -1375,16 +1366,16 @@ const Reports: React.FC = () => {
                   <FileText className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900">تقرير الخفارات</h2>
+                  <h2 className="text-xl font-bold text-slate-900">تقرير المناوبات</h2>
                   <p className="text-sm text-slate-600 mt-1">
-                    إحصائية خفارات الحجز لـ <span className="text-blue-700 font-semibold">{orderedSelectedCategories.join(' و ')}</span>
+                    إحصائية مناوبات الحجز لـ <span className="text-blue-700 font-semibold">{orderedSelectedCategories.join(' و ')}</span>
                   </p>
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
                     <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
                       الفترة: {startDate} ← {endDate}
                     </span>
                     <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-700 font-semibold">
-                      آخر خفارة: {latestShiftDate}
+                      آخر مناوبة: {latestShiftDate}
                     </span>
                     <span className="rounded-full border border-slate-200 bg-white px-3 py-1">
                       تاريخ الطباعة: {new Date().getDate()}/{new Date().getMonth() + 1}/{new Date().getFullYear()}
@@ -1437,7 +1428,7 @@ const Reports: React.FC = () => {
                       <CalendarDays className="h-5 w-5" />
                     </div>
                     <div>
-                      <div className="text-xs text-emerald-700 font-semibold">إجمالي الخفارات</div>
+                      <div className="text-xs text-emerald-700 font-semibold">إجمالي المناوبات</div>
                       <div className="text-2xl font-black text-slate-900">{totalReportShifts}</div>
                     </div>
                   </div>
@@ -1472,9 +1463,9 @@ const Reports: React.FC = () => {
                   const percent = reportData.length > 0
                     ? Math.round((categoryData.length / reportData.length) * 100)
                     : 0;
-                  const palette = category === 'ضباط'
+                  const palette = category === 'قيادات'
                     ? { bar: 'bg-blue-600', text: 'text-blue-700', border: 'border-blue-200', bg: 'bg-blue-50' }
-                    : category === 'ضباط صف'
+                    : category === 'مشرفون'
                       ? { bar: 'bg-emerald-600', text: 'text-emerald-700', border: 'border-emerald-200', bg: 'bg-emerald-50' }
                       : { bar: 'bg-amber-500', text: 'text-amber-700', border: 'border-amber-200', bg: 'bg-amber-50' };
 
@@ -1500,8 +1491,8 @@ const Reports: React.FC = () => {
             <div style={{ display: 'none' }} className="print-show">
               <h2 className="print-subtitle">
                 {orderedSelectedCategories.length > 0
-                  ? `إحصائية خفارات الحجز لـ ${orderedSelectedCategories.join(' و ')}`
-                  : 'إحصائية خفارات الحجز'}
+                  ? `إحصائية مناوبات الحجز لـ ${orderedSelectedCategories.join(' و ')}`
+                  : 'إحصائية مناوبات الحجز'}
               </h2>
               <div className="print-date-info">
                 <div className="print-date-item">
@@ -1509,12 +1500,12 @@ const Reports: React.FC = () => {
                   <strong className="print-date-highlight">{format(new Date(), 'yyyy/M/d')}</strong>
                 </div>
                 <div className="print-date-item">
-                  <span className="print-date-label">تاريخ أخر خفارة</span>
+                  <span className="print-date-label">تاريخ أخر مناوبة</span>
                   <strong className="print-date-highlight">{shifts.length > 0
                     ? format(parseISO(shifts.reduce((latest, current) =>
                         new Date(current.shiftDate) > new Date(latest.shiftDate) ? current : latest
                       ).shiftDate), 'yyyy/M/d')
-                    : 'لا توجد خفارات'
+                    : 'لا توجد مناوبات'
                   }</strong>
                 </div>
               </div>
@@ -1530,7 +1521,7 @@ const Reports: React.FC = () => {
                         <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 serial-column">م</th>
                       )}
                       {showRankColumn && (
-                        <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 rank-column">الرتبة</th>
+                        <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 rank-column">المسمى الوظيفي</th>
                       )}
                       {visibleColumns.name && (
                         <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 name-column">الاسم</th>
@@ -1539,7 +1530,7 @@ const Reports: React.FC = () => {
                         <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 department-column">الإدارة</th>
                       )}
                       {visibleColumns.shifts && (
-                        <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 shifts-column">الخفارات</th>
+                        <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 shifts-column">المناوبات</th>
                       )}
                       {visibleColumns.totalShifts && (
                         <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 total-column">الإجمالي</th>
@@ -1559,7 +1550,7 @@ const Reports: React.FC = () => {
                               )}
                               {showRankColumn && (
                                 <td className="border border-slate-200 px-4 py-3 text-center rank-column employee-rank">
-                                  {data.employee.category === 'مهنيين'
+                                  {data.employee.category === 'فنيون'
                                     ? (data.employee.jobTitle || 'بدون مسمى')
                                     : formatRankShort(data.employee.rank)}
                                 </td>
@@ -1644,7 +1635,7 @@ const Reports: React.FC = () => {
                           )}
 
                           {/* صفوف الإدارات والموظفين */}
-                          {category === 'مهنيين'
+                          {category === 'فنيون'
                             ? Object.entries(departments as Record<string, Record<string, ReportData[]>>)
                               .sort(([groupA], [groupB]) => {
                                 const indexA = professionalGroupOrder.indexOf(groupA);
@@ -1655,7 +1646,7 @@ const Reports: React.FC = () => {
                               })
                               .map(([professionalGroup, groupDepartments], groupIndex) => (
                                 <React.Fragment key={`${category}-${professionalGroup}`}>
-                                  {/* صف فئة المهنيين */}
+                                  {/* صف فئة الفنيين */}
                                   <tr
                                     className={`bg-blue-800 text-white subcategory-row ${
                                       groupIndex > 0 ? 'subcategory-page-break' : ''
@@ -1742,7 +1733,7 @@ const Reports: React.FC = () => {
             {includeExemptPage && (
               <div className={`mt-8 rounded-2xl border border-red-200 bg-white overflow-hidden ${reportData.length > 0 ? 'category-page-break' : ''}`}>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-red-200 bg-red-50">
-                  <h3 className="text-lg font-extrabold text-red-800">معفيين من الخفارات</h3>
+                  <h3 className="text-lg font-extrabold text-red-800">معفيين من المناوبات</h3>
                   <span className="inline-flex items-center rounded-full border border-red-200 bg-white px-3 py-1 text-xs font-semibold text-red-700">
                     الإجمالي: {exemptReportData.length}
                   </span>
@@ -1753,10 +1744,10 @@ const Reports: React.FC = () => {
                     <thead>
                       <tr className="bg-red-50">
                         <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 serial-column w-[6%]">م</th>
-                        <th className="border border-slate-200 px-3 py-3 text-center font-semibold text-slate-700 w-[12%] whitespace-nowrap">الرتبة</th>
+                        <th className="border border-slate-200 px-3 py-3 text-center font-semibold text-slate-700 w-[12%] whitespace-nowrap">المسمى الوظيفي</th>
                         <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 w-[24%] whitespace-nowrap">الاسم</th>
                         <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 w-[18%]">الإدارة</th>
-                        <th className="border border-slate-200 px-2 py-3 text-center font-semibold text-slate-700 w-[14%]">الخفارات</th>
+                        <th className="border border-slate-200 px-2 py-3 text-center font-semibold text-slate-700 w-[14%]">المناوبات</th>
                         <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-slate-700 w-[26%]">سبب الإعفاء</th>
                       </tr>
                     </thead>
@@ -1771,7 +1762,7 @@ const Reports: React.FC = () => {
                             <tr key={data.employee.id} className="hover:bg-slate-50 transition-colors">
                               <td className="border border-slate-200 px-4 py-3 text-center font-medium serial-column">{index + 1}</td>
                               <td className="border border-slate-200 px-3 py-3 text-center employee-rank whitespace-nowrap">
-                                {data.employee.category === 'مهنيين'
+                                {data.employee.category === 'فنيون'
                                   ? (data.employee.jobTitle || 'بدون مسمى')
                                   : formatRankShort(data.employee.rank)}
                               </td>
@@ -1813,7 +1804,7 @@ const Reports: React.FC = () => {
                       ) : (
                         <tr>
                           <td colSpan={6} className="border border-slate-200 px-4 py-6 text-center text-slate-500">
-                            لا يوجد موظفون غير مدرجين بالخفارات
+                            لا يوجد موظفون غير مدرجين بالمناوبات
                           </td>
                         </tr>
                       )}
@@ -1830,7 +1821,7 @@ const Reports: React.FC = () => {
             <CalendarDays className="h-12 w-12 mx-auto mb-4 text-amber-500" />
             <h3 className="text-lg font-bold text-amber-800 mb-2">لا توجد بيانات</h3>
             <p className="text-sm text-amber-700">
-              لم يتم العثور على خفارات في الفترة المحددة للفئات والأقسام المختارة
+              لم يتم العثور على مناوبات في الفترة المحددة للفئات والأقسام المختارة
             </p>
             <button
               onClick={resetFilters}

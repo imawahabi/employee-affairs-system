@@ -132,7 +132,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
     
     const employeeReports = Array.from(employeeMap.values());
     
-    // استخدام وظيفة sortEmployees من ملف sorting.ts لترتيب البيانات حسب الفئة والرتبة
+    // استخدام وظيفة sortEmployees من ملف sorting.ts لترتيب البيانات حسب الفئة والمسمى الوظيفي
     return employeeReports.sort((a, b) => {
       // استخدام نفس منطق الترتيب الموجود في وظيفة sortEmployees
       const employeeA = a.employee;
@@ -145,13 +145,13 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
         return categoryA - categoryB;
       }
 
-      if (employeeA.category === 'ضابط') {
-        const rankA = OFFICER_RANK_ORDER[employeeA.rank.replace(' حقوقي', '').trim()] || 99;
-        const rankB = OFFICER_RANK_ORDER[employeeB.rank.replace(' حقوقي', '').trim()] || 99;
+      if (employeeA.category === 'قيادات') {
+        const rankA = OFFICER_RANK_ORDER[employeeA.rank.trim()] || 99;
+        const rankB = OFFICER_RANK_ORDER[employeeB.rank.trim()] || 99;
         if (rankA !== rankB) return rankA - rankB;
       }
 
-      if (employeeA.category === 'ضابط صف') {
+      if (employeeA.category === 'مشرفون') {
         const rankA = NCO_RANK_ORDER[employeeA.rank] || 99;
         const rankB = NCO_RANK_ORDER[employeeB.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
@@ -261,7 +261,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
           }
 
           body {
-            font-family: 'Sultan Normal', 'Times New Roman', serif;
+            font-family: 'Cairo', sans-serif;
             font-size: 12pt;
             line-height: 1.4;
             color: #000;
@@ -288,7 +288,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
           }
 
           .report-title {
-            font-family: 'Sultan Bold', 'Times New Roman', serif;
+            font-family: 'Cairo', sans-serif;
             font-size: 22pt;
             font-weight: normal;
             text-decoration: none;
@@ -298,7 +298,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
           }
 
           .report-date {
-            font-family: 'Sultan Normal', 'Times New Roman', serif;
+            font-family: 'Cairo', sans-serif;
             font-size: 18pt;
             color: #000;
             text-align: center;
@@ -311,7 +311,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
           }
 
           .report-categories {
-            font-family: 'Sultan Bold', 'Times New Roman', serif;
+            font-family: 'Cairo', sans-serif;
             font-size: 18pt;
             color: #ff0000;
             margin-bottom: 8px;
@@ -334,13 +334,13 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
             padding: 6px 4px;
             text-align: center;
             vertical-align: middle;
-            font-family: 'Sultan Normal', 'Times New Roman', serif;
+            font-family: 'Cairo', sans-serif;
             font-size: 14pt;
           }
 
           th {
             background: #e0e0e0; /* رأس الجدول رمادي فاتح */
-            font-family: 'Sultan Bold', 'Times New Roman', serif;
+            font-family: 'Cairo', sans-serif;
             font-size: 15pt;
           }
 
@@ -361,7 +361,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
           }
 
           .number-cell {
-            font-family: 'Sultan Bold', 'Times New Roman', serif;
+            font-family: 'Cairo', sans-serif;
             font-weight: bold;
           }
 
@@ -401,10 +401,10 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
             <h1 class="report-title">${reportConfig.title || `تقرير متابعة موظفي الإدارة العامة لسنة <b>${new Date(reportConfig.dateRange.startDate).getFullYear()}`}</b></h1>
             <p class="report-date">من <span class="report-date-range">${reportConfig.dateRange.startDate.replace(/-/g, '/')}</span> إلى <span class="report-date-range">${reportConfig.dateRange.endDate.replace(/-/g, '/')}</span></p>
             ${reportConfig.categories.length > 0 ? `<p class="report-categories">( ${reportConfig.categories.map(cat => {
-              if (cat === 'ضابط') return 'ضباط';
-              if (cat === 'ضابط صف') return 'ضباط صف';
-              if (cat === 'مهني') return 'مهنيين';
-              if (cat === 'مدني') return 'مدنيين';
+              if (cat === 'قيادات') return 'قيادات';
+              if (cat === 'مشرفون') return 'مشرفون';
+              if (cat === 'فني') return 'فنيون';
+              if (cat === 'إداري') return 'إداريون';
               return cat;
             }).join(' / ')} )</p>` : ''}
           </div>
@@ -414,7 +414,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
               <thead>
                 <tr>
                   <th style="width: auto; min-width: 40px">م</th>
-                  <th style="width: auto; min-width: 80px">الرتبة</th>
+                  <th style="width: auto; min-width: 80px">المسمى الوظيفي</th>
                   <th style="width: auto; min-width: 150px">الاسم</th>
                   <th style="width: auto; min-width: 70px">رخصة يوم</th>
                   <th style="width: auto; min-width: 70px">استئذان قصير</th>
@@ -425,7 +425,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
                 ${reportData.map((item, index) => `
                   <tr>
                     <td class="number-cell">${index + 1}</td>
-                    <td class="rank-cell">${(item.employee.category === 'ضابط' || item.employee.category === 'ضابط صف') ? item.employee.rank : item.employee.category}</td>
+                    <td class="rank-cell">${(item.employee.category === 'قيادات' || item.employee.category === 'مشرفون') ? item.employee.rank : item.employee.category}</td>
                     <td class="employee-name">${item.employee.full_name}</td>
                     <td class="number-cell">${item.fullDays}</td>
                     <td class="number-cell">${item.halfDays}</td>
@@ -501,10 +501,10 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
           {reportConfig.categories.length > 0 && (
             <p className="text-blue-600 font-semibold mt-2">
               ( {reportConfig.categories.map(cat => {
-                if (cat === 'ضابط') return 'ضباط';
-                if (cat === 'ضابط صف') return 'ضباط صف';
-                if (cat === 'مهني') return 'مهنيين';
-                if (cat === 'مدني') return 'مدنيين';
+                if (cat === 'قيادات') return 'قيادات';
+                if (cat === 'مشرفون') return 'مشرفون';
+                if (cat === 'فني') return 'فنيون';
+                if (cat === 'إداري') return 'إداريون';
                 return cat;
               }).join(' / ')} )
             </p>
@@ -568,7 +568,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-4 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">م</th>
-                    <th className="px-6 py-4 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">الرتبة</th>
+                    <th className="px-6 py-4 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">المسمى الوظيفي</th>
                     <th className="px-6 py-4 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">اسم الموظف</th>
                     <th className="px-6 py-4 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">رخصة يوم كامل</th>
                     <th className="px-6 py-4 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">استئذان قصير</th>
@@ -585,7 +585,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
                       </td>
                       <td className="px-6 py-4 text-center text-sm font-medium text-gray-700">
                         <span className="bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold">
-                          {data.employee.category === 'ضابط' || data.employee.category === 'ضابط صف'
+                          {data.employee.category === 'قيادات' || data.employee.category === 'مشرفون'
                             ? data.employee.rank
                             : data.employee.category}
                         </span>
@@ -819,10 +819,10 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
                     </div>
                     <p className="text-slate-900 font-semibold mt-1 text-right">
                       {reportConfig.categories.length > 0 ? reportConfig.categories.map(cat => {
-                        if (cat === 'ضابط') return 'ضباط';
-                        if (cat === 'ضابط صف') return 'ضباط صف';
-                        if (cat === 'مهني') return 'مهنيين';
-                        if (cat === 'مدني') return 'مدنيين';
+                        if (cat === 'قيادات') return 'قيادات';
+                        if (cat === 'مشرفون') return 'مشرفون';
+                        if (cat === 'فني') return 'فنيون';
+                        if (cat === 'إداري') return 'إداريون';
                         return cat;
                       }).join(' • ') : 'جميع الفئات'}
                     </p>
@@ -980,7 +980,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
                   <thead>
                     <tr className="bg-blue-600 text-white">
                       <th className="border border-gray-300 px-4 py-3 text-center font-bold">م</th>
-                      <th className="border border-gray-300 px-4 py-3 text-center font-bold">الرتبة</th>
+                      <th className="border border-gray-300 px-4 py-3 text-center font-bold">المسمى الوظيفي</th>
                       <th className="border border-gray-300 px-4 py-3 text-center font-bold">الاسم</th>
                       <th className="border border-gray-300 px-4 py-3 text-center font-bold">رخصة يوم كامل</th>
                       <th className="border border-gray-300 px-4 py-3 text-center font-bold">استئذان قصير</th>
@@ -993,7 +993,7 @@ const ModernReports: React.FC<ModernReportsProps> = ({ onNavigate }) => {
                       <tr key={item.employee.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                         <td className="border border-gray-300 px-4 py-3 text-center font-medium">{index + 1}</td>
                         <td className="border border-gray-300 px-4 py-3 text-center">
-                          {item.employee.category === 'ضابط' || item.employee.category === 'ضابط صف'
+                          {item.employee.category === 'قيادات' || item.employee.category === 'مشرفون'
                             ? item.employee.rank
                             : item.employee.category}
                         </td>

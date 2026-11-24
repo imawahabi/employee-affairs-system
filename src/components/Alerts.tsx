@@ -165,9 +165,9 @@ const Alerts: React.FC = () => {
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'no_upcoming_shift': return 'لا توجد خفارة قادمة';
-      case 'shift_not_received': return 'خفارة غير مستلمة';
-      case 'professional_extension': return 'تمديد مهني';
+      case 'no_upcoming_shift': return 'لا توجد مناوبة قادمة';
+      case 'shift_not_received': return 'مناوبة غير مستلمة';
+      case 'professional_extension': return 'تمديد فني';
       default: return type;
     }
   };
@@ -402,9 +402,9 @@ const Alerts: React.FC = () => {
                 className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 bg-white transition-all"
               >
                 <option value="all">جميع الأنواع</option>
-                <option value="no_upcoming_shift">لا توجد خفارة قادمة</option>
-                <option value="shift_not_received">خفارة غير مستلمة</option>
-                <option value="professional_extension">تمديد مهني</option>
+                <option value="no_upcoming_shift">لا توجد مناوبة قادمة</option>
+                <option value="shift_not_received">مناوبة غير مستلمة</option>
+                <option value="professional_extension">تمديد فني</option>
               </select>
 
               <button

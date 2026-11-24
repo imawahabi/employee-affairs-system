@@ -138,7 +138,7 @@ const AddLicense: React.FC<AddLicenseProps> = ({ onNavigate }) => {
 
   const getEmployeeIdentifier = (employee: Employee | null) => {
     if (!employee) return null;
-    const isCivilian = employee.category === 'مدني';
+    const isCivilian = employee.category === 'إداري';
     const value = isCivilian
       ? (employee.civil_id || employee.file_number)
       : (employee.file_number || employee.civil_id);
@@ -511,10 +511,10 @@ const AddLicense: React.FC<AddLicenseProps> = ({ onNavigate }) => {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, { bg: string; text: string }> = {
-      'ضابط': { bg: 'bg-blue-100', text: 'text-blue-800' },
-      'ضابط صف': { bg: 'bg-green-100', text: 'text-green-800' },
-      'مهني': { bg: 'bg-yellow-100', text: 'text-yellow-800' },
-      'مدني': { bg: 'bg-orange-100', text: 'text-orange-800' },
+      'قيادات': { bg: 'bg-blue-100', text: 'text-blue-800' },
+      'مشرفون': { bg: 'bg-green-100', text: 'text-green-800' },
+      'فني': { bg: 'bg-yellow-100', text: 'text-yellow-800' },
+      'إداري': { bg: 'bg-orange-100', text: 'text-orange-800' },
     };
     return colors[category] || { bg: 'bg-gray-100', text: 'text-gray-800' };
   };
@@ -561,7 +561,7 @@ const AddLicense: React.FC<AddLicenseProps> = ({ onNavigate }) => {
                   )}
                   <input
                     type="text"
-                    placeholder="ابحث بالاسم، الرتبة، رقم الملف، الرقم المدني، أو الفئة..."
+                    placeholder="ابحث بالاسم، المسمى الوظيفي، رقم الملف، الرقم المدني، أو الفئة..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pr-12 pl-10 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white shadow-sm"
@@ -976,7 +976,7 @@ const AddLicense: React.FC<AddLicenseProps> = ({ onNavigate }) => {
                   <span className="rounded-full border border-blue-200 bg-white px-3 py-1">
                     {licenseConfig.selectedEmployee?.jobTitle || licenseConfig.selectedEmployee?.rank || '-'}
                   </span>
-                  {licenseConfig.selectedEmployee?.category === 'مهني' && licenseConfig.selectedEmployee?.jobTitle ? (
+                  {licenseConfig.selectedEmployee?.category === 'فني' && licenseConfig.selectedEmployee?.jobTitle ? (
                     <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-700 font-semibold">
                       المسمى الوظيفي: {licenseConfig.selectedEmployee?.jobTitle}
                     </span>

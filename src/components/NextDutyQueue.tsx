@@ -40,7 +40,7 @@ const getDaysSinceLastShift = (
   return diffDays < 0 ? 0 : diffDays;
 };
 
-// تحديد أولوية الموظف للخفارة القادمة حسب الأبعد عن آخر خفارة.
+// تحديد أولوية الموظف للمناوبة القادمة حسب الأبعد عن آخر مناوبة.
 function getEmployeePriority(
   s: EmployeeSummary,
   now = Date.now()
@@ -52,10 +52,10 @@ function getEmployeePriority(
   const daysSinceLastShift = getDaysSinceLastShift(s, now);
   if (daysSinceLastShift !== null) {
     if (daysSinceLastShift > 10) {
-      return { priority: 2, reason: `آخر خفارة منذ ${daysSinceLastShift} يوم`, daysSinceLastShift };
+      return { priority: 2, reason: `آخر مناوبة منذ ${daysSinceLastShift} يوم`, daysSinceLastShift };
     }
 
-    return { priority: 3, reason: `آخر خفارة منذ ${daysSinceLastShift} يوم`, daysSinceLastShift };
+    return { priority: 3, reason: `آخر مناوبة منذ ${daysSinceLastShift} يوم`, daysSinceLastShift };
   }
 
   return { priority: 5, reason: 'غير محدد', daysSinceLastShift };
@@ -133,7 +133,7 @@ function buildEmployeeSummaries(
     }
 
     // Filter professionals based on excluded departments
-    if (e.category === 'مهنيين' && excludedDepartments.has(e.department)) {
+    if (e.category === 'فنيون' && excludedDepartments.has(e.department)) {
       return false;
     }
 
@@ -202,7 +202,7 @@ export default function NextDutyQueue() {
         fetchShifts(),
         fetchShiftAssignments()
       ]);
-      setEmployees(empData.filter((e: Employee) => e.category !== 'مدنيين'));
+      setEmployees(empData.filter((e: Employee) => e.category !== 'إداريون'));
       setShifts(shiftData);
       setAssignments(assignData);
     } catch (err) {
@@ -233,7 +233,7 @@ export default function NextDutyQueue() {
   const professionalGroupOptions = useMemo(() => {
     return Array.from(new Set(
       summaries
-        .filter((summary) => summary.employee.category === 'مهنيين')
+        .filter((summary) => summary.employee.category === 'فنيون')
         .map((summary) => summary.employee.professionalGroup || 'أخرى')
         .filter(Boolean)
     )).sort((a, b) => a.localeCompare(b, 'ar'));
@@ -246,7 +246,7 @@ export default function NextDutyQueue() {
     }
     if (selectedProfessionalGroup !== 'all') {
       list = list.filter((summary) =>
-        summary.employee.category !== 'مهنيين' ||
+        summary.employee.category !== 'فنيون' ||
         (summary.employee.professionalGroup || 'أخرى') === selectedProfessionalGroup
       );
     }
@@ -286,16 +286,16 @@ export default function NextDutyQueue() {
 
   // تجميع البيانات حسب الفئة
   const employeesByCategory = useMemo(() => {
-    const officers = filteredSummaries.filter(s => s.employee.category === 'ضباط');
-    const ncos = filteredSummaries.filter(s => s.employee.category === 'ضباط صف');
-    const professionals = filteredSummaries.filter(s => s.employee.category === 'مهنيين');
+    const officers = filteredSummaries.filter(s => s.employee.category === 'قيادات');
+    const ncos = filteredSummaries.filter(s => s.employee.category === 'مشرفون');
+    const professionals = filteredSummaries.filter(s => s.employee.category === 'فنيون');
     
     return { officers, ncos, professionals };
   }, [filteredSummaries]);
 
   const visibleScopeLabel = useMemo(() => {
     const departmentLabel = selectedDepartment === 'all' ? 'كل الإدارات' : selectedDepartment;
-    const professionalGroupLabel = selectedProfessionalGroup === 'all' ? 'كل فئات المهنيين' : selectedProfessionalGroup;
+    const professionalGroupLabel = selectedProfessionalGroup === 'all' ? 'كل فئات الفنيون' : selectedProfessionalGroup;
     return `${departmentLabel} / ${professionalGroupLabel}`;
   }, [selectedDepartment, selectedProfessionalGroup]);
 
@@ -419,12 +419,12 @@ export default function NextDutyQueue() {
             <thead className="bg-gray-50 text-gray-600">
               <tr>
                 <th className="px-4 py-3 font-bold">م</th>
-                <th className="px-4 py-3 font-bold">الرتبة</th>
+                <th className="px-4 py-3 font-bold">المسمى الوظيفي</th>
                 <th className="px-4 py-3 font-bold">الاسم</th>
                 <th className="px-4 py-3 font-bold">الإدارة</th>
                 <th className="px-4 py-3 font-bold">الأولوية</th>
                 <th className="px-4 py-3 font-bold">سبب الترشيح</th>
-                <th className="px-4 py-3 font-bold">آخر خفارة</th>
+                <th className="px-4 py-3 font-bold">آخر مناوبة</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -457,11 +457,11 @@ export default function NextDutyQueue() {
                             type="button"
                             onClick={() => goToEmployeeShiftHistory(summary.employee)}
                             className="w-fit text-right font-bold hover:text-blue-700 transition-colors"
-                            title="عرض سجل خفارات الموظف"
+                            title="عرض سجل مناوبات الموظف"
                           >
                             {displayName}
                           </button>
-                          {summary.employee.category === 'مهنيين' && summary.employee.jobTitle && (
+                          {summary.employee.category === 'فنيون' && summary.employee.jobTitle && (
                             <span className="text-xs text-blue-600 mt-1">{summary.employee.jobTitle}</span>
                           )}
                         </div>
@@ -540,7 +540,7 @@ export default function NextDutyQueue() {
                 <Calendar className="w-6 h-6 text-white drop-shadow-lg" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold drop-shadow-lg">قائمة ترشيحات الخفارة القادمة</h1>
+                <h1 className="text-2xl font-bold drop-shadow-lg">قائمة ترشيحات المناوبة القادمة</h1>
               </div>
             </div>
 
@@ -560,7 +560,7 @@ export default function NextDutyQueue() {
                 </label>
 
                 <label className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm cursor-pointer">
-                  <span className="text-sm font-semibold text-white">استبعاد خفارة آخر 10 أيام</span>
+                  <span className="text-sm font-semibold text-white">استبعاد مناوبة آخر 10 أيام</span>
                   <span className="relative inline-flex items-center">
                     <input
                       type="checkbox"
@@ -603,13 +603,13 @@ export default function NextDutyQueue() {
               </label>
 
               <label className="space-y-2">
-                <span className="block text-xs font-bold text-blue-100">فئة المهنيين</span>
+                <span className="block text-xs font-bold text-blue-100">فئة الفنيين</span>
                 <select
                   value={selectedProfessionalGroup}
                   onChange={(event) => setSelectedProfessionalGroup(event.target.value)}
                   className="h-11 w-full rounded-xl border border-white/20 bg-white px-3 text-sm font-bold text-slate-800 outline-none focus:ring-4 focus:ring-white/25"
                 >
-                  <option value="all">كل فئات المهنيين</option>
+                  <option value="all">كل فئات الفنيون</option>
                   {professionalGroupOptions.map((group) => (
                     <option key={group} value={group}>
                       {group}
@@ -648,13 +648,13 @@ export default function NextDutyQueue() {
             <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
               <div className="text-lg font-black text-slate-800">لا توجد نتائج مطابقة</div>
               <div className="mt-2 text-sm font-semibold text-slate-500">
-                غيّر الإدارة أو فئة المهنيين أو ألغِ فلاتر الاستبعاد لعرض الوضع الحالي.
+                غيّر الإدارة أو فئة الفنيين أو ألغِ فلاتر الاستبعاد لعرض الوضع الحالي.
               </div>
             </div>
           )}
-          {renderCategoryTable('officers', 'الضباط', 'مرشحون من فئة الضباط حسب الترتيب الوظيفي')}
-          {renderCategoryTable('ncos', 'ضباط الصف', 'مرشحون من فئة ضباط الصف حسب الترتيب الوظيفي')}
-          {renderCategoryTable('professionals', 'المهنيين', 'مرشحون من فئة المهنيين حسب الأبعد عن آخر خفارة')}
+          {renderCategoryTable('officers', 'القيادات', 'مرشحون من فئة القيادات حسب الترتيب الوظيفي')}
+          {renderCategoryTable('ncos', 'المشرفون', 'مرشحون من فئة المشرفين حسب الترتيب الوظيفي')}
+          {renderCategoryTable('professionals', 'الفنيون', 'مرشحون من فئة الفنيين حسب الأبعد عن آخر مناوبة')}
         </div>
       </div>
     </div>

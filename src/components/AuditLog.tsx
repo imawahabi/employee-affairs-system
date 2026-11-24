@@ -12,7 +12,7 @@ import PageHeader from './UI/PageHeader';
 
 const ENTITY_LABELS: Record<string, string> = {
   employee: 'الموظفون',
-  shift: 'الخفارات',
+  shift: 'المناوبات',
   license: 'الرخص والاستئذانات',
   system: 'النظام'
 };
@@ -390,7 +390,7 @@ const AuditLog: React.FC = () => {
                 >
                   <option value="all">كل الأنظمة</option>
                   <option value="employee">الموظفون</option>
-                  {!hideShifts && <option value="shift">الخفارات</option>}
+                  {!hideShifts && <option value="shift">المناوبات</option>}
                   <option value="license">الرخص والاستئذانات</option>
                 </select>
               </div>

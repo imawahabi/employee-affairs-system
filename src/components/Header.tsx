@@ -253,7 +253,7 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
   };
 
   const getEmployeePrimaryIdentifier = (employee: Employee) => {
-    const isCivilian = String(employee.category || '').includes('مدني') || employee.rank === 'مدني';
+    const isCivilian = String(employee.category || '').includes('إداري') || employee.rank === 'إداري';
     const value = isCivilian
       ? (employee.civilId || employee.fileNumber || employee.militaryNumber || '')
       : (employee.fileNumber || employee.militaryNumber || employee.civilId || '');
@@ -271,7 +271,7 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
       return;
     }
     const categoryLabel = String(employee.category || '');
-    const showCivilians = categoryLabel.includes('مدني');
+    const showCivilians = categoryLabel.includes('إداري');
     try {
       localStorage.setItem('employeeHighlightId', employee.id);
       localStorage.setItem('employeeHighlightAt', String(Date.now()));
@@ -451,7 +451,7 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
       .sort((a, b) => {
         const catDiff = getCategoryOrder(a.category) - getCategoryOrder(b.category);
         if (catDiff !== 0) return catDiff;
-        const isOfficerCategory = a.category === 'ضباط' || a.category === 'ضباط صف';
+        const isOfficerCategory = a.category === 'قيادات' || a.category === 'مشرفون';
         if (isOfficerCategory) {
           const rankDiff = getRankOrder(a.rank, a.category) - getRankOrder(b.rank, b.category);
           if (rankDiff !== 0) return rankDiff;
@@ -486,10 +486,10 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
   const goToShiftDate = (dateString?: string) => {
     const targetDate = dateString || quickSearchDate;
     if (targetDate) {
-      // حفظ التاريخ في localStorage للوصول إليه من صفحة كشوفات الخفارات
+      // حفظ التاريخ في localStorage للوصول إليه من صفحة كشوفات المناوبات
       localStorage.setItem('quickSearchDate', targetDate);
 
-      // تحويل إلى صفحة كشوفات الخفارات
+      // تحويل إلى صفحة كشوفات المناوبات
       onPageChange('view-shifts');
 
       // Dispatch a global event so the view-shifts page can react even if it's already active
@@ -642,19 +642,19 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                   <button
                     onClick={() => {
                       setIsQuickSearchOpen(!isQuickSearchOpen);
-                      // تحديث آخر خفارة عند فتح القائمة
+                      // تحديث آخر مناوبة عند فتح القائمة
                       if (!isQuickSearchOpen && lastShiftDate) {
                         setQuickSearchDate(lastShiftDate);
                       }
                     }}
                     className="relative rounded-xl bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 p-3 text-white hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/50 transform hover:scale-105 group"
-                    title="الوصول السريع لخفارة"
+                    title="الوصول السريع لمناوبة"
                   >
-                    <span className="sr-only">الوصول السريع لخفارة</span>
+                    <span className="sr-only">الوصول السريع لمناوبة</span>
                     <div className="absolute rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 blur-md opacity-30 group-hover:opacity-50 transition-all duration-300"></div>
                     <div className="flex items-center justify-center gap-2 px-4 py-1 rounded-lg transition-all duration-300">
                       <CalendarIcon className="h-5 w-5 drop-shadow-sm" aria-hidden="true" />
-                      <span className="text-[13px] text-white font-bold leading-none">الخفارات</span>
+                      <span className="text-[13px] text-white font-bold leading-none">المناوبات</span>
                     </div>
                   </button>
 
@@ -665,8 +665,8 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                       <div className="px-6 py-4 border-b border-blue-100 bg-gradient-to-r from-blue-50 via-blue-50 to-blue-50 rounded-t-2xl">
                         <div className="flex items-center gap-3">
                           <div>
-                            <h3 className="text-lg font-bold text-gray-900">الوصول السريع للخفارات</h3>
-                            <p className="text-xs text-gray-600">البحث والانتقال إلى خفارة محددة</p>
+                            <h3 className="text-lg font-bold text-gray-900">الوصول السريع للمناوبات</h3>
+                            <p className="text-xs text-gray-600">البحث والانتقال إلى مناوبة محددة</p>
                           </div>
                         </div>
                         <button
@@ -684,7 +684,7 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                       <div className="p-6 space-y-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            تاريخ الخفارة المطلوب
+                            تاريخ المناوبة المطلوب
                           </label>
                           <input
                             type="date"
@@ -695,7 +695,7 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                           />
                           {lastShiftDate && (
                             <p className="text-xs text-gray-500 mt-1">
-                              آخر خفارة مسجلة: {new Date(lastShiftDate).toLocaleDateString('en-GB')}
+                              آخر مناوبة مسجلة: {new Date(lastShiftDate).toLocaleDateString('en-GB')}
                             </p>
                           )}
                         </div>
@@ -706,7 +706,7 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                             disabled={!quickSearchDate}
                             className="flex-1 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 disabled:bg-gray-300 text-white px-4 py-3 rounded-xl font-medium transition-all disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:scale-105"
                           >
-                            عرض الخفارة
+                            عرض المناوبة
                           </button>
                         </div>
 
@@ -793,7 +793,7 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                         const displayName = formatEmployeeDisplayName(employee) || employee.name || '—';
                         const displayLabel = employee.rank ? `${employee.rank} / ${displayName}` : displayName;
                         const isExcludedFromShifts = employee.includeInShifts === false;
-                        const isCivilian = String(employee.category || '').includes('مدني') || employee.rank === 'مدني';
+                        const isCivilian = String(employee.category || '').includes('إداري') || employee.rank === 'إداري';
                         const isInactive = employee.status === 'inactive';
                         const inactiveReasonLabel = (employee.reasonIfInactive || '').trim() || 'سبب غير مسجل';
                         const showPastShiftInfo = !hideShifts && !isCivilian && past.length > 0;
@@ -834,8 +834,8 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                                   {!isInactive && isExcludedFromShifts && !isCivilian && (
                                     <span
                                       className="inline-flex items-center justify-center rounded-full border border-red-200 bg-red-50 p-1 text-red-700"
-                                      title="لا يدرج بالخفارات"
-                                      aria-label="لا يدرج بالخفارات"
+                                      title="لا يدرج بالمناوبات"
+                                      aria-label="لا يدرج بالمناوبات"
                                     >
                                       <NoSymbolIcon className="h-3 w-3" />
                                     </span>
@@ -892,11 +892,11 @@ export default function Header({ onPageChange, onToggleSidebar }: HeaderProps) {
                                     type="button"
                                     onClick={() => openEmployeeShiftHistory(employee)}
                                     className="flex min-w-0 max-w-[80%] shrink-0 items-center gap-1.5 rounded-xl border border-blue-100 bg-blue-50 px-2 py-1.5 text-right hover:bg-blue-100"
-                                    title="فتح سجل خفارات الموظف"
+                                    title="فتح سجل مناوبات الموظف"
                                   >
                                     <span className="inline-flex shrink-0 items-center gap-1 text-[11px] font-black text-blue-700">
                                       <ClipboardDocumentListIcon className="h-3.5 w-3.5" />
-                                      الخفارات
+                                      المناوبات
                                     </span>
                                     {combinedShifts.slice(0, 2).map((shift) => (
                                       <span key={shift.id} className="shrink-0 rounded-lg bg-white px-2 py-1 font-black text-slate-800">

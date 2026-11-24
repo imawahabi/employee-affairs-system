@@ -13,7 +13,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ onAdd, onClose }) =
     full_name: '',
     rank: '',
     file_number: '',
-    category: 'ضابط',
+    category: 'قيادات',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,7 +50,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ onAdd, onClose }) =
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-gray-700">الرتبة</label>
+          <label className="block text-sm font-semibold text-gray-700">المسمى الوظيفي</label>
           <input
             type="text"
             value={formData.rank}
@@ -77,10 +77,10 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ onAdd, onClose }) =
             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-right"
             required
           >
-            <option value="ضابط">ضابط</option>
-            <option value="ضابط صف">ضابط صف</option>
-            <option value="مهني">مهني</option>
-            <option value="مدني">مدني</option>
+            <option value="قيادات">قيادات</option>
+            <option value="مشرفون">مشرفون</option>
+            <option value="فني">فني</option>
+            <option value="إداري">إداري</option>
           </select>
         </div>
 

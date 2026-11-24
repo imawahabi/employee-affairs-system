@@ -1,22 +1,19 @@
 const OFFICER_RANKS = [
-  'لواء',
-  'عميد',
-  'عقيد',
-  'مقدم',
-  'رائد',
-  'نقيب',
-  'ملازم أول',
-  'ملازم',
+  'مدير عام',
+  'مدير إدارة',
+  'مساعد مدير إدارة',
+  'رئيس قسم',
+  'مشرف أول',
+  'مشرف',
+  'موظف أول',
 ];
 
 const NCO_RANKS = [
-  'و.أ.ضابط',
-  'و.ضابط',
-  'رقيب أول',
-  'رقيب',
-  'عريف',
-  'و.عريف',
-  'شرطي',
+  'مشرف',
+  'مشرف مساعد',
+  'موظف أول',
+  'موظف',
+  'موظف خدمات',
 ];
 
 const normalizeArabicText = (value: string) =>
@@ -61,10 +58,10 @@ const findRankOrder = (rankName: string, map: { normalized: string; compact: str
 
 export const getRankOrder = (rankName?: string, category?: string) => {
   if (!rankName) return Number.MAX_SAFE_INTEGER;
-  if (category === 'ضباط') {
+  if (category === 'قيادات') {
     return findRankOrder(rankName, OFFICER_RANK_MAP);
   }
-  if (category === 'ضباط صف') {
+  if (category === 'مشرفون') {
     return findRankOrder(rankName, NCO_RANK_MAP);
   }
   return Number.MAX_SAFE_INTEGER;
@@ -72,10 +69,10 @@ export const getRankOrder = (rankName?: string, category?: string) => {
 
 export const getCategoryOrder = (category?: string) => {
   const categoryOrder: Record<string, number> = {
-    'ضباط': 1,
-    'ضباط صف': 2,
-    'مهنيين': 3,
-    'مدنيين': 4,
+    'قيادات': 1,
+    'مشرفون': 2,
+    'فنيون': 3,
+    'إداريون': 4,
   };
   return categoryOrder[category || ''] ?? Number.MAX_SAFE_INTEGER;
 };
